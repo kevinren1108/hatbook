@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一顶帽子的全球旅行 · 随书助教版</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#22304a; --denim:#33517e; --thread:#c8641f; --paper:#fafaf7;
+  --stitch:#ddd8cc; --panel:#ffffff; --tutor-bg:#f4f2ec;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans SC',-apple-system,sans-serif;color:var(--ink);background:var(--paper);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── 顶栏 ── */
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:2px dashed var(--thread);flex-shrink:0}
+header .title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:15px;color:var(--denim);letter-spacing:.04em}
+header .sub{font-size:11px;color:#8a8a82}
+#tocToggle,#tutorToggle{margin-left:auto;background:none;border:1px solid var(--stitch);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--denim);cursor:pointer;font-family:inherit}
+#tocToggle{margin-left:0}
+#tutorToggle.active{background:var(--thread);color:#fff;border-color:var(--thread)}
+
+/* ── 主区 ── */
+main{flex:1;display:flex;min-height:0}
+nav{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--stitch);overflow-y:auto;padding:14px 0}
+nav .part{font-size:10.5px;letter-spacing:.2em;color:#9a958a;padding:12px 16px 4px;font-weight:700}
+nav a{display:block;padding:6px 16px;font-size:13px;color:#4a5468;text-decoration:none;border-left:3px solid transparent}
+nav a:hover{background:#f6f4ee}
+nav a.on{color:var(--thread);border-left-color:var(--thread);font-weight:700;background:#fdf6ef}
+nav a.todo{color:#b5b1a6;cursor:default}
+
+#reader{flex:1;overflow-y:auto;padding:32px 44px 90px;scroll-behavior:smooth}
+#content{max-width:720px;margin:0 auto;line-height:1.9;font-size:15px}
+#content h1{font-family:'Noto Serif SC',serif;font-weight:900;font-size:24px;padding-bottom:12px;margin-bottom:22px;border-bottom:2px dashed var(--thread)}
+#content h2{font-family:'Noto Serif SC',serif;font-weight:900;font-size:18px;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--denim)}
+#content h3{font-family:'Noto Serif SC',serif;font-size:15.5px;color:var(--denim);margin:24px 0 8px}
+#content p{margin:10px 0}
+#content strong{color:var(--denim)}
+#content code{background:#f1ede4;color:var(--thread);padding:1px 5px;border-radius:3px;font-size:13px}
+#content blockquote{border-left:4px solid var(--thread);background:#fdf6ef;padding:10px 14px;margin:16px 0;color:#6b5138;border-radius:0 6px 6px 0}
+#content table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px}
+#content th,#content td{border:1px solid var(--stitch);padding:7px 10px;text-align:left}
+#content th{background:#f2efe7;font-weight:700}
+#content tr:nth-child(2n){background:#faf8f3}
+#content ul,#content ol{padding-left:1.5em;margin:10px 0}
+#content li{margin:5px 0}
+#content hr{border:none;border-top:1px dashed var(--stitch);margin:24px 0}
+#content a{color:var(--thread)}
+
+/* ── 选中提问浮钮 ── */
+#askBtn{position:fixed;display:none;z-index:60;background:var(--thread);color:#fff;border:none;border-radius:16px;padding:6px 14px;font-size:12.5px;cursor:pointer;font-family:inherit;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+#askBtn::before{content:"✂ "}
+
+/* ── 助教面板 ── */
+#tutor{width:360px;flex-shrink:0;background:var(--tutor-bg);border-left:1px solid var(--stitch);display:flex;flex-direction:column;min-width:0}
+#tutor.hidden{display:none}
+#tutor .thead{padding:12px 16px;border-bottom:1px dashed var(--thread);display:flex;align-items:center;gap:8px;flex-shrink:0}
+#tutor .thead .tname{font-family:'Noto Serif SC',serif;font-weight:900;font-size:14px;color:var(--denim)}
+#tutor .thead .tdesc{font-size:10.5px;color:#8a8a82}
+#clearBtn{margin-left:auto;background:none;border:none;font-size:11px;color:#9a958a;cursor:pointer;font-family:inherit;text-decoration:underline}
+#msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:92%;padding:9px 13px;border-radius:10px;font-size:13.5px;line-height:1.75;word-break:break-word}
+.msg.u{align-self:flex-end;background:var(--denim);color:#fff;border-bottom-right-radius:3px}
+.msg.u .quote{border-left:3px solid rgba(255,255,255,.5);padding-left:8px;margin-bottom:6px;font-size:12px;opacity:.85}
+.msg.a{align-self:flex-start;background:#fff;border:1px solid var(--stitch);border-bottom-left-radius:3px}
+.msg.a p{margin:6px 0}.msg.a p:first-child{margin-top:0}.msg.a p:last-child{margin-bottom:0}
+.msg.a strong{color:var(--thread)}
+.msg.a table{border-collapse:collapse;font-size:12px;margin:6px 0}
+.msg.a th,.msg.a td{border:1px solid var(--stitch);padding:4px 7px}
+.msg.a ul,.msg.a ol{padding-left:1.3em}
+.msg.a code{background:#f1ede4;padding:0 4px;border-radius:3px;font-size:12px}
+.msg.hint{align-self:center;background:none;color:#9a958a;font-size:12px;text-align:center;max-width:100%}
+.msg.thinking{align-self:flex-start;color:#9a958a;font-size:12.5px;background:#fff;border:1px dashed var(--stitch)}
+#inputRow{padding:10px;border-top:1px solid var(--stitch);flex-shrink:0;background:var(--tutor-bg)}
+#quoteBox{display:none;background:#fff;border-left:3px solid var(--thread);padding:6px 10px;font-size:12px;color:#6b5138;margin-bottom:6px;border-radius:0 6px 6px 0;position:relative}
+#quoteBox .x{position:absolute;right:6px;top:4px;cursor:pointer;color:#b5b1a6;font-size:13px}
+#inWrap{display:flex;gap:8px}
+#q{flex:1;border:1px solid var(--stitch);border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:inherit;resize:none;height:42px;background:#fff;color:var(--ink)}
+#q:focus{outline:none;border-color:var(--thread)}
+#send{background:var(--thread);color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:13.5px;cursor:pointer;font-family:inherit}
+#send:disabled{opacity:.45;cursor:default}
+
+/* ── 窄屏 ── */
+@media(max-width:900px){
+  nav{position:fixed;left:0;top:49px;bottom:0;z-index:50;transform:translateX(-100%);transition:.2s;box-shadow:4px 0 14px rgba(0,0,0,.12)}
+  nav.open{transform:none}
+  #tutor{position:fixed;right:0;top:49px;bottom:0;width:min(94vw,380px);z-index:55;box-shadow:-4px 0 14px rgba(0,0,0,.15)}
+  #reader{padding:22px 18px 80px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button id="tocToggle">☰ 目录</button>
+  <div>
+    <div class="title">一顶帽子的全球旅行</div>
+    <div class="sub">小白入行帽子厂贸实战 · 连载中</div>
+  </div>
+  <button id="tutorToggle" class="active">🧵 随书助教</button>
+</header>
+
+<main>
+  <nav id="nav"></nav>
+  <div id="reader"><article id="content"></article></div>
+
+  <aside id="tutor">
+    <div class="thead">
+      <div>
+        <div class="tname">随书助教</div>
+        <div class="tdesc">只依据本书内容回答 · 不了解读者背景</div>
+      </div>
+      <button id="pingBtn" style="background:none;border:none;font-size:11px;color:#9a958a;cursor:pointer;font-family:inherit;text-decoration:underline">测试连接</button>
+      <button id="clearBtn">清空对话</button>
+    </div>
+    <div id="msgs"></div>
+    <div id="inputRow">
+      <div id="quoteBox"><span class="x" onclick="clearQuote()">✕</span><span id="quoteText"></span></div>
+      <div id="inWrap">
+        <textarea id="q" placeholder="就当前章节提问,或选中正文文字追问…"></textarea>
+        <button id="send">问</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<button id="askBtn">问这段</button>
+
+<!-- ══ 书稿内容(构建脚本注入)══ -->
+<script type="text/x-markdown" id="md-toc">
+# 全书目录
+
+> ✅ 已完成 · ⬜ 未写作。详细到三级小节的完整目录以各章正文为准。
+
+**第0章 写在前面** ⬜ — 行业冷水/读者画像/主线订单(加拿大精酿啤酒厂500顶定制帽)登场
+
+## 第一部 帽子的语言(全书术语在此定义)
+
+- **第1章 布料** ✅ — 1.1 纤维(棉/涤/混纺) · 1.2 织法(平纹/斜纹/网布) · 1.3 克重 · 1.4 颜色与潘通色号 · 1.5 面料采购常识
+- **第2章 帽子解剖** ✅ — 2.1 帽型总览 · 2.2 帽身与帽片 · 2.3 部件(帽檐/汗带/织唛/气眼) · 2.4 调节扣全家族 · 2.5 尺寸与规格表
+- **第3章 装饰工艺** ✅ — 3.1 绣花(针数/制版/平绣3D绣) · 3.2 印花家族 · 3.3 皮标/激光/水洗做旧 · 3.4 工艺选型决策
+- **第4章 生产之旅** ⬜ — 4.1 总流程 · 4.2 裁剪 · 4.3 绣花工序 · 4.4 车缝 · 4.5 后整 · 4.6 包装 · 4.7 时间账与交期构成
+
+## 第二部 行业地图
+
+- **第5章 全球行业格局** ⬜ — 市场规模/分散格局/OEM·ODM·OBM/头部玩家/需求侧
+- **第6章 中国产业带地图** ⬜ — 青岛胶州/东莞广州/泰州淮安/白沟义乌/东南亚"中国+1"/决策表
+- **第7章 钱的地图** ⬜ — 出厂价到零售价的链条解剖/各环节毛利/三个利润档位/定位练习
+
+## 第三部 工厂篇
+
+- **第8章 组织与人** ✅ — 8.1 双主体结构 · 8.2 接单端(业务/跟单/单证) · 8.3 生产端 · 8.4 支持端 · 8.5 结构性矛盾 · 8.6 订单流转 · 8.7 外部合作者生存指南
+- **第9章 看懂报价单** ✅ — 9.1 成本拆分 · 9.2 面料 · 9.3 辅料 · 9.4 绣花 · 9.5 工缴 · 9.6 弹性项 · 9.7 价外五变量 · 9.8 询价SOP
+- **第10章 打样的艺术** ⬜ — 样品体系/打样需求单/绣花样带/行规/远程确认/封样管理/返工top5
+- **第11章 品质与验货** ⬜ — 疵点图鉴/品质标准/AQL抽样/验货三方式/远程验货SOP/事故处理
+- **第12章 找工厂与验厂** ⬜ — 找厂渠道/工厂vs贸易公司/50问清单/验厂/双供应商策略
+
+## 第四部 外贸篇
+
+- **第13章 本质与贸易术语** ⬜ — 钱货分离/Incoterms/EXW·FOB·CIF·DDP精讲/报价策略
+- **第14章 付款方式** ⬜ — T/T的30/70玩法/风险光谱/信用证/小额工具/现金流设计
+- **第15章 从询盘到成交** ⬜ — 询盘甄别/报价单制作/样品规则/谈判四维/PI精讲/主线案例
+- **第16章 单证** ⬜ — CI/PL/提单三位一体/电放/空运单/产地证/报关资料
+- **第17章 物流** ⬜ — 整柜/拼箱/空运与体积重/专线双清/货代/装箱优化/保险
+- **第18章 海关与退税** ⬜ — HS编码/中国出口端与买单出口/出口退税原理/加美进口端实操/合规红线/标签合规
+- **第19章 算账(全书最重要)** ⬜ — 到岸成本公式/三个算例/七项常漏成本/定价法/Excel模板
+
+## 第五部 获客篇
+
+- **第20章 认识你的客户** ⬜ — 客户分类学/订单特征对照/市场画像/小单快反缝隙
+- **第21章 B2B渠道** ⬜ — 阿里国际站/展会/开发信/LinkedIn/批发平台
+- **第22章 B2C与定制路线** ⬜ — Amazon/Etsy/TikTok与独立站/定制流程设计/本地化打法
+- **第23章 内容获客** ⬜ — 流量洼地原理/选题库/账号矩阵/转化链路/案例拆解
+- **第24章 客户经营与复购** ⬜ — 首单后动作/分级管理/涨价与守价/顾问式销售/坏客户识别
+
+## 第六部 开局篇
+
+- **第25章 主体、税务与合规** ⬜ — 经营主体/资金通道/税务基本盘/知识产权/产品合规
+- **第26章 第一单沙盘推演** ⬜ — 主线订单大结局:三线并行图/三次事故/损益表/复盘十问
+- **第27章 三种开局路径** ⬜ — 有工厂资源/纯贸易SOHO/跨境电商起步,各12个月路线图
+- **第28章 风险与死亡案例** ⬜ — 风险矩阵/五个真实翻车故事/通用根因
+- **尾声 从倒爷到品牌** ⬜
+- **附录 工具包** ⬜ — 术语表/单证模板/成本Excel/验货工具/50问/话术库/资源导航
+
+</script>
+
+<script type="text/x-markdown" id="md-ch01">
+# 第1章 布料:帽子是用什么做的
+
+这一章没有任何生意经,只干一件事:认识"布"。布料通常占一顶帽子成本的20-30%,是最大的单项成本,也是报价单上最大的猫腻来源。这一章的术语——纤维、织法、克重、潘通色号——是后面报价(第9章)、打样(第10章)、验货(第11章)的全部语言基础。
+
+## 1.1 纤维:布的最小单位
+
+布是纱线织出来的,纱线是纤维捻成的。做帽子的常见纤维就四类:
+
+### 1.1.1 棉(Cotton)
+
+棉花植物的天然纤维。特点:吸汗、透气、贴肤感软,越洗越软;缺点是容易皱、**会缩水**(下水后尺寸缩1-3%,所以正规工厂裁布前要"预缩",见4.2.2)、湿了干得慢。棉是棒球帽最经典的用料,一顶"有质感"的帽子多半是棉的。价格中等。
+
+### 1.1.2 涤纶(Polyester)
+
+也叫聚酯纤维,石油化工做出来的人造纤维。特点:结实耐磨、不皱不缩、**速干**、便宜;缺点是透气吸汗不如棉,贴皮肤有"塑料感"——廉价帽子的廉价感多半来自它。但运动帽反而爱用它:跑步出汗时,速干比吸汗更重要。
+
+### 1.1.3 混纺(Blend)
+
+棉和涤按比例混着纺,取两边的优点。标签上写"65%棉 35%涤"(行话"65/35")就是混纺,比全棉便宜、比全涤有质感,是走量帽子的主流选择。**成分比是可以做手脚的地方**:65/35换成35/65,外观几乎一样,成本差一截——这就是为什么后面第9章要求把成分写进合同。
+
+### 1.1.4 配角纤维
+
+- **羊毛/毛呢(Wool)**:秋冬帽和复古款,贵、显档次、怕洗。
+- **腈纶(Acrylic)**:"人造羊毛",毛线帽(beanie)的主料,便宜不怕洗。
+- **尼龙(Nylon)**:轻薄、防泼水,户外帽、跑步帽用。
+
+### 1.1.5 动手:靠洗水标和手感认纤维
+
+翻你家里帽子和衣服的洗水标看成分,再摸:棉是干爽的软,涤是滑溜的软,羊毛有毛茸感和微刺感。摸十件,你就能盲摸分出棉和涤——这个手感在验货时值钱。
+
+## 1.2 织法:同样的纱,不同的织法是不同的布
+
+纱线要经纬交织才成布,交织的规律叫**织法**,它决定布的纹理和性格。
+
+### 1.2.1 平纹(Plain weave)
+
+**经线**(布上纵向的纱)和**纬线**(横向的纱)一上一下最简单地交叉,像编竹席。布面平整、轻薄。衬衫布常用,帽子上用得少。
+
+### 1.2.2 斜纹(Twill):棒球帽的标配
+
+经纬线按"压二挑一"或"压三挑一"的规律交错,布面呈现**一条条45度左右的斜向纹路**——拿一条卡其裤或牛仔裤看布面,那些斜线就是斜纹。斜纹布比平纹更厚实、更垂、更耐磨,**是棒球帽的标配面料**。报价单上的"棉斜纹(cotton twill)"就是指用斜纹织法织的棉布。牛仔布、卡其布本质都是斜纹布的变种。
+
+### 1.2.3 帆布与灯芯绒
+
+- **帆布(Canvas)**:粗纱织的平纹布,厚、硬、挺,做工装风格帽。
+- **灯芯绒(Corduroy)**:表面有一条条凸起绒条,复古感强,秋冬流行款。
+
+### 1.2.4 针织与网布
+
+以上都是**梭织**(经纬交织,布不弹)。另一大家族是**针织**(线圈套线圈,像毛衣,布有弹性)。帽子上最重要的针织物是**网布(Mesh)**——trucker帽(卡车司机帽)后半部分那种带孔材料,透气性极强,基本都是涤纶的。毛线帽整顶都是针织。
+
+## 1.3 克重(g/㎡):布的厚度语言
+
+**克重 = 一平方米布的重量**,单位 g/㎡(也写作GSM),是行业衡量布料厚薄和用料多少的硬指标:
+
+| 克重 | 手感 | 典型用途 |
+|---|---|---|
+| 150-180g | 薄、软 | 廉价促销帽、夏季款 |
+| 200-240g | 厚实挺括 | 主流品质棒球帽 |
+| 280g以上 | 重磅 | 精品dad hat、工装款 |
+
+为什么克重是报价单第一猫腻点?因为"棉斜纹"三个字不锁定厚度,180克和240克的布价差得远,照片上却几乎看不出。所以懂行的人谈布料永远是三件套一起说:**材质+织法+克重**——"全棉斜纹,240克"。
+
+## 1.4 颜色:隔着太平洋怎么说清一个颜色
+
+### 1.4.1 染色、色差与缸差
+
+布是白坯布染出来的。染色按"缸"进行,**同一颜色不同缸染出来会有细微差异,叫缸差**——这就是为什么第4章要讲"同一顶帽子的六片必须裁自同一批布"。**色差**则泛指实物与预期颜色的偏离,是定制单最高发的纠纷之一。
+
+### 1.4.2 潘通色号(Pantone / PMS)
+
+嘴说"深一点的蓝"永远说不清。行业的通用语言是**潘通色卡**:一套全球统一编号的标准色,每个颜色一个号,如"PMS 2945C"。客户报色号,工厂拿实体色卡比对——两边看的是同一张卡,颜色就说清了。你入行第一件该买的工具就是一本潘通C卡(铜版纸色卡,几百块)。
+
+### 1.4.3 色样布片(Lab dip)
+
+讲究的流程,工厂会先染一小块布寄给客户确认,叫lab dip。一块布片平信就能寄,成本可忽略,却能消灭大货色差纠纷——小成本大保险,值得养成习惯。
+
+## 1.5 面料采购常识
+
+### 1.5.1 门幅、米价与用量
+
+布按米卖,**门幅**是布的宽度(常见1.5米)。一顶成人棒球帽用布约**0.15-0.18㎡**(含裁耗)。记住这个数的用处是**反向验算**:面料市价¥18/米、门幅1.5米,即¥12/㎡,单顶面料成本合理区间就是¥1.8-2.5——报价单写¥3.2,要么面料确实高档,要么塞了利润,可以问(详见9.2)。
+
+### 1.5.2 面料起订量:为什么小单不能随便挑颜色
+
+染厂染一缸布有最低起染量(常见300-500米)。你订200顶帽子只需30米布,没有哪个染厂为你开缸——所以**小单只能在面料商的现货色里选**。工厂说"这个颜色要加钱/凑量",不是刁难,是染缸的物理现实。这也解释了为什么大单能玩定制色、小单该顺着现货色设计。
+
+---
+
+> **本章作业**:收集5块不同的面料小样(拆旧衣帽或找面料店要),给每块标出:纤维成分、织法、目测克重档位。做完你就拥有了自己的第一套"手感标尺"。
+
+*下一章:[第2章 帽子解剖:每个零件的名字](chapters/ch02.md)*
+
+</script>
+
+<script type="text/x-markdown" id="md-ch02">
+# 第2章 帽子解剖:每个零件的名字
+
+拿一顶帽子,从上往下拆。这一章结束后,你要能看懂任何一张帽子规格表,也能听懂工厂的黑话——"6片弯檐,鸡眼,金属扣收尾环"。
+
+## 2.1 帽型总览
+
+### 2.1.1 结构化棒球帽 vs 软顶老爹帽
+
+**结构化(structured)**指帽子前幅内衬了一层硬衬布(布衬),不戴时也能立起来,轮廓挺——经典棒球帽、snapback都是结构化的。**无结构(unstructured)**没有衬布,帽身软塌、贴头型,就是**老爹帽(dad hat)**的慵懒感来源。同一个logo放在两种帽上气质完全不同:结构化=运动/街头,软顶=休闲/文艺。
+
+### 2.1.2 主流帽型速览
+
+| 帽型 | 特征 | 典型人群/场景 |
+|---|---|---|
+| 经典棒球帽 | 6片、结构化、弯檐 | 最大公约数,球队、品牌 |
+| Dad hat | 6片、软顶、弯檐、常配金属扣 | 精品咖啡、潮牌、年轻客群 |
+| Snapback | 平檐、结构化、塑料排扣 | 嘻哈街头 |
+| Trucker | 前幅泡棉+后半网布 | 户外、蓝领、复古潮流 |
+| 高尔夫帽 | 轻薄速干料、常激光打孔 | 运动、企业礼品 |
+| 渔夫帽(bucket) | 360度软檐 | 时尚、防晒 |
+| 毛线帽(beanie) | 针织、无檐 | 秋冬 |
+| 空顶帽(visor) | 只有檐没有顶 | 网球、跑步 |
+
+### 2.1.3 帽型即语言
+
+给客户提案时,帽型选择本身就在传达品牌气质——精酿啤酒厂大概率要dad hat或trucker(手作感),而青少年球队要经典结构化棒球帽(统一感)。这是第22章定制提案的基础。
+
+## 2.2 帽身(Crown)结构
+
+### 2.2.1 帽片(panel):6片与5片
+
+帽身由几片扇形布片拼缝而成,每片叫一个**帽片**。**6片帽**:正前方是两片,一条中缝落在脸的正中线上。**5片帽**:正前方是完整一大片,无中缝。
+
+### 2.2.2 前幅与中缝对logo的影响
+
+**前幅**就是帽子正前方那块区域——logo的家。6片帽的前幅有中缝,绣大logo会跨在缝上(小logo无碍);要绣大图案或贴大面积印花,选5片帽。这是选款时的第一个技术判断。
+
+### 2.2.3 缝份与沿条
+
+布片拼缝处内侧的余量叫**缝份**;帽内盖住缝份的包边条叫**沿条(taping)**——有沿条的帽子内里整洁,是品质档次的信号之一,也是一道额外工缴(第9章工价表里能看到它)。
+
+## 2.3 部件逐个认
+
+### 2.3.1 顶扣(Button)
+
+帽顶正中央那颗包布小圆扣,盖住六片布的交汇点。也有"无顶扣"设计(高尔夫帽常见,避免头盔/耳机压迫)。
+
+### 2.3.2 气眼(Eyelets)
+
+帽片上的透气小孔,两种做法:**绣眼**(线锁边绣出的孔,软,主流)和**金属鸡眼**(金属圈压出,硬,工装感)。
+
+### 2.3.3 帽檐(Brim / Visor)
+
+外层是布,内夹一块**帽檐芯**(通常PE塑料板)定型。分**弯檐**(curved,传统棒球帽)与**平檐**(flat,snapback标配)。檐面上一圈圈的车线叫**檐面线**,行数(常见4-8行)是规格表项目之一——线越多越显工艺。
+
+### 2.3.4 汗带(Sweatband)
+
+帽内圈贴额头的带子,吸汗、定尺寸。棉的舒服、涤的耐用,宽度常见2.5-3cm。
+
+### 2.3.5 四种"标"
+
+- **织唛(woven label)**:织出来的品牌标,质感好,缝在帽内后中或前幅内侧;
+- **印唛(printed label)**:印出来的标,便宜;
+- **洗水标(care label)**:写成分和洗涤方式——出口件的合规必需品(见18.6);
+- **吊牌(hangtag)**:挂在外面的纸牌,零售用。
+
+## 2.4 调节扣(Closure)全家族
+
+帽后调松紧的机关,是选款必答题,每种扣都自带成本档位和风格暗示:
+
+| 扣型 | 描述 | 成本 | 风格暗示 |
+|---|---|---|---|
+| 塑料排扣(snapback扣) | 一排凸点按进孔,"啪啪"扣上 | 最低 | 街头、嘻哈 |
+| 魔术贴(velcro) | 一撕一贴 | 低 | 休闲;用久粘性衰减、显廉价 |
+| 织带日字扣 | 布织带穿"日"字扣 | 中 | 中性、运动 |
+| 金属滑扣+收尾环 | 布带穿金属扣滑动,尾端金属环收口 | 最高 | 精品dad hat标配,质感担当 |
+| 全封弹力(fitted/flex) | 无开口,弹性面料分码 | 高(管理成本) | 正版球队帽、专业运动 |
+
+**全封分码逻辑**:没有调节扣就必须按头围出尺码(S/M、L/XL),工厂要多套版、你要压多码库存——所以定制小单几乎不做fitted,这是成本常识而非工厂偷懒。
+
+## 2.5 尺寸语言
+
+### 2.5.1 三个核心尺寸
+
+- **帽围**:帽口一圈的周长,成人可调款通常覆盖56-60cm;
+- **帽深**:帽口到帽顶的高度,决定"戴得深不深"(dad hat浅、棒球帽标准、嘻哈款深);
+- **檐长**:帽檐前伸长度,常见7-7.5cm。
+
+### 2.5.2 码段
+
+成人均码(可调)/ 青年码(54-57cm)/ 儿童码(50-54cm)。做球队单会同时遇到成人和青少年,报价和排产都要分开算。
+
+### 2.5.3 规格表(Spec sheet)
+
+把帽型、片数、面辅料、三围尺寸、工艺、标类、包装全部写成一张表,就是规格表——它是打样需求(第10章)、报价锁定(第9章)、验货依据(第11章)共用的同一份文件。**外贸的一切纠纷,最后都回到规格表写没写清。**
+
+---
+
+> **本章作业**:买三顶不同价位的帽子(¥15/¥50/¥150档各一顶),拆解对比,填一张零件对照表:每个部件用了什么材质工艺、贵的贵在哪。这三顶帽子拆完,你对"品质"的理解就从形容词变成了名词清单。
+
+*下一章:[第3章 装饰工艺:logo怎么上帽子](chapters/ch03.md)*
+
+</script>
+
+<script type="text/x-markdown" id="md-ch03">
+# 第3章 装饰工艺:logo怎么上帽子
+
+客户买定制帽,买的就是"把我的logo放上去"。方法分两大家族:**绣**和**印**。这一章的针数、制版、平绣3D绣这些概念,直接决定你能不能看懂报价(第9章)和提好打样需求(第10章)。
+
+## 3.1 绣花(Embroidery):行业主流
+
+绣花是把彩色线用密密的针脚扎进布里组成图案。它是帽子行业**最主流**的装饰工艺:帽子前幅有弧度、面料厚,绣花的立体感和耐久度远胜印刷,而且"绣出来的logo"本身就显档次。
+
+### 3.1.1 什么是"一针"(stitch)
+
+绣花机的针每扎布一次、带一条线迹,就叫**一针**。一个logo由几千到几万针组成——**针就是绣花世界的像素**。
+
+### 3.1.2 针数由什么决定
+
+三个因素:**面积**(logo越大针越多)、**填充密度**(实心满绣比只绣轮廓线条,针数翻几倍)、**工艺**(3D绣要垫料加针)。
+
+### 3.1.3 常见针数区间:建立数量级直觉
+
+| logo类型 | 针数量级 |
+|---|---|
+| 小文字/细线条logo(3-4cm) | 3,000-6,000针 |
+| 直径5-6cm实心满绣 | 8,000-12,000针 |
+| 大面积复杂多色 | 15,000-25,000针 |
+
+记住一个锚点:**"9000针"≈一个直径6厘米的实心圆形logo**。
+
+### 3.1.4 时间与机器:9000针要绣多久
+
+绣花机转速约每分钟600-800针,9000针净绣时间约**12-15分钟**。但工厂用的是**多头机**——一台机器12或15个机头同步动作,一次绣12-15顶。摊到单顶,9000针的机时约一分钟。这就是为什么绣花按件算并不贵,而**真正的效率杀手是换线换色和上下料**——多色logo比单色贵,不止贵在线。
+
+### 3.1.5 计价:千针单价与制版费
+
+行业按"千针"计价,**¥0.35-0.55/千针**(量大取低)。9000针的logo,单顶绣花费约¥3.2-5。另有一次性**制版费(打带费)¥100-200/logo**,首单收、翻单不再收——翻单时记得核对报价里没再藏这笔。
+
+### 3.1.6 制版(Digitizing):从图片到针迹文件
+
+logo图片不能直接进绣花机,要由**绣花制版师**(打带工)转成针迹文件(常见格式`.dst`)——规划每一针的落点、方向、密度,这个过程叫digitizing。制版水平决定logo绣出来好不好看、会不会起皱。也因此有些logo**绣不出来**:线条比1毫米细(一针的宽度就那么大)、颜色渐变(线没有渐变色)、小于5毫米的文字(糊成一团)。遇到这类logo,方案是简化图形、放大、或改印花——你要能在接单时就看出来并告诉客户,这是专业度的分水岭。
+
+### 3.1.7 平绣 vs 3D立体绣 vs 贴布绣
+
+- **平绣(flat embroidery)**:标准工艺,线平铺在布面;
+- **3D立体绣(puff embroidery)**:先垫一层泡棉再绣,logo鼓起来,街头感强。针数和单价上浮30-50%,且只适合粗壮图形(细节会塌);
+- **贴布绣(applique)**:先贴一块布再沿边绣,大面积图案省针数、有拼布质感。
+
+### 3.1.8 绣花线
+
+主流是**涤纶线**(耐用、色牢)和**人造丝线**(更亮但娇气),特殊效果有金属线(易断、贵)。线也有色卡体系,工厂按你的潘通号(见1.4.2)找最接近的线色——**线色永远做不到100%等于潘通色**,打样时要接受"最接近色"的确认逻辑,这点提前跟客户说清能避免一半的色差纠纷。
+
+### 3.1.9 自查工具:自己核针数
+
+针数是工厂报的,你无法目测——但可以验证:下载免费的绣花文件查看器(如 TrueSizer 等),让工厂发`.dst`文件,打开就能看到精确针数。学会这一招,你在工厂眼里立刻从小白变内行。第9章会把它变成报价谈判的武器。
+
+## 3.2 印花家族
+
+### 3.2.1 丝网印(丝印)
+
+原理:每种颜色做一张网版,油墨透过网版刮印到布上。**按色数计价**(一色一版),适合大色块、少颜色的图案。帽子上多用于前幅大面积图案或帽檐底印花。
+
+### 3.2.2 热转印与烫画
+
+图案先印在转印膜上,再高温压到布面。全彩不限色,但表面有一层膜感,**耐久性是短板**(水洗久了开裂剥落),多用于低价促销帽。
+
+### 3.2.3 数码直喷(DTG/DTF)
+
+打印机直接喷墨,小批量全彩的解法,无版费,单件成本高——几十顶的全彩图案单用它最划算。
+
+### 3.2.4 为什么帽子上绣花多印花少
+
+三个原因:前幅是**弧面**(印刷对位难)、面料**厚且有纹理**(油墨附着差)、**档次感**(消费者默认绣花=更贵的帽子)。印花的主场在T恤,绣花的主场在帽子——记住这个行业默认。
+
+## 3.3 其他装饰与做旧工艺
+
+### 3.3.1 标类装饰
+
+**皮标**(压印皮革块,精品感)、**金属标**(高尔夫帽常见)、**PVC胶章**(户外潮流感)、**织唛贴布**(小面积织唛缝上前幅,复古)——都是"不绣不印"的第三条路,单件成本几毛到几块,常与绣花组合使用。
+
+### 3.3.2 激光穿孔
+
+激光在布面烧出透气孔阵,高尔夫帽标配工艺,运动感强。
+
+### 3.3.3 水洗做旧与酵素洗
+
+成品帽整体水洗(石磨/酵素),洗出褪色、软塌的vintage感——dad hat的"旧旧的"就是洗出来的,不是布本来那样。水洗是一道独立成本(¥1-3/顶),且有变形损耗,报价时别漏。
+
+## 3.4 工艺选型决策
+
+拿到客户logo后的判断顺序:
+
+1. **logo适不适合绣?**(线条≥1mm、无渐变、文字≥5mm)→ 适合:平绣为默认;
+2. **要街头感、图形粗壮?** → 3D绣;
+3. **全彩/渐变/照片级?** → 印花(量大丝印、量小直喷);
+4. **预算高、要精品感?** → 绣花+皮标/金属扣组合拳;
+5. **量小、要快?** → 现货帽+成品绣(见4.3.3),牺牲一点效果换速度。
+
+---
+
+> **本章作业**:把你自己(或虚构)的logo分别按平绣、3D绣、印花做效果推演:哪些细节会丢、各要多少针/几个色、预估单顶装饰成本,写成一份给"客户"的工艺建议。这就是你未来接每一单要做的第一份专业输出。
+
+*下一章:[第4章 一顶帽子的生产之旅(未完成)](chapters/ch04.md)*
+
+</script>
+
+<script type="text/x-markdown" id="md-ch08">
+# 第8章 工厂里的组织与人
+
+看懂一家帽厂的组织,你就知道该找谁、谁能帮你、谁会卡你。本章以典型的中型出口帽厂(100-300人,配套自己的外贸公司)为样本——这是国内出口型帽厂最常见的形态。
+
+## 8.1 双主体结构:"帽厂+外贸公司"两块牌子
+
+很多工厂老板名下是**两个法人主体**:生产型的"XX帽业/制帽有限公司"(工厂)+ "XX进出口/贸易有限公司"(外贸公司)。
+
+### 8.1.1 三个原因
+
+- **出口退税的载体**:外贸公司从工厂"采购"(开增值税发票)再出口,凭发票办退税(帽类约13%,原理见18.3);
+- **财务与风险隔离**:工厂重资产有工人,贸易公司轻资产走资金流,贸易纠纷不牵连工厂;
+- **接单灵活**:贸易公司还能外发同行工厂做自己产能吃不下的单、外采自己不做的品类(客户帽子袜子一起订,袜子外采)。
+
+### 8.1.2 对你的意义
+
+跟工厂谈合作,**合同和钱大概率走贸易公司主体**——签约前问清对方用哪个抬头,两个主体的信用和资产不是一回事。
+
+## 8.2 接单端:外贸部
+
+离钱最近的部门,一般5-15人,三种角色:
+
+### 8.2.1 外贸业务员(Sales)
+
+找客户、谈订单:守阿里国际站、跑展会、发开发信,谈价签PI。收入=底薪+提成(订单利润或金额的1-3%),所以**客户是业务员的命根子**,地盘意识极强。你以外部合作方身份进来,在业务员眼里可能是"抢客户的"——市场边界要提前划清(见8.7.2)。
+
+### 8.2.2 跟单员(Merchandiser):订单的项目经理
+
+订单签下后的中枢:下生产通知单、盯打样、催面辅料、跟进度、安排验货、订舱。客户改logo、加数量、赶交期,全是跟单员在两头协调。**外部合作者日常打交道最多的就是她**——关系好,你的样品插队;关系差,永远排最后。
+
+### 8.2.3 单证员
+
+专做单据:CI、PL、报关资料、产地证。小厂由跟单员兼任。
+
+### 8.2.4 外贸经理
+
+统管业务、握着定价权,通常自己也抓着几个最大的客户。
+
+## 8.3 生产端
+
+### 8.3.1 厂长
+
+统管生产,**排产权在他手上**——你的单排本周还是下月,厂长一句话。
+
+### 8.3.2 版房与版师
+
+打样的地方,工厂的"研发部"。版师把客户图片转成纸样,样品工做出样帽。**打样能力=工厂的天花板**:好版师看照片能仿出九成像。这也是瓶颈部门,旺季打样排队一两周是常态。
+
+### 8.3.3 绣花制版师(打带工)
+
+被低估的关键技术岗(职能详见3.1.6):logo好不好看、报价多少针,他说了算。
+
+### 8.3.4 车间与班组长
+
+裁剪、绣花、车缝、后整各车间设主管/班组长——你的单具体在哪条线、哪个组长手里,决定做工水平。
+
+### 8.3.5 机修
+
+人不多,但绣花机车缝机停机就是停产。
+
+## 8.4 支持端
+
+- **采购(1-3人)**:买面辅料。**面辅料齐不齐直接决定交期**——很多"工厂延误"其实是辅料没到位。采购与供应商之间有回扣文化,是老板重点盯防的部门;
+- **QC(3-8人)**:驻线检验+出货终检(尾查),大客户验货时陪验;
+- **仓库(2-5人)**:面辅料仓+成品仓;
+- **财务(2-4人)**:两个主体的账、开票、退税、收付汇。**家族厂的财务几乎必然是老板娘或至亲**——钱袋子不外放;
+- **人事行政(1-2人)**:招工(制衣业常年缺工)、计件工资核算。
+
+## 8.5 结构性矛盾:谁和谁天然冲突
+
+### 8.5.1 产量 vs 质量
+
+生产端的KPI是产量和交期,QC的KPI是质量,**天然冲突**。小厂QC往往弱势——厂长一句"先出货"就放行。所以你的单出货前要自己远程验(第11章),别全指望厂内QC。
+
+### 8.5.2 业务 vs 生产
+
+业务员为接单敢承诺任何交期,生产端按排产现实走——两头拉扯的结果就是"答应你的交期"和"实际交期"之间的落差。防法:交期让跟单员确认过厂长再信。
+
+### 8.5.3 读懂矛盾的用处
+
+工厂说"没问题"时,你要知道追问谁:交期问厂长口径、品质问QC口径、价格问外贸经理口径——三个"没问题"都拿到,才是真没问题。
+
+## 8.6 一张订单的组织内流转
+
+**业务员**接单签PI收定金 → **跟单员**开生产通知单 → **版房**打产前样、**绣花制版师**出绣花带 → 客户确认 → **采购**下面辅料 → 料齐后**裁剪→绣花→车缝→后整包装** → **QC**终检 → 跟单安排验货订舱 → **单证员**做报关文件 → 货走、**财务**收尾款办退税。
+
+普通订单(几千顶)全程约25-40天,其中**生产本身只占15-20天**——打样确认、备料、订舱占了另一半。这就是为什么外贸交期总比"生产周期"长得多(交期构成详见4.7)。
+
+## 8.7 外部合作者生存指南
+
+### 8.7.1 必须搞好关系的三个人
+
+**跟单员**(你的单顺不顺)、**版师/绣花制版师**(你的样品快不快好不好)、**老板娘/财务**(你的结算顺不顺)。
+
+### 8.7.2 不能踩的地盘
+
+业务员的存量客户。合作前明确市场划分(例如:你只做某区域/某类定制小单,不碰他们现有客户名单),白纸黑字,避免"你抢我提成"的暗战。
+
+### 8.7.3 人情的尺度
+
+中国工厂是人情社会:回访时带点伴手礼、节日发个红包、请跟单和版师吃顿饭——不是行贿,是把你从"一个订单号"变成"一个人"。插队打样、旺季排产的弹性,都藏在这层关系里。
+
+---
+
+> **本章作业**:如果你已有目标工厂(亲友的厂或候选供应商),画出它的组织图:每个格子填上真实姓名。填不出来的格子,就是你下次拜访要认识的人。
+
+*下一章:[第9章 看懂报价单](chapters/ch09.md)*
+
+</script>
+
+<script type="text/x-markdown" id="md-ch09">
+# 第9章 看懂报价单:一顶帽子的钱都花在哪了
+
+## 9.1 从一个数字到一张拆分表
+
+你向工厂询价:"6片棉斜纹棒球帽,前幅平绣logo约9000针,金属调节扣,5000顶,FOB上海。"几天后收到报价:**FOB USD $1.95/pc**。
+
+一个数字,什么信息都没有。新手到这里就开始砍价:"能不能1.8?"——这是最外行的谈法:你不知道1.95里面是什么,砍下来的每一分钱,工厂都能从你看不见的地方拿回来。老手的做法是要**成本拆分(cost breakdown)**。一张诚实的拆分单大致长这样(人民币计价):
+
+| 项目 | 明细 | 单顶成本 |
+|---|---|---|
+| 帽身面料 | 全棉斜纹,约0.16㎡/顶 | ¥3.20 |
+| 帽檐芯 | PE塑板 | ¥0.45 |
+| 汗带 | 涤纶汗带 | ¥0.35 |
+| 织唛+尺码标 | 主标织唛 | ¥0.20 |
+| 调节扣 | 金属滑扣+鸡眼扣 | ¥0.60 |
+| 绣花 | 9000针×¥0.45/千针 | ¥4.05 |
+| 裁剪工缴 | | ¥0.30 |
+| 车缝工缴 | | ¥3.00 |
+| 后整+包装 | 定型、剪线、单塑袋、外箱分摊 | ¥0.70 |
+| 损耗 | 按小计3% | ¥0.38 |
+| **生产成本小计** | | **¥13.23** |
+| 管理费+利润 | 约18% | ¥2.38 |
+| 内陆运输+报关杂费 | | ¥0.35 |
+| **FOB成本合计** | | **¥13.96 ≈ $1.95**(汇率7.15) |
+
+要拆分的话术:"我们内部做预算需要cost breakdown,方便后续翻单时按项调整。"——给工厂一个"给你拆分对它有好处"的理由(翻单预期),比硬要有效得多。
+
+## 9.2 面料成本:反算法与换料猫腻
+
+面料占一顶帽子成本的20-30%,由**材质、克重、用量**决定(术语见1.1-1.3)。
+
+**反算公式**:合理面料成本 ≈ 克重对应的米价 ÷ 门幅 × 单顶用量(0.15-0.18㎡)。面料市价¥18/米、门幅1.5米(即¥12/㎡),单顶合理区间¥1.8-2.5;报¥3.2,要么面料真高档,要么塞了利润——可以问。
+
+**换料猫腻**:你砍价成功后,工厂换轻克重面料或改混纺比,肉眼看不出,成本悄悄降五毛。防法:报价时写死"全棉斜纹,克重240±5%",封样时剪面料小样留底,大货对照(封样制度见10.6)。
+
+## 9.3 辅料成本:档次替换
+
+金属滑扣¥0.5-0.8,换塑料扣只要¥0.15;织唛分高密度与普通密度。辅料谈判的价值不在砍价,而在**明确规格防替换**——PI附一页辅料清单(trim sheet):调节扣材质、织唛工艺、汗带宽度,并照片确认。"大货和样品不一样"的投诉,出事的多半是辅料。
+
+## 9.4 绣花成本:针数验证三招
+
+绣花按针数计价(¥0.35-0.55/千针,原理见3.1.5),而**针数是工厂说了算,是整张报价单水分最大的地方**——同一logo报9000针还是12000针,单顶差¥1.35,五千顶就是近七千块。三招验证:
+
+1. **要针数明细**:打带软件直接生成,截图就有;
+2. **两家对比**:同一logo问两家厂,针数差超15%就有问题;
+3. **自查文件**:要`.dst`文件,用免费查看器自己看针数(见3.1.9)。
+
+另防两笔:**制版费**首单收、翻单不该再收;帽后加绣小logo是另一套针数,报价别漏算。
+
+## 9.5 工缴:为什么砍工缴没有意义
+
+裁剪¥0.2-0.4、车缝¥2.5-4、后整包装¥0.5-1——付给工人的计件工资加车间分摊,由帽型复杂度决定(6片比5片多两道拼缝;夹沿条、绣眼都加钱)。工缴基本是行业公价,**工厂真让步了,代价是你的单被排到最不熟练的新工人线上**。新手对着总价瞎砍,压掉的全是做工质量。
+
+## 9.6 弹性项:真正的谈判空间
+
+- **损耗率**:2-3%正常,报5%就是藏利润;
+- **管理费+利润**:行业15-25%,大单、简单款取低,小单、打样多、要验厂取高。
+
+这两个比例项才是谈判空间。但注意:工厂拆分给不给、诚不诚实,取决于你的订单吸引力和**专业度**——你能逐项验算,工厂就不敢乱报;你只会喊"便宜点",拆分单做给你看也是表演。
+
+## 9.7 报价单外的五个价格变量
+
+1. **数量阶梯**:5000顶和500顶单价差25-40%(面料起订量、开机效率、制版费摊薄)。**询价必须带数量**,拿大单报价做小单预算必死;
+2. **汇率buffer**:工厂按低于即期1-2%的内部汇率折算美金价,给自己留波动垫。美金报价突然涨,不一定是成本涨,可能是财务调了内部汇率;
+3. **付款方式**:100%前TT可换1-2%价格优惠;要账期则加价(付款方式详见第14章);
+4. **淡旺季**:帽厂旺季3-9月(赶欧美秋冬和圣诞订单),议价难交期长;11月-次年2月淡季,同一张单便宜5-8%、交期腰斩。**翻单备货尽量排淡季**;
+5. **退税已在价里**:帽子出口退税约13%,工厂报FOB价时退税收益已计入利润模型(原理见18.3)——出口价"反常便宜"是正常的,别以为工厂亏本。
+
+## 9.8 询价SOP
+
+1. **锁规格**:材质克重、辅料清单、针数上限、包装、数量、术语、付款,写成一页规格书;
+2. **三家询价**:产业带不同的厂各一家(产业带见第6章);
+3. **要拆分,逐项验算**:面料反算、针数核对、损耗率;
+4. **问why不问"能不能便宜"**:"你们绣花报12000针,另一家9000,差在哪?"——让工厂知道你懂行,水分自动挤出;
+5. **入PI**:最终规格+拆分价写进PI附件,作为大货验收依据。
+
+---
+
+> **本章作业**:把一个logo发给1688上三家定制帽厂询价,数量分别报200和2000,要求提供针数。把六份报价填进对比表,亲手找出不一致——本章讲的每个猫腻,几乎都能在真实报价里抓到现行。
+
+</script>
+
+<script>
+/* ───────── 书籍数据 ───────── */
+const CHAPTERS = [
+  {id:'toc',  title:'全书目录',           part:'导览',   done:true},
+  {id:'ch01', title:'第1章 布料',         part:'第一部 帽子的语言', done:true},
+  {id:'ch02', title:'第2章 帽子解剖',     part:'第一部 帽子的语言', done:true},
+  {id:'ch03', title:'第3章 装饰工艺',     part:'第一部 帽子的语言', done:true},
+  {id:'ch04', title:'第4章 生产之旅',     part:'第一部 帽子的语言', done:false},
+  {id:'ch05', title:'第5章 全球行业格局', part:'第二部 行业地图', done:false},
+  {id:'ch06', title:'第6章 产业带地图',   part:'第二部 行业地图', done:false},
+  {id:'ch07', title:'第7章 钱的地图',     part:'第二部 行业地图', done:false},
+  {id:'ch08', title:'第8章 组织与人',     part:'第三部 工厂篇', done:true},
+  {id:'ch09', title:'第9章 看懂报价单',   part:'第三部 工厂篇', done:true},
+  {id:'ch10', title:'第10章 打样的艺术',  part:'第三部 工厂篇', done:false},
+  {id:'ch11', title:'第11章 品质与验货',  part:'第三部 工厂篇', done:false},
+  {id:'ch12', title:'第12章 找工厂与验厂',part:'第三部 工厂篇', done:false},
+  {id:'ch13', title:'第13章 本质与贸易术语',part:'第四部 外贸篇', done:false},
+  {id:'ch14', title:'第14章 付款方式',    part:'第四部 外贸篇', done:false},
+  {id:'ch15', title:'第15章 从询盘到成交',part:'第四部 外贸篇', done:false},
+  {id:'ch16', title:'第16章 单证',        part:'第四部 外贸篇', done:false},
+  {id:'ch17', title:'第17章 物流',        part:'第四部 外贸篇', done:false},
+  {id:'ch18', title:'第18章 海关与退税',  part:'第四部 外贸篇', done:false},
+  {id:'ch19', title:'第19章 算账',        part:'第四部 外贸篇', done:false},
+  {id:'ch20', title:'第20章 认识你的客户',part:'第五部 获客篇', done:false},
+  {id:'ch21', title:'第21章 B2B渠道',     part:'第五部 获客篇', done:false},
+  {id:'ch22', title:'第22章 B2C与定制',   part:'第五部 获客篇', done:false},
+  {id:'ch23', title:'第23章 内容获客',    part:'第五部 获客篇', done:false},
+  {id:'ch24', title:'第24章 经营与复购',  part:'第五部 获客篇', done:false},
+  {id:'ch25', title:'第25章 主体税务合规',part:'第六部 开局篇', done:false},
+  {id:'ch26', title:'第26章 第一单沙盘',  part:'第六部 开局篇', done:false},
+  {id:'ch27', title:'第27章 三种开局路径',part:'第六部 开局篇', done:false},
+  {id:'ch28', title:'第28章 风险与案例',  part:'第六部 开局篇', done:false},
+];
+const md = id => (document.getElementById('md-'+id)?.textContent || '').trim();
+let cur = 'toc';
+let history = [];       // 助教对话 [{role, content}]
+let pendingQuote = '';
+
+/* ───────── 目录渲染 ───────── */
+function renderNav(){
+  const nav = document.getElementById('nav');
+  let html = '', lastPart = '';
+  for(const c of CHAPTERS){
+    if(c.part !== lastPart){ html += `<div class="part">${c.part}</div>`; lastPart = c.part; }
+    html += c.done
+      ? `<a href="#" data-id="${c.id}" class="${c.id===cur?'on':''}">${c.title}</a>`
+      : `<a class="todo">${c.title} ⬜</a>`;
+  }
+  nav.innerHTML = html;
+  nav.querySelectorAll('a[data-id]').forEach(a=>a.onclick=e=>{e.preventDefault();openChapter(a.dataset.id);});
+}
+
+/* ───────── 章节渲染 ───────── */
+function openChapter(id){
+  cur = id;
+  document.getElementById('content').innerHTML = marked.parse(md(id));
+  document.getElementById('reader').scrollTop = 0;
+  renderNav();
+  document.getElementById('nav').classList.remove('open');
+  saveState();
+  const cn = CHAPTERS.find(c=>c.id===id);
+  addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+}
+function addHint(t){
+  const box = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg hint'; d.textContent = t;
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+
+/* ───────── 选中提问 ───────── */
+const askBtn = document.getElementById('askBtn');
+document.getElementById('reader').addEventListener('mouseup', ()=>{
+  setTimeout(()=>{
+    const sel = window.getSelection();
+    const t = sel.toString().trim();
+    if(t.length > 3 && t.length < 800){
+      const r = sel.getRangeAt(0).getBoundingClientRect();
+      askBtn.style.left = Math.min(r.left + r.width/2 - 40, window.innerWidth-110)+'px';
+      askBtn.style.top  = (r.bottom + 8)+'px';
+      askBtn.style.display = 'block';
+      askBtn.dataset.text = t;
+    } else askBtn.style.display = 'none';
+  }, 10);
+});
+document.addEventListener('mousedown', e=>{ if(e.target!==askBtn) askBtn.style.display='none'; });
+askBtn.onclick = ()=>{
+  pendingQuote = askBtn.dataset.text;
+  document.getElementById('quoteText').textContent = pendingQuote.length>120 ? pendingQuote.slice(0,120)+'…' : pendingQuote;
+  document.getElementById('quoteBox').style.display = 'block';
+  askBtn.style.display = 'none';
+  document.getElementById('tutor').classList.remove('hidden');
+  document.getElementById('q').focus();
+};
+function clearQuote(){ pendingQuote=''; document.getElementById('quoteBox').style.display='none'; }
+
+/* ───────── 助教对话 ───────── */
+function addMsg(role, content, quote){
+  const box = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg ' + (role==='user'?'u':'a');
+  if(role==='user'){
+    d.innerHTML = (quote?`<div class="quote">「${escapeHtml(quote.length>100?quote.slice(0,100)+'…':quote)}」</div>`:'') + escapeHtml(content);
+  } else {
+    d.innerHTML = marked.parse(content);
+  }
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function send(){
+  const q = document.getElementById('q');
+  const text = q.value.trim();
+  if(!text) return;
+  const quote = pendingQuote;
+  clearQuote();
+  q.value = '';
+  addMsg('user', text, quote);
+
+  const userContent = quote
+    ? `我选中了书中这段文字:「${quote}」\n\n我的问题:${text}`
+    : text;
+  history.push({role:'user', content:userContent});
+
+  const box = document.getElementById('msgs');
+  const th = document.createElement('div');
+  th.className = 'msg thinking'; th.textContent = '助教翻书中…';
+  box.appendChild(th); box.scrollTop = box.scrollHeight;
+  document.getElementById('send').disabled = true;
+
+  const curCh = CHAPTERS.find(c=>c.id===cur);
+  const system = `你是《一顶帽子的全球旅行:小白入行帽子厂贸实战》的随书助教。这本书教零基础读者进入帽子的生产制造与出口外贸行业。
+
+你的行为准则:
+1. 你对读者一无所知,不假设读者的任何背景、地区或资源,像面对一位陌生读者一样回答。
+2. 优先依据书的内容回答;可以补充公开的行业常识,但要与书的口径一致。
+3. 书是连载中的,很多章节未写。如果问题属于未写章节的范围,直接说明"这属于第X章(未写作)的内容",然后仍给出简要的先行解答。
+4. 回答用简体中文,简洁、口语化、像一位耐心的师傅,一般不超过300字;需要对比时可用小表格。
+5. 读者若选中了书中文字,围绕该段展开,可以举例、换个说法、或给出实操建议。
+
+【全书目录】
+${md('toc')}
+
+【读者当前正在阅读的章节全文】
+${md(curCh.id)}`;
+
+  const ctxMessages = [
+    {role:'user', content: system},
+    {role:'assistant', content:'明白。我已通读以上书稿与目录,现在以随书助教的身份回答读者提问:只依据书的内容和公开行业常识,不对读者背景做任何假设,用简体中文简洁作答。'},
+    ...history.slice(-12)
+  ];
+  async function callAPI(){
+    return fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages: ctxMessages
+      })
+    });
+  }
+  try{
+    let resp = await callAPI();
+    if(!resp.ok){ await new Promise(r=>setTimeout(r,1200)); resp = await callAPI(); }
+    let data = null, raw = '';
+    try{ raw = await resp.text(); data = JSON.parse(raw); }catch(_){}
+    th.remove();
+    if(resp.ok && data && data.content){
+      const ans = data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+      history.push({role:'assistant', content:ans});
+      addMsg('assistant', ans);
+      saveState();
+    } else {
+      const detail = (data && data.error && data.error.message) ? data.error.message : raw.slice(0,300);
+      addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`\n\n请把这条错误信息发给作者排查。');
+      history.pop();
+    }
+  }catch(e){
+    try{
+      await new Promise(r=>setTimeout(r,1200));
+      const resp2 = await callAPI();
+      const data2 = await resp2.json();
+      th.remove();
+      if(resp2.ok && data2 && data2.content){
+        const ans2 = data2.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+        history.push({role:'assistant', content:ans2});
+        addMsg('assistant', ans2);
+        saveState();
+      } else { throw e; }
+    }catch(e2){
+      th.remove();
+      addMsg('assistant', '请求失败(' + (e && e.message ? e.message : '未知错误') + '),已自动重试一次仍未成功。请稍等几秒再问,或把这条信息发给作者。');
+      history.pop();
+    }
+  }
+  document.getElementById('send').disabled = false;
+  q.focus();
+}
+document.getElementById('send').onclick = send;
+document.getElementById('q').addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+document.getElementById('pingBtn').onclick = async ()=>{
+  addHint('发送最小测试请求…');
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:'请只回复一个字:通'}]})
+    });
+    const t = await r.text();
+    addMsg('assistant', '**测试结果** HTTP ' + r.status + '\n\n```\n' + t.slice(0,400) + '\n```');
+  }catch(e){
+    addMsg('assistant', '**测试结果** 请求抛出异常:`' + (e && e.message ? e.message : e) + '`');
+  }
+};
+document.getElementById('clearBtn').onclick = ()=>{
+  history = [];
+  document.getElementById('msgs').innerHTML = '';
+  addHint('对话已清空。');
+  saveState();
+};
+
+/* ───────── 面板开关 ───────── */
+document.getElementById('tutorToggle').onclick = function(){
+  const t = document.getElementById('tutor');
+  t.classList.toggle('hidden');
+  this.classList.toggle('active', !t.classList.contains('hidden'));
+};
+document.getElementById('tocToggle').onclick = ()=>document.getElementById('nav').classList.toggle('open');
+
+/* ───────── 进度与对话持久化(尽力而为)───────── */
+async function saveState(){
+  try{ await window.storage.set('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
+}
+async function loadState(){
+  try{
+    const r = await window.storage.get('hatbook-state');
+    if(r && r.value){
+      const s = JSON.parse(r.value);
+      if(s.cur && CHAPTERS.find(c=>c.id===s.cur && c.done)) cur = s.cur;
+      if(Array.isArray(s.history)){
+        history = s.history;
+        for(const m of history){
+          if(m.role==='user') addMsg('user', m.content.startsWith('我选中了')? m.content.split('我的问题:').pop() : m.content);
+          else addMsg('assistant', m.content);
+        }
+      }
+    }
+  }catch(e){}
+}
+
+/* ───────── 启动 ───────── */
+(async function(){
+  await loadState();
+  renderNav();
+  document.getElementById('content').innerHTML = marked.parse(md(cur));
+  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或用鼠标选中正文任意文字点「问这段」。');
+})();
+</script>
+</body>
+</html>
