@@ -685,6 +685,9 @@ logo图片不能直接进绣花机,要由**绣花制版师**(打带工)转成针
 </script>
 
 <script>
+/* ═════ 部署配置:把下面的地址换成你的 Cloudflare Worker 地址 ═════ */
+const CONFIG = { WORKER_URL: 'https://shy-brook-76ea.kevinren1108.workers.dev' };
+
 /* ───────── 书籍数据 ───────── */
 const CHAPTERS = [
   {id:'toc',  title:'全书目录',           part:'导览',   done:true},
@@ -830,25 +833,15 @@ ${md('toc')}
 【读者当前正在阅读的章节全文】
 ${md(curCh.id)}`;
 
-  const ctxMessages = [
-    {role:'user', content: system},
-    {role:'assistant', content:'明白。我已通读以上书稿与目录,现在以随书助教的身份回答读者提问:只依据书的内容和公开行业常识,不对读者背景做任何假设,用简体中文简洁作答。'},
-    ...history.slice(-12)
-  ];
-  async function callAPI(){
-    return fetch('https://api.anthropic.com/v1/messages', {
+  try{
+    let resp = await fetch(CONFIG.WORKER_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        messages: ctxMessages
-      })
+      body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })
     });
-  }
-  try{
-    let resp = await callAPI();
-    if(!resp.ok){ await new Promise(r=>setTimeout(r,1200)); resp = await callAPI(); }
+    if(!resp.ok && resp.status >= 500){ await new Promise(r=>setTimeout(r,1200));
+      resp = await fetch(CONFIG.WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })});
+    }
     let data = null, raw = '';
     try{ raw = await resp.text(); data = JSON.parse(raw); }catch(_){}
     th.remove();
@@ -859,26 +852,13 @@ ${md(curCh.id)}`;
       saveState();
     } else {
       const detail = (data && data.error && data.error.message) ? data.error.message : raw.slice(0,300);
-      addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`\n\n请把这条错误信息发给作者排查。');
+      addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`');
       history.pop();
     }
   }catch(e){
-    try{
-      await new Promise(r=>setTimeout(r,1200));
-      const resp2 = await callAPI();
-      const data2 = await resp2.json();
-      th.remove();
-      if(resp2.ok && data2 && data2.content){
-        const ans2 = data2.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
-        history.push({role:'assistant', content:ans2});
-        addMsg('assistant', ans2);
-        saveState();
-      } else { throw e; }
-    }catch(e2){
-      th.remove();
-      addMsg('assistant', '请求失败(' + (e && e.message ? e.message : '未知错误') + '),已自动重试一次仍未成功。请稍等几秒再问,或把这条信息发给作者。');
-      history.pop();
-    }
+    th.remove();
+    addMsg('assistant', '请求失败:`' + (e && e.message ? e.message : e) + '`。请检查 CONFIG.WORKER_URL 是否已配置、Worker 是否在线。');
+    history.pop();
   }
   document.getElementById('send').disabled = false;
   q.focus();
@@ -890,10 +870,10 @@ document.getElementById('q').addEventListener('keydown', e=>{
 document.getElementById('pingBtn').onclick = async ()=>{
   addHint('发送最小测试请求…');
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch(CONFIG.WORKER_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:'请只回复一个字:通'}]})
+      body: JSON.stringify({max_tokens:50, messages:[{role:'user', content:'请只回复一个字:通'}]})
     });
     const t = await r.text();
     addMsg('assistant', '**测试结果** HTTP ' + r.status + '\n\n```\n' + t.slice(0,400) + '\n```');
@@ -918,13 +898,13 @@ document.getElementById('tocToggle').onclick = ()=>document.getElementById('nav'
 
 /* ───────── 进度与对话持久化(尽力而为)───────── */
 async function saveState(){
-  try{ await window.storage.set('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
+  try{ localStorage.setItem('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
 }
 async function loadState(){
   try{
-    const r = await window.storage.get('hatbook-state');
-    if(r && r.value){
-      const s = JSON.parse(r.value);
+    const v = localStorage.getItem('hatbook-state');
+    if(v){
+      const s = JSON.parse(v);
       if(s.cur && CHAPTERS.find(c=>c.id===s.cur && c.done)) cur = s.cur;
       if(Array.isArray(s.history)){
         history = s.history;
