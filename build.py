@@ -3,7 +3,7 @@
 import sys, re
 
 WORKER_URL = 'https://shy-brook-76ea.kevinren1108.workers.dev'
-FILES = ['toc', 'ch01', 'ch02', 'ch03', 'ch04', 'ch08', 'ch09']  # 新章完成后加进来
+FILES = ['toc', 'ch00', 'ch01', 'ch02', 'ch03', 'ch04', 'ch08', 'ch09']  # 新章完成后加进来
 
 html = open('reader_web_template.html', encoding='utf-8').read()
 html = html.replace("const CONFIG = { WORKER_URL: 'https://REPLACE-ME.workers.dev' };",

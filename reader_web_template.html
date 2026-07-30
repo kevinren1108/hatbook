@@ -358,6 +358,7 @@ const CONFIG = { WORKER_URL: 'https://REPLACE-ME.workers.dev' };
 /* ───────── 书籍数据 ───────── */
 const CHAPTERS = [
   {id:'toc',  title:'全书目录',           part:'导览',   done:true},
+  {id:'ch00', title:'第0章 写在前面',     part:'导览',   done:true},
   {id:'ch01', title:'第1章 布料',         part:'第一部 帽子的语言', done:true},
   {id:'ch02', title:'第2章 帽子解剖',     part:'第一部 帽子的语言', done:true},
   {id:'ch03', title:'第3章 装饰工艺',     part:'第一部 帽子的语言', done:true},
@@ -405,7 +406,8 @@ function renderNav(){
   nav.innerHTML = html;
   nav.querySelectorAll('a[data-id]').forEach(a=>a.onclick=e=>{e.preventDefault();openChapter(a.dataset.id);});
   const done = CHAPTERS.filter(c=>c.done && c.id!=='toc').length;
-  document.getElementById('prog').textContent = done + '/28章';
+  const total = CHAPTERS.filter(c=>c.id!=='toc').length;
+  document.getElementById('prog').textContent = done + '/' + total + '章';
 }
 
 /* ───────── 章节渲染 ───────── */
