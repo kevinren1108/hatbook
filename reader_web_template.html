@@ -307,7 +307,7 @@ nav a.on .dot{background:var(--thread)}
       <div class="en">The Global Journey of a Cap</div>
     </div>
   </div>
-  <div class="progress">小白入行帽子厂贸实战 · 连载中 <b id="prog"></b></div>
+  <div class="progress">小白入行帽子厂贸实战 · 全书完成 <b id="prog"></b></div>
   <div class="spacer"></div>
   <button class="hbtn" id="fontMinus" title="缩小字号">A−</button>
   <button class="hbtn" id="fontPlus" title="放大字号">A＋</button>
@@ -388,6 +388,7 @@ const CHAPTERS = [
   {id:'ch27', title:'第27章 三种开局路径',part:'第六部 开局篇', done:true},
   {id:'ch28', title:'第28章 风险与案例',  part:'第六部 开局篇', done:true},
   {id:'ch29', title:'尾声 从倒爷到品牌', part:'第六部 开局篇', done:true},
+  {id:'ch30', title:'附录 工具包',      part:'附录',   done:true},
 ];
 const md = id => (document.getElementById('md-'+id)?.textContent || '').trim();
 let cur = 'toc';
@@ -505,7 +506,7 @@ async function send(){
 你的行为准则:
 1. 你对读者一无所知,不假设读者的任何背景、地区或资源,像面对一位陌生读者一样回答。
 2. 优先依据书的内容回答;可以补充公开的行业常识,但要与书的口径一致。
-3. 书是连载中的,很多章节未写。如果问题属于未写章节的范围,直接说明"这属于第X章(未写作)的内容",然后仍给出简要的先行解答。
+3. 全书28章+尾声+附录已完整。若问题涉及读者当前未在读的章节,指出它在第X章(或附录X)并给出简要解答,引导读者去读原章。
 4. 回答用简体中文,简洁、口语化、像一位耐心的师傅,一般不超过300字;需要对比时可用小表格。
 5. 读者若选中了书中文字,围绕该段展开,可以举例、换个说法、或给出实操建议。
 
