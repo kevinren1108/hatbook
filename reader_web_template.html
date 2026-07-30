@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>一顶帽子的全球旅行 · 小白入行帽子厂贸实战</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,6 +19,43 @@
   --tutor-bg:#f4f1ea;
   --shadow:0 1px 2px rgba(35,44,61,.06), 0 8px 24px rgba(35,44,61,.07);
 }
+/* ═══ 暗色主题 ═══ */
+body.dark{
+  --ink:#cfd4de;
+  --denim:#8ba4d0;
+  --denim-deep:#b9c8e4;
+  --thread:#e0904f;
+  --thread-soft:#54371e;
+  --paper:#14171e;
+  --stitch:#373d4a;
+  --panel:#1d212b;
+  --tutor-bg:#191d26;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  background:
+    repeating-linear-gradient(135deg, rgba(139,164,208,.03) 0 1px, transparent 1px 7px),
+    var(--paper);
+}
+body.dark ::selection{background:#54371e;color:#f3dcc6}
+body.dark .brand .en,body.dark .progress{color:#7c8290}
+body.dark nav .part{color:#6f7684}
+body.dark nav a{color:#9aa3b4}
+body.dark nav a.todo{color:#565c69}
+body.dark nav a.todo .dot{border-color:#4a5060}
+body.dark nav a:not(.todo):hover{background:#242936}
+body.dark nav a.on{background:#2c2418}
+body.dark #content em{color:#9d968a}
+body.dark #content code{background:#2b2721;color:#e09a5e}
+body.dark #content pre{background:#22262f}
+body.dark #content pre code{color:#a8b0c0}
+body.dark #content blockquote{background:#262019;color:#c9b394}
+body.dark #content th{background:#272c38}
+body.dark #content tr:nth-child(2n){background:#20242e}
+body.dark .msg.u{background:#31507f;color:#fff}
+body.dark .msg.a code{background:#2b2721;color:#e09a5e}
+body.dark .msg.a th{background:#272c38}
+body.dark #quoteBox{color:#c9b394}
+body.dark .msg.hint,body.dark #clearBtn{color:#7c8290}
+body.dark .msg.thinking{color:#8b919e}
 *{box-sizing:border-box;margin:0;padding:0}
 html{height:100%}
 body{
@@ -145,7 +182,7 @@ nav a.on .dot{background:var(--thread)}
 
 /* ═══ 选中提问浮钮 ═══ */
 #askBtn{
-  position:fixed;display:none;z-index:60;
+  position:fixed;display:none;z-index:80;
   background:var(--denim-deep);color:#fff;border:none;border-radius:999px;
   padding:7px 16px;font-size:12.5px;cursor:pointer;
   box-shadow:0 4px 14px rgba(35,44,61,.3);
@@ -171,7 +208,6 @@ nav a.on .dot{background:var(--thread)}
   color:#fff;font-size:13px;
 }
 #tutor .tname{font-family:'Noto Serif SC',serif;font-weight:900;font-size:14.5px;color:var(--denim-deep)}
-#tutor .tdesc{font-size:10.5px;color:#9a948a;margin-top:2px}
 #clearBtn{
   margin-left:auto;background:none;border:none;font-size:11px;
   color:#a39c8e;cursor:pointer;text-decoration:underline;text-underline-offset:2px;
@@ -226,15 +262,35 @@ nav a.on .dot{background:var(--thread)}
 #send:hover{background:#b25617}
 #send:disabled{opacity:.45;cursor:default}
 
+/* ═══ 手机底部工具栏 ═══ */
+#mbar{display:none}
+
 /* ═══ 窄屏 ═══ */
 @media(max-width:900px){
-  nav{position:fixed;left:0;top:53px;bottom:0;z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
+  header .hbtn{display:none}
+  nav{position:fixed;left:0;top:53px;bottom:calc(52px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
   nav.open{transform:none}
-  #tutor{position:fixed;right:0;top:53px;bottom:0;width:min(94vw,380px);z-index:55;box-shadow:-4px 0 16px rgba(35,44,61,.16)}
-  #reader{padding:20px 14px 90px}
+  #tutor{
+    position:fixed;left:0;right:0;width:auto;top:auto;
+    bottom:calc(52px + env(safe-area-inset-bottom));
+    height:min(72vh,560px);z-index:55;
+    border-left:none;border-top:2px solid var(--thread);
+    box-shadow:0 -6px 20px rgba(35,44,61,.18);
+  }
+  #reader{padding:20px 14px calc(84px + env(safe-area-inset-bottom))}
   #content{padding:30px 22px 40px}
   .progress{display:none}
   .brand .en{display:none}
+  #mbar{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:7px;
+    background:var(--panel);border-top:1px solid var(--stitch);
+    padding:7px 10px calc(7px + env(safe-area-inset-bottom));
+  }
+  #mbar button{
+    flex:1;background:none;border:1px solid var(--stitch);border-radius:999px;
+    padding:7px 0;font-size:12.5px;color:var(--denim);cursor:pointer;white-space:nowrap;
+  }
+  #mbar button.active{background:var(--thread);color:#fff;border-color:var(--thread)}
 }
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;scroll-behavior:auto!important}
@@ -253,6 +309,9 @@ nav a.on .dot{background:var(--thread)}
   </div>
   <div class="progress">小白入行帽子厂贸实战 · 连载中 <b id="prog"></b></div>
   <div class="spacer"></div>
+  <button class="hbtn" id="fontMinus" title="缩小字号">A−</button>
+  <button class="hbtn" id="fontPlus" title="放大字号">A＋</button>
+  <button class="hbtn" id="themeToggle" title="切换深浅色">🌙 深色</button>
   <button class="hbtn active" id="tutorToggle">🧵 随书助教</button>
 </header>
 
@@ -265,7 +324,6 @@ nav a.on .dot{background:var(--thread)}
       <div class="spool">✦</div>
       <div>
         <div class="tname">随书助教</div>
-        <div class="tdesc">只依据本书内容回答 · 不了解读者背景</div>
       </div>
       <button id="clearBtn">清空对话</button>
     </div>
@@ -281,6 +339,14 @@ nav a.on .dot{background:var(--thread)}
 </main>
 
 <button id="askBtn">问这段</button>
+
+<div id="mbar">
+  <button id="mToc">☰ 目录</button>
+  <button id="mFontMinus">A−</button>
+  <button id="mFontPlus">A＋</button>
+  <button id="mTheme">🌙</button>
+  <button id="mTutor">🧵 助教</button>
+</div>
 
 <!-- ══ 书稿内容(构建脚本注入)══ -->
 <!--BOOK_CONTENT-->
@@ -361,27 +427,37 @@ function addHint(t){
 }
 
 /* ───────── 选中提问 ───────── */
+/* 用 selectionchange 而非 mouseup:iOS 长按选词不触发 mouseup,这是手机上"问这段"不出现的原因 */
 const askBtn = document.getElementById('askBtn');
-document.getElementById('reader').addEventListener('mouseup', ()=>{
-  setTimeout(()=>{
-    const sel = window.getSelection();
-    const t = sel.toString().trim();
-    if(t.length > 3 && t.length < 800){
-      const r = sel.getRangeAt(0).getBoundingClientRect();
-      askBtn.style.left = Math.min(r.left + r.width/2 - 40, window.innerWidth-110)+'px';
-      askBtn.style.top  = (r.bottom + 8)+'px';
-      askBtn.style.display = 'block';
-      askBtn.dataset.text = t;
-    } else askBtn.style.display = 'none';
-  }, 10);
+const readerEl = document.getElementById('reader');
+let selTimer = null;
+function updateAskBtn(){
+  const sel = window.getSelection();
+  const t = sel ? sel.toString().trim() : '';
+  if(t.length > 3 && t.length < 800 && sel.rangeCount){
+    const node = sel.anchorNode;
+    const el = node && (node.nodeType === 1 ? node : node.parentNode);
+    if(!el || !readerEl.contains(el)){ askBtn.style.display = 'none'; return; }
+    const r = sel.getRangeAt(0).getBoundingClientRect();
+    askBtn.style.left = Math.max(8, Math.min(r.left + r.width/2 - 40, window.innerWidth - 110)) + 'px';
+    askBtn.style.top  = Math.min(r.bottom + 10, window.innerHeight - 150) + 'px';
+    askBtn.style.display = 'block';
+    askBtn.dataset.text = t;
+  } else askBtn.style.display = 'none';
+}
+document.addEventListener('selectionchange', ()=>{
+  clearTimeout(selTimer);
+  selTimer = setTimeout(updateAskBtn, 220);
 });
 document.addEventListener('mousedown', e=>{ if(e.target!==askBtn) askBtn.style.display='none'; });
+/* iOS:touchstart 直接触发,防止系统在点击瞬间清空选区导致按钮先消失 */
+askBtn.addEventListener('touchstart', e=>{ e.preventDefault(); askBtn.click(); }, {passive:false});
 askBtn.onclick = ()=>{
   pendingQuote = askBtn.dataset.text;
   document.getElementById('quoteText').textContent = pendingQuote.length>120 ? pendingQuote.slice(0,120)+'…' : pendingQuote;
   document.getElementById('quoteBox').style.display = 'block';
   askBtn.style.display = 'none';
-  document.getElementById('tutor').classList.remove('hidden');
+  setTutor(true);
   document.getElementById('q').focus();
 };
 function clearQuote(){ pendingQuote=''; document.getElementById('quoteBox').style.display='none'; }
@@ -480,12 +556,40 @@ document.getElementById('clearBtn').onclick = ()=>{
 };
 
 /* ───────── 面板开关 ───────── */
-document.getElementById('tutorToggle').onclick = function(){
-  const t = document.getElementById('tutor');
-  t.classList.toggle('hidden');
-  this.classList.toggle('active', !t.classList.contains('hidden'));
-};
-document.getElementById('tocToggle').onclick = ()=>document.getElementById('nav').classList.toggle('open');
+function setTutor(open){
+  document.getElementById('tutor').classList.toggle('hidden', !open);
+  document.getElementById('tutorToggle').classList.toggle('active', open);
+  document.getElementById('mTutor').classList.toggle('active', open);
+}
+function toggleTutor(){ setTutor(document.getElementById('tutor').classList.contains('hidden')); }
+function toggleToc(){ document.getElementById('nav').classList.toggle('open'); }
+document.getElementById('tutorToggle').onclick = toggleTutor;
+document.getElementById('tocToggle').onclick = toggleToc;
+
+/* ───────── 字号与主题 ───────── */
+let fontSize = 15;
+function applyFont(){
+  document.getElementById('content').style.fontSize = fontSize + 'px';
+  try{ localStorage.setItem('hatbook-font', fontSize); }catch(e){}
+}
+function bumpFont(d){ fontSize = Math.max(13, Math.min(20, fontSize + d)); applyFont(); }
+function applyTheme(dark){
+  document.body.classList.toggle('dark', dark);
+  document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
+  document.getElementById('mTheme').textContent = dark ? '☀️' : '🌙';
+  try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
+}
+function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
+document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);
+document.getElementById('fontPlus').onclick  = ()=>bumpFont(1);
+document.getElementById('themeToggle').onclick = toggleTheme;
+
+/* ───────── 手机底部工具栏 ───────── */
+document.getElementById('mToc').onclick = toggleToc;
+document.getElementById('mFontMinus').onclick = ()=>bumpFont(-1);
+document.getElementById('mFontPlus').onclick  = ()=>bumpFont(1);
+document.getElementById('mTheme').onclick = toggleTheme;
+document.getElementById('mTutor').onclick = toggleTutor;
 
 /* ───────── 进度与对话持久化 ───────── */
 async function saveState(){
@@ -510,10 +614,18 @@ async function loadState(){
 
 /* ───────── 启动 ───────── */
 (async function(){
+  try{
+    const f = parseInt(localStorage.getItem('hatbook-font'), 10);
+    if(f >= 13 && f <= 20) fontSize = f;
+    const savedTheme = localStorage.getItem('hatbook-theme');
+    applyTheme(savedTheme ? savedTheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
+  }catch(e){ applyTheme(false); }
+  applyFont();
+  if(matchMedia('(max-width:900px)').matches) setTutor(false);
   await loadState();
   renderNav();
   document.getElementById('content').innerHTML = marked.parse(md(cur));
-  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或用鼠标选中正文任意文字点「问这段」。');
+  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
 })();
 </script>
 </body>
