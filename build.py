@@ -3,7 +3,7 @@
 import sys, re
 
 WORKER_URL = 'https://shy-brook-76ea.kevinren1108.workers.dev'
-FILES = ['toc', 'ch00', 'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18']  # 新章完成后加进来
+FILES = ['toc', 'ch00', 'ch01', 'ch02', 'ch03', 'ch04', 'ch05', 'ch06', 'ch07', 'ch08', 'ch09', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'ch15', 'ch16', 'ch17', 'ch18', 'ch22']  # 新章完成后加进来
 
 html = open('reader_web_template.html', encoding='utf-8').read()
 html = html.replace("const CONFIG = { WORKER_URL: 'https://REPLACE-ME.workers.dev' };",
