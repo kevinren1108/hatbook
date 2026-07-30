@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一顶帽子的全球旅行 · 小白入行帽子厂贸实战</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#232c3d;            /* 墨 */
+  --denim:#35507c;          /* 斜纹布靛蓝 */
+  --denim-deep:#243656;
+  --thread:#c8641f;         /* 绣线橘 */
+  --thread-soft:#f3dcc6;
+  --paper:#faf9f5;          /* 坯布白 */
+  --stitch:#ded7c9;         /* 缝线灰 */
+  --panel:#ffffff;
+  --tutor-bg:#f4f1ea;
+  --shadow:0 1px 2px rgba(35,44,61,.06), 0 8px 24px rgba(35,44,61,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{
+  font-family:'Noto Sans SC',-apple-system,'PingFang SC',sans-serif;
+  color:var(--ink);height:100vh;display:flex;flex-direction:column;overflow:hidden;
+  /* 签名底纹:45°斜纹布纹理(twill) */
+  background:
+    repeating-linear-gradient(135deg, rgba(53,80,124,.028) 0 1px, transparent 1px 7px),
+    var(--paper);
+}
+::selection{background:var(--thread-soft);color:var(--denim-deep)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--thread);outline-offset:2px;border-radius:4px}
+
+/* ═══ 顶栏:织唛式品牌牌 ═══ */
+header{
+  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:var(--panel);border-bottom:1px solid var(--stitch);flex-shrink:0;
+  box-shadow:0 1px 0 rgba(35,44,61,.03);
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--denim);outline:1px solid var(--denim);outline-offset:2px;
+  padding:5px 12px;background:var(--panel);
+}
+.brand .cn{font-family:'Noto Serif SC',serif;font-weight:900;font-size:14px;color:var(--denim-deep);letter-spacing:.08em}
+.brand .en{font-size:8.5px;color:#9a948a;letter-spacing:.22em;text-transform:uppercase;margin-top:1px}
+.progress{font-size:11px;color:#9a948a;letter-spacing:.05em}
+.progress b{color:var(--thread);font-weight:700}
+header .spacer{flex:1}
+.hbtn{
+  background:none;border:1px solid var(--stitch);border-radius:999px;
+  padding:6px 14px;font-size:12.5px;color:var(--denim);cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.hbtn:hover{border-color:var(--denim)}
+.hbtn.active{background:var(--thread);color:#fff;border-color:var(--thread)}
+
+/* ═══ 主区 ═══ */
+main{flex:1;display:flex;min-height:0}
+
+/* —— 目录:样品册脊 —— */
+nav{
+  width:224px;flex-shrink:0;background:var(--panel);
+  border-right:1px solid var(--stitch);overflow-y:auto;padding:16px 0 30px;
+}
+nav .part{
+  font-size:10px;letter-spacing:.24em;color:#a39c8e;font-weight:700;
+  padding:16px 18px 6px;display:flex;align-items:center;gap:8px;
+}
+nav .part::after{content:"";flex:1;border-top:1px dashed var(--stitch)}
+nav a{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 18px;font-size:13px;color:#4c5568;text-decoration:none;
+  border-left:3px solid transparent;line-height:1.5;
+}
+nav a .dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  background:var(--denim);opacity:.85;
+}
+nav a.todo{color:#b8b2a5;cursor:default}
+nav a.todo .dot{background:none;border:1.5px dashed #c9c3b5}
+nav a:not(.todo):hover{background:#f7f5ef}
+nav a.on{
+  color:var(--thread);border-left-color:var(--thread);
+  font-weight:700;background:#fdf5ec;
+}
+nav a.on .dot{background:var(--thread)}
+
+/* —— 正文:书页 —— */
+#reader{flex:1;overflow-y:auto;padding:40px 48px 110px;scroll-behavior:smooth}
+#content{
+  max-width:700px;margin:0 auto;line-height:2.0;font-size:15px;
+  background:var(--panel);padding:52px 56px 60px;
+  border:1px solid var(--stitch);box-shadow:var(--shadow);
+}
+#content h1{
+  font-family:'Noto Serif SC',serif;font-weight:900;font-size:25px;line-height:1.5;
+  padding-bottom:16px;margin-bottom:26px;position:relative;
+  border-bottom:2px dashed var(--thread);
+}
+#content h1::after{ /* 双针迹 */
+  content:"";position:absolute;left:0;right:0;bottom:-7px;
+  border-bottom:1px dashed var(--stitch);
+}
+#content h2{
+  font-family:'Noto Serif SC',serif;font-weight:900;font-size:18.5px;
+  margin:42px 0 14px;padding-left:12px;border-left:4px solid var(--denim);
+}
+#content h3{
+  font-family:'Noto Serif SC',serif;font-weight:700;font-size:15.5px;
+  color:var(--denim);margin:28px 0 8px;
+}
+#content p{margin:11px 0}
+#content strong{color:var(--denim-deep)}
+#content em{color:#6b6357}
+#content code{
+  background:#f3efe6;color:#a4531a;padding:1px 6px;border-radius:3px;
+  font-size:13px;font-family:ui-monospace,Menlo,monospace;
+}
+#content pre{
+  background:#f6f3ec;border:1px solid var(--stitch);border-radius:6px;
+  padding:14px 16px;margin:16px 0;overflow-x:auto;line-height:1.8;
+}
+#content pre code{background:none;padding:0;color:#4c5568;font-size:12.5px}
+/* 作业框:吊牌样式 */
+#content blockquote{
+  position:relative;margin:26px 0 10px;padding:18px 20px 16px 44px;
+  background:#fdf9f2;border:1px dashed var(--thread);border-radius:2px;
+  color:#6b5a42;
+}
+#content blockquote::before{ /* 吊牌孔 */
+  content:"";position:absolute;left:16px;top:20px;width:11px;height:11px;
+  border:2px solid var(--thread);border-radius:50%;background:var(--panel);
+}
+#content table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px;line-height:1.7}
+#content th,#content td{border:1px solid var(--stitch);padding:8px 11px;text-align:left}
+#content th{background:#f2eee5;font-weight:700;color:var(--denim-deep)}
+#content tr:nth-child(2n){background:#fbf9f4}
+#content ul,#content ol{padding-left:1.5em;margin:11px 0}
+#content li{margin:6px 0}
+#content hr{border:none;border-top:1px dashed var(--stitch);margin:30px 0}
+#content a{color:var(--thread);text-decoration:none;border-bottom:1px dashed var(--thread)}
+
+/* ═══ 选中提问浮钮 ═══ */
+#askBtn{
+  position:fixed;display:none;z-index:60;
+  background:var(--denim-deep);color:#fff;border:none;border-radius:999px;
+  padding:7px 16px;font-size:12.5px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(35,44,61,.3);
+}
+#askBtn::before{content:"✂ ";color:var(--thread-soft)}
+#askBtn:hover{background:var(--thread)}
+
+/* ═══ 助教面板 ═══ */
+#tutor{
+  width:365px;flex-shrink:0;background:var(--tutor-bg);
+  border-left:1px solid var(--stitch);display:flex;flex-direction:column;min-width:0;
+}
+#tutor.hidden{display:none}
+#tutor .thead{
+  padding:14px 18px 12px;border-bottom:2px dashed var(--thread);
+  display:flex;align-items:flex-start;gap:10px;flex-shrink:0;
+}
+.spool{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-top:1px;
+  background:radial-gradient(circle at 35% 35%, #e08b4a, var(--thread));
+  border:2px solid var(--panel);box-shadow:0 0 0 1px var(--stitch);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;
+}
+#tutor .tname{font-family:'Noto Serif SC',serif;font-weight:900;font-size:14.5px;color:var(--denim-deep)}
+#tutor .tdesc{font-size:10.5px;color:#9a948a;margin-top:2px}
+#clearBtn{
+  margin-left:auto;background:none;border:none;font-size:11px;
+  color:#a39c8e;cursor:pointer;text-decoration:underline;text-underline-offset:2px;
+}
+#clearBtn:hover{color:var(--thread)}
+#msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:13px}
+.msg{
+  max-width:92%;padding:10px 14px;font-size:13.5px;line-height:1.8;word-break:break-word;
+}
+.msg.u{
+  align-self:flex-end;background:var(--denim);color:#fff;
+  border-radius:12px 12px 3px 12px;
+}
+.msg.u .quote{
+  border-left:3px solid rgba(255,255,255,.45);padding-left:9px;
+  margin-bottom:7px;font-size:12px;opacity:.85;
+}
+.msg.a{
+  align-self:flex-start;background:var(--panel);
+  border:1px solid var(--stitch);border-top:2px solid var(--thread);
+  border-radius:3px 12px 12px 12px;box-shadow:0 1px 3px rgba(35,44,61,.05);
+}
+.msg.a p{margin:7px 0}.msg.a p:first-child{margin-top:0}.msg.a p:last-child{margin-bottom:0}
+.msg.a strong{color:var(--thread)}
+.msg.a table{border-collapse:collapse;font-size:12px;margin:7px 0}
+.msg.a th,.msg.a td{border:1px solid var(--stitch);padding:4px 8px}
+.msg.a th{background:#f2eee5}
+.msg.a ul,.msg.a ol{padding-left:1.3em}
+.msg.a code{background:#f3efe6;padding:0 4px;border-radius:3px;font-size:12px;color:#a4531a}
+.msg.hint{align-self:center;background:none;color:#a39c8e;font-size:12px;text-align:center;max-width:100%;line-height:1.7}
+.msg.thinking{align-self:flex-start;color:#9a948a;font-size:12.5px;background:var(--panel);border:1px dashed var(--stitch);border-radius:3px 12px 12px 12px}
+#inputRow{padding:12px;border-top:1px solid var(--stitch);flex-shrink:0}
+#quoteBox{
+  display:none;background:var(--panel);border-left:3px solid var(--thread);
+  padding:7px 26px 7px 11px;font-size:12px;color:#6b5a42;margin-bottom:8px;
+  border-radius:0 6px 6px 0;position:relative;line-height:1.6;
+}
+#quoteBox .x{position:absolute;right:8px;top:5px;cursor:pointer;color:#b8b2a5;font-size:13px}
+#quoteBox .x:hover{color:var(--thread)}
+#inWrap{display:flex;gap:8px}
+#q{
+  flex:1;border:1px solid var(--stitch);border-radius:10px;padding:10px 13px;
+  font-size:13.5px;font-family:inherit;resize:none;height:44px;
+  background:var(--panel);color:var(--ink);transition:border-color .15s;
+}
+#q:focus{outline:none;border-color:var(--thread)}
+#send{
+  background:var(--thread);color:#fff;border:none;border-radius:10px;
+  padding:0 18px;font-size:13.5px;cursor:pointer;font-weight:500;
+  transition:background .15s;
+}
+#send:hover{background:#b25617}
+#send:disabled{opacity:.45;cursor:default}
+
+/* ═══ 窄屏 ═══ */
+@media(max-width:900px){
+  nav{position:fixed;left:0;top:53px;bottom:0;z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
+  nav.open{transform:none}
+  #tutor{position:fixed;right:0;top:53px;bottom:0;width:min(94vw,380px);z-index:55;box-shadow:-4px 0 16px rgba(35,44,61,.16)}
+  #reader{padding:20px 14px 90px}
+  #content{padding:30px 22px 40px}
+  .progress{display:none}
+  .brand .en{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="hbtn" id="tocToggle">☰ 目录</button>
+  <div class="brand">
+    <div>
+      <div class="cn">一顶帽子的全球旅行</div>
+      <div class="en">The Global Journey of a Cap</div>
+    </div>
+  </div>
+  <div class="progress">小白入行帽子厂贸实战 · 连载中 <b id="prog"></b></div>
+  <div class="spacer"></div>
+  <button class="hbtn active" id="tutorToggle">🧵 随书助教</button>
+</header>
+
+<main>
+  <nav id="nav"></nav>
+  <div id="reader"><article id="content"></article></div>
+
+  <aside id="tutor">
+    <div class="thead">
+      <div class="spool">✦</div>
+      <div>
+        <div class="tname">随书助教</div>
+        <div class="tdesc">只依据本书内容回答 · 不了解读者背景</div>
+      </div>
+      <button id="clearBtn">清空对话</button>
+    </div>
+    <div id="msgs"></div>
+    <div id="inputRow">
+      <div id="quoteBox"><span class="x" onclick="clearQuote()">✕</span><span id="quoteText"></span></div>
+      <div id="inWrap">
+        <textarea id="q" placeholder="就当前章节提问,或选中正文文字追问…"></textarea>
+        <button id="send">问</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<button id="askBtn">问这段</button>
+
+<!-- ══ 书稿内容(构建脚本注入)══ -->
+<!--BOOK_CONTENT-->
+
+<script>
+/* ═════ 部署配置 ═════ */
+const CONFIG = { WORKER_URL: 'https://REPLACE-ME.workers.dev' };
+
+/* ───────── 书籍数据 ───────── */
+const CHAPTERS = [
+  {id:'toc',  title:'全书目录',           part:'导览',   done:true},
+  {id:'ch01', title:'第1章 布料',         part:'第一部 帽子的语言', done:true},
+  {id:'ch02', title:'第2章 帽子解剖',     part:'第一部 帽子的语言', done:true},
+  {id:'ch03', title:'第3章 装饰工艺',     part:'第一部 帽子的语言', done:true},
+  {id:'ch04', title:'第4章 生产之旅',     part:'第一部 帽子的语言', done:true},
+  {id:'ch05', title:'第5章 全球行业格局', part:'第二部 行业地图', done:false},
+  {id:'ch06', title:'第6章 产业带地图',   part:'第二部 行业地图', done:false},
+  {id:'ch07', title:'第7章 钱的地图',     part:'第二部 行业地图', done:false},
+  {id:'ch08', title:'第8章 组织与人',     part:'第三部 工厂篇', done:true},
+  {id:'ch09', title:'第9章 看懂报价单',   part:'第三部 工厂篇', done:true},
+  {id:'ch10', title:'第10章 打样的艺术',  part:'第三部 工厂篇', done:false},
+  {id:'ch11', title:'第11章 品质与验货',  part:'第三部 工厂篇', done:false},
+  {id:'ch12', title:'第12章 找工厂与验厂',part:'第三部 工厂篇', done:false},
+  {id:'ch13', title:'第13章 本质与贸易术语',part:'第四部 外贸篇', done:false},
+  {id:'ch14', title:'第14章 付款方式',    part:'第四部 外贸篇', done:false},
+  {id:'ch15', title:'第15章 从询盘到成交',part:'第四部 外贸篇', done:false},
+  {id:'ch16', title:'第16章 单证',        part:'第四部 外贸篇', done:false},
+  {id:'ch17', title:'第17章 物流',        part:'第四部 外贸篇', done:false},
+  {id:'ch18', title:'第18章 海关与退税',  part:'第四部 外贸篇', done:false},
+  {id:'ch19', title:'第19章 算账',        part:'第四部 外贸篇', done:false},
+  {id:'ch20', title:'第20章 认识你的客户',part:'第五部 获客篇', done:false},
+  {id:'ch21', title:'第21章 B2B渠道',     part:'第五部 获客篇', done:false},
+  {id:'ch22', title:'第22章 B2C与定制',   part:'第五部 获客篇', done:false},
+  {id:'ch23', title:'第23章 内容获客',    part:'第五部 获客篇', done:false},
+  {id:'ch24', title:'第24章 经营与复购',  part:'第五部 获客篇', done:false},
+  {id:'ch25', title:'第25章 主体税务合规',part:'第六部 开局篇', done:false},
+  {id:'ch26', title:'第26章 第一单沙盘',  part:'第六部 开局篇', done:false},
+  {id:'ch27', title:'第27章 三种开局路径',part:'第六部 开局篇', done:false},
+  {id:'ch28', title:'第28章 风险与案例',  part:'第六部 开局篇', done:false},
+];
+const md = id => (document.getElementById('md-'+id)?.textContent || '').trim();
+let cur = 'toc';
+let history = [];
+let pendingQuote = '';
+
+/* ───────── 目录渲染 ───────── */
+function renderNav(){
+  const nav = document.getElementById('nav');
+  let html = '', lastPart = '';
+  for(const c of CHAPTERS){
+    if(c.part !== lastPart){ html += `<div class="part">${c.part}</div>`; lastPart = c.part; }
+    html += c.done
+      ? `<a href="#" data-id="${c.id}" class="${c.id===cur?'on':''}"><span class="dot"></span>${c.title}</a>`
+      : `<a class="todo"><span class="dot"></span>${c.title}</a>`;
+  }
+  nav.innerHTML = html;
+  nav.querySelectorAll('a[data-id]').forEach(a=>a.onclick=e=>{e.preventDefault();openChapter(a.dataset.id);});
+  const done = CHAPTERS.filter(c=>c.done && c.id!=='toc').length;
+  document.getElementById('prog').textContent = done + '/28章';
+}
+
+/* ───────── 章节渲染 ───────── */
+function openChapter(id){
+  cur = id;
+  document.getElementById('content').innerHTML = marked.parse(md(id));
+  document.getElementById('reader').scrollTop = 0;
+  renderNav();
+  document.getElementById('nav').classList.remove('open');
+  saveState();
+  const cn = CHAPTERS.find(c=>c.id===id);
+  addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+}
+function addHint(t){
+  const box = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg hint'; d.textContent = t;
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+
+/* ───────── 选中提问 ───────── */
+const askBtn = document.getElementById('askBtn');
+document.getElementById('reader').addEventListener('mouseup', ()=>{
+  setTimeout(()=>{
+    const sel = window.getSelection();
+    const t = sel.toString().trim();
+    if(t.length > 3 && t.length < 800){
+      const r = sel.getRangeAt(0).getBoundingClientRect();
+      askBtn.style.left = Math.min(r.left + r.width/2 - 40, window.innerWidth-110)+'px';
+      askBtn.style.top  = (r.bottom + 8)+'px';
+      askBtn.style.display = 'block';
+      askBtn.dataset.text = t;
+    } else askBtn.style.display = 'none';
+  }, 10);
+});
+document.addEventListener('mousedown', e=>{ if(e.target!==askBtn) askBtn.style.display='none'; });
+askBtn.onclick = ()=>{
+  pendingQuote = askBtn.dataset.text;
+  document.getElementById('quoteText').textContent = pendingQuote.length>120 ? pendingQuote.slice(0,120)+'…' : pendingQuote;
+  document.getElementById('quoteBox').style.display = 'block';
+  askBtn.style.display = 'none';
+  document.getElementById('tutor').classList.remove('hidden');
+  document.getElementById('q').focus();
+};
+function clearQuote(){ pendingQuote=''; document.getElementById('quoteBox').style.display='none'; }
+
+/* ───────── 助教对话 ───────── */
+function addMsg(role, content, quote){
+  const box = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg ' + (role==='user'?'u':'a');
+  if(role==='user'){
+    d.innerHTML = (quote?`<div class="quote">「${escapeHtml(quote.length>100?quote.slice(0,100)+'…':quote)}」</div>`:'') + escapeHtml(content);
+  } else {
+    d.innerHTML = marked.parse(content);
+  }
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function send(){
+  const q = document.getElementById('q');
+  const text = q.value.trim();
+  if(!text) return;
+  const quote = pendingQuote;
+  clearQuote();
+  q.value = '';
+  addMsg('user', text, quote);
+
+  const userContent = quote
+    ? `我选中了书中这段文字:「${quote}」\n\n我的问题:${text}`
+    : text;
+  history.push({role:'user', content:userContent});
+
+  const box = document.getElementById('msgs');
+  const th = document.createElement('div');
+  th.className = 'msg thinking'; th.textContent = '助教翻书中…';
+  box.appendChild(th); box.scrollTop = box.scrollHeight;
+  document.getElementById('send').disabled = true;
+
+  const curCh = CHAPTERS.find(c=>c.id===cur);
+  const system = `你是《一顶帽子的全球旅行:小白入行帽子厂贸实战》的随书助教。这本书教零基础读者进入帽子的生产制造与出口外贸行业。
+
+你的行为准则:
+1. 你对读者一无所知,不假设读者的任何背景、地区或资源,像面对一位陌生读者一样回答。
+2. 优先依据书的内容回答;可以补充公开的行业常识,但要与书的口径一致。
+3. 书是连载中的,很多章节未写。如果问题属于未写章节的范围,直接说明"这属于第X章(未写作)的内容",然后仍给出简要的先行解答。
+4. 回答用简体中文,简洁、口语化、像一位耐心的师傅,一般不超过300字;需要对比时可用小表格。
+5. 读者若选中了书中文字,围绕该段展开,可以举例、换个说法、或给出实操建议。
+
+【全书目录】
+${md('toc')}
+
+【读者当前正在阅读的章节全文】
+${md(curCh.id)}`;
+
+  try{
+    let resp = await fetch(CONFIG.WORKER_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })
+    });
+    if(!resp.ok && resp.status >= 500){ await new Promise(r=>setTimeout(r,1200));
+      resp = await fetch(CONFIG.WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })});
+    }
+    let data = null, raw = '';
+    try{ raw = await resp.text(); data = JSON.parse(raw); }catch(_){}
+    th.remove();
+    if(resp.ok && data && data.content){
+      const ans = data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+      history.push({role:'assistant', content:ans});
+      addMsg('assistant', ans);
+      saveState();
+    } else {
+      const detail = (data && data.error && data.error.message) ? data.error.message : raw.slice(0,300);
+      addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`');
+      history.pop();
+    }
+  }catch(e){
+    th.remove();
+    addMsg('assistant', '请求失败:`' + (e && e.message ? e.message : e) + '`。请稍后再试。');
+    history.pop();
+  }
+  document.getElementById('send').disabled = false;
+  q.focus();
+}
+document.getElementById('send').onclick = send;
+document.getElementById('q').addEventListener('keydown', e=>{
+  // 输入法组词中的回车(确认候选词)不触发发送
+  if(e.isComposing || e.keyCode === 229) return;
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+document.getElementById('clearBtn').onclick = ()=>{
+  history = [];
+  document.getElementById('msgs').innerHTML = '';
+  addHint('对话已清空。');
+  saveState();
+};
+
+/* ───────── 面板开关 ───────── */
+document.getElementById('tutorToggle').onclick = function(){
+  const t = document.getElementById('tutor');
+  t.classList.toggle('hidden');
+  this.classList.toggle('active', !t.classList.contains('hidden'));
+};
+document.getElementById('tocToggle').onclick = ()=>document.getElementById('nav').classList.toggle('open');
+
+/* ───────── 进度与对话持久化 ───────── */
+async function saveState(){
+  try{ localStorage.setItem('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
+}
+async function loadState(){
+  try{
+    const v = localStorage.getItem('hatbook-state');
+    if(v){
+      const s = JSON.parse(v);
+      if(s.cur && CHAPTERS.find(c=>c.id===s.cur && c.done)) cur = s.cur;
+      if(Array.isArray(s.history)){
+        history = s.history;
+        for(const m of history){
+          if(m.role==='user') addMsg('user', m.content.startsWith('我选中了')? m.content.split('我的问题:').pop() : m.content);
+          else addMsg('assistant', m.content);
+        }
+      }
+    }
+  }catch(e){}
+}
+
+/* ───────── 启动 ───────── */
+(async function(){
+  await loadState();
+  renderNav();
+  document.getElementById('content').innerHTML = marked.parse(md(cur));
+  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或用鼠标选中正文任意文字点「问这段」。');
+})();
+</script>
+</body>
+</html>
