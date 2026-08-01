@@ -180,15 +180,165 @@ nav a.on .dot{background:var(--thread)}
 #content hr{border:none;border-top:1px dashed var(--stitch);margin:30px 0}
 #content a{color:var(--thread);text-decoration:none;border-bottom:1px dashed var(--thread)}
 
-/* ═══ 选中提问浮钮 ═══ */
-#askBtn{
-  position:fixed;display:none;z-index:80;
-  background:var(--denim-deep);color:#fff;border:none;border-radius:999px;
-  padding:7px 16px;font-size:12.5px;cursor:pointer;
-  box-shadow:0 4px 14px rgba(35,44,61,.3);
+/* ═══ 选中文字后的工具条:划线 / 笔记 / 问这段 ═══ */
+#selbar{
+  position:fixed;display:none;z-index:88;
+  background:var(--denim-deep);border-radius:999px;padding:4px;
+  box-shadow:0 5px 18px rgba(35,44,61,.34);
+  gap:2px;
 }
-#askBtn::before{content:"✂ ";color:var(--thread-soft)}
-#askBtn:hover{background:var(--thread)}
+#selbar.on{display:flex}
+#selbar button{
+  background:none;border:none;color:#fff;cursor:pointer;
+  padding:8px 13px;font-size:13px;border-radius:999px;white-space:nowrap;
+  display:flex;align-items:center;gap:5px;min-height:38px;
+  -webkit-tap-highlight-color:transparent;
+}
+#selbar button:hover{background:rgba(255,255,255,.14)}
+#selbar button:active{background:var(--thread)}
+#selbar .sw-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+/* ═══ 划线高亮 ═══ */
+#content mark.hl{
+  background:none;color:inherit;padding:0;
+  border-radius:2px;cursor:pointer;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.c-yellow{background:#fbe6a2}  .c-green{background:#c8e6c0}
+.c-blue{background:#c3dcf2}    .c-pink{background:#f6cede}
+#content mark.hl.c-yellow{background:#fdefc0}
+#content mark.hl.c-green{background:#d8ecd0}
+#content mark.hl.c-blue{background:#d3e5f5}
+#content mark.hl.c-pink{background:#f8dbe6}
+body.dark #content mark.hl.c-yellow{background:#4a4123;color:#ecdfc4}
+body.dark #content mark.hl.c-green{background:#31432f;color:#d5e6d0}
+body.dark #content mark.hl.c-blue{background:#2c3f52;color:#d2e2f0}
+body.dark #content mark.hl.c-pink{background:#4a2f3a;color:#f0d6e0}
+body.dark .c-yellow{background:#4a4123} body.dark .c-green{background:#31432f}
+body.dark .c-blue{background:#2c3f52}   body.dark .c-pink{background:#4a2f3a}
+/* 带笔记的划线:末尾一枚小笔尖 */
+#content mark.hl.hasnote::after{
+  content:"✎";font-size:.72em;color:var(--thread);vertical-align:super;margin-left:1px;
+}
+/* 对方的划线:只在下方加一道虚线,不抢自己的颜色 */
+#content mark.hl.peer{
+  background:none;border-bottom:2px dotted var(--thread);
+}
+body.dark #content mark.hl.peer{color:inherit}
+
+/* ═══ 批注卡片 ═══ */
+.annocard .who{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:#8f8879;margin-bottom:10px;
+}
+.annocard .who .when{margin-left:auto;font-size:11.5px}
+.annocard blockquote.qt{
+  margin:0 0 4px;padding:11px 14px;border-radius:3px;
+  border-left:3px solid var(--thread);
+  font-size:13.5px;line-height:1.85;color:#5c5343;
+}
+body.dark .annocard blockquote.qt{color:#cfd4de}
+.cbtn{
+  width:30px;height:30px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;padding:0;
+}
+.cbtn.on{border-color:var(--denim-deep);box-shadow:0 0 0 2px var(--panel) inset}
+.peernote{
+  background:var(--tutor-bg);border:1px dashed var(--stitch);border-radius:8px;
+  padding:10px 13px;margin:12px 0;font-size:13.5px;line-height:1.8;
+}
+.replies{margin:12px 0 4px;display:flex;flex-direction:column;gap:8px}
+.replies .rp{
+  font-size:13px;line-height:1.75;background:var(--tutor-bg);
+  border-radius:8px;padding:9px 12px;
+}
+.replies .rp b{color:var(--thread);margin-right:7px;font-weight:700}
+
+/* ═══ 笔记本 ═══ */
+.nbtabs{display:flex;gap:7px;margin-bottom:4px;flex-wrap:wrap}
+.nbtabs button{
+  border:1px solid var(--stitch);background:var(--panel);color:var(--denim);
+  border-radius:999px;padding:7px 14px;font-size:12.5px;font-family:inherit;cursor:pointer;min-height:36px;
+}
+.nbtabs button.on{background:var(--thread);color:#fff;border-color:var(--thread)}
+.nbstat{
+  display:flex;gap:16px;font-size:12px;color:#8f8879;margin:12px 0 4px;flex-wrap:wrap;
+}
+.nbstat b{color:var(--thread);font-size:15px;font-family:'Noto Serif SC',serif}
+.bar{height:7px;border-radius:4px;background:var(--stitch);overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--thread);border-radius:4px}
+.nbch{margin:18px 0 0}
+.nbch > h4{
+  font-family:'Noto Serif SC',serif;font-size:13.5px;color:var(--denim-deep);
+  margin:0 0 8px;padding-bottom:6px;border-bottom:1px dashed var(--stitch);
+  display:flex;align-items:center;gap:8px;
+}
+.nbch > h4 .n{margin-left:auto;font-size:11px;color:#a39c8e;font-weight:400}
+.nbitem{
+  border-left:3px solid var(--thread);padding:8px 0 8px 12px;margin:10px 0;cursor:pointer;
+}
+.nbitem:hover{background:#faf8f3}
+body.dark .nbitem:hover{background:#20242e}
+.nbitem .qt{font-size:13px;line-height:1.8;color:#5c5343}
+body.dark .nbitem .qt{color:#b6bcc9}
+.nbitem .nt{font-size:13px;line-height:1.8;margin-top:6px;color:var(--ink)}
+.nbitem .nt::before{content:"✎ ";color:var(--thread)}
+.nbitem .meta{font-size:11px;color:#a39c8e;margin-top:5px;display:flex;gap:8px;align-items:center}
+.nbitem.broken .qt{opacity:.6;text-decoration:line-through}
+.nbempty{text-align:center;color:#a39c8e;font-size:13px;line-height:1.9;padding:30px 10px}
+
+/* ═══ 搜索 ═══ */
+.sbox{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.sbox input{
+  flex:1;border:1px solid var(--stitch);border-radius:9px;padding:11px 13px;
+  font-size:16px;font-family:inherit;background:var(--paper);color:var(--ink);
+}
+.sbox input:focus{outline:none;border-color:var(--thread)}
+.shit{padding:11px 2px;border-bottom:1px dashed var(--stitch);cursor:pointer}
+.shit:last-child{border-bottom:none}
+.shit .ttl{font-size:12px;color:var(--thread);font-weight:700;margin-bottom:4px}
+.shit .ctx{font-size:13px;line-height:1.8;color:#5c5343}
+body.dark .shit .ctx{color:#b6bcc9}
+.shit .ctx b{background:var(--thread-soft);color:var(--denim-deep);border-radius:2px;padding:0 2px}
+body.dark .shit .ctx b{background:#54371e;color:#f3dcc6}
+.shit:hover{background:#faf8f3}
+body.dark .shit:hover{background:#20242e}
+/* 跳转后短暂闪一下命中处 */
+@keyframes flashhit{0%,100%{background:transparent}20%,60%{background:var(--thread-soft)}}
+#content .flashhit{animation:flashhit 1.6s ease-in-out}
+body.dark #content .flashhit{animation:flashhitd 1.6s ease-in-out}
+@keyframes flashhitd{0%,100%{background:transparent}20%,60%{background:#54371e}}
+
+/* ═══ 术语 ═══ */
+#content .term{
+  border-bottom:1px dotted var(--denim);cursor:pointer;
+}
+body.dark #content .term{border-bottom-color:#7f93b8}
+.termcard .en{
+  font-size:12.5px;color:#8f8879;letter-spacing:.04em;margin-bottom:10px;
+}
+.termcard .def{font-size:14.5px;line-height:1.9}
+.termcard .src{margin-top:14px;font-size:12px;color:#a39c8e}
+
+/* ═══ 本章作业 ═══ */
+.hwbox{
+  margin:14px 0 6px;padding:13px 15px;border:1px solid var(--stitch);
+  border-radius:8px;background:var(--tutor-bg);
+}
+.hwbox .top{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:32px}
+.hwbox .tick{
+  width:24px;height:24px;border-radius:6px;border:2px solid var(--thread);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:#fff;font-size:14px;line-height:1;
+}
+.hwbox.done .tick{background:var(--thread)}
+.hwbox .lb{font-size:13.5px;font-weight:700;color:var(--denim-deep)}
+.hwbox .sub{font-size:11.5px;color:#a39c8e;margin-top:2px}
+.hwbox textarea{
+  width:100%;margin-top:10px;border:1px solid var(--stitch);border-radius:8px;
+  padding:10px 12px;font-family:inherit;font-size:14px;line-height:1.8;
+  background:var(--panel);color:var(--ink);resize:vertical;min-height:80px;
+}
+.hwbox textarea:focus{outline:none;border-color:var(--thread)}
 
 /* ═══ 助教面板 ═══ */
 #tutor{
@@ -262,35 +412,181 @@ nav a.on .dot{background:var(--thread)}
 #send:hover{background:#b25617}
 #send:disabled{opacity:.45;cursor:default}
 
+/* ═══════════════════════════════════════════════
+   通用弹层:手机=底部抽屉(拇指可达),桌面=居中卡片
+   ═══════════════════════════════════════════════ */
+.mask{
+  position:fixed;inset:0;background:rgba(20,23,30,.45);z-index:90;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.mask.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;z-index:95;background:var(--panel);color:var(--ink);
+  display:flex;flex-direction:column;
+  left:50%;top:50%;transform:translate(-50%,-50%) scale(.97);
+  width:min(540px,92vw);max-height:82vh;
+  border:1px solid var(--stitch);border-radius:10px;
+  box-shadow:0 12px 40px rgba(35,44,61,.28);
+  opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+}
+.sheet.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.sheet .grip{display:none}
+.sh-head{
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  padding:14px 16px 11px;border-bottom:2px dashed var(--thread);
+}
+.sh-title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:15px;color:var(--denim-deep)}
+.sh-x{
+  margin-left:auto;background:none;border:none;font-size:20px;line-height:1;
+  color:#a39c8e;cursor:pointer;padding:6px 8px;border-radius:6px;
+}
+.sh-x:hover{color:var(--thread)}
+.sh-body{padding:14px 16px 20px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sh-body .hint{font-size:12px;color:#a39c8e;line-height:1.8;margin:8px 0}
+.sh-err{
+  display:none;background:#fdece2;border:1px solid var(--thread);color:#a4531a;
+  border-radius:6px;padding:8px 11px;font-size:12.5px;line-height:1.6;margin:10px 0 0;
+}
+body.dark .sh-err{background:#33231a;color:#e0904f}
+
+/* —— 弹层里的表单 —— */
+.fld{margin:14px 0}
+.fld label{display:block;font-size:12px;color:#8f8879;letter-spacing:.04em;margin-bottom:6px}
+.fld input,.fld textarea{
+  width:100%;border:1px solid var(--stitch);border-radius:9px;padding:11px 13px;
+  font-family:inherit;font-size:16px;   /* 16px:iOS 聚焦时不自动放大页面 */
+  background:var(--paper);color:var(--ink);
+}
+.fld textarea{resize:vertical;min-height:96px;line-height:1.75;font-size:15px}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--thread)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--stitch);background:var(--panel);color:var(--denim);
+  border-radius:999px;padding:10px 18px;font-size:14px;font-family:inherit;
+  cursor:pointer;min-height:44px;   /* 手机触控目标 */
+}
+.btn:hover{border-color:var(--denim)}
+.btn.primary{background:var(--thread);color:#fff;border-color:var(--thread);font-weight:500}
+.btn.primary:hover{background:#b25617}
+.btn.block{display:flex;width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.danger{color:#b2402a;border-color:#e2c3ba}
+.btnrow{display:flex;gap:9px;margin-top:16px}
+.btnrow .btn{flex:1}
+
+/* —— 设置行 —— */
+.srow{
+  display:flex;align-items:center;gap:12px;min-height:54px;
+  padding:10px 0;border-bottom:1px dashed var(--stitch);font-size:14px;
+}
+.srow:last-child{border-bottom:none}
+.srow .lbl{flex:1;min-width:0}
+.srow .sub{font-size:11.5px;color:#a39c8e;margin-top:3px;line-height:1.6}
+.srow .ctl{display:flex;gap:7px;align-items:center;flex-shrink:0}
+.stepper{display:flex;align-items:center;gap:4px}
+.stepper button{
+  width:38px;height:38px;border-radius:9px;border:1px solid var(--stitch);
+  background:var(--panel);color:var(--denim);font-size:15px;cursor:pointer;
+}
+.stepper .val{min-width:34px;text-align:center;font-size:13px;color:#8f8879}
+/* 开关 */
+.sw{position:relative;width:48px;height:29px;flex-shrink:0;cursor:pointer}
+.sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.sw .track{
+  position:absolute;inset:0;background:var(--stitch);border-radius:999px;transition:background .18s;
+}
+.sw .knob{
+  position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .18s;
+}
+.sw input:checked ~ .track{background:var(--thread)}
+.sw input:checked ~ .knob{transform:translateX(19px)}
+
+/* —— 账号头像小圆片 —— */
+.avatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;background:var(--denim);
+}
+.avatar.peer{background:var(--thread)}
+#acctBtn .avatar{width:21px;height:21px;font-size:10.5px}
+.syncdot{
+  width:7px;height:7px;border-radius:50%;background:#9bbf7a;flex-shrink:0;
+  transition:background .2s;
+}
+.syncdot.busy{background:var(--thread)}
+.syncdot.off{background:#c9c3b5}
+.syncdot.bad{background:#c4553a}
+
+/* —— 轻提示 —— */
+#toast{
+  position:fixed;z-index:98;left:50%;transform:translateX(-50%) translateY(14px);
+  bottom:26px;max-width:min(520px,92vw);
+  display:flex;align-items:center;gap:12px;
+  background:var(--denim-deep);color:#fff;border-radius:999px;
+  padding:11px 16px;font-size:13px;line-height:1.5;
+  box-shadow:0 6px 22px rgba(35,44,61,.32);
+  opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+}
+#toast.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+#toast .tact{
+  background:var(--thread);color:#fff;border:none;border-radius:999px;
+  padding:7px 14px;font-size:12.5px;font-family:inherit;cursor:pointer;flex-shrink:0;
+}
+@media(max-width:900px){
+  #toast{bottom:calc(66px + env(safe-area-inset-bottom));left:10px;right:10px;transform:translateY(14px);max-width:none}
+  #toast.on{transform:translateY(0)}
+}
+
 /* ═══ 手机底部工具栏 ═══ */
 #mbar{display:none}
 
 /* ═══ 窄屏 ═══ */
 @media(max-width:900px){
   header .hbtn{display:none}
-  nav{position:fixed;left:0;top:53px;bottom:calc(52px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
+  header #acctBtn{display:none}
+  nav{position:fixed;left:0;top:53px;bottom:calc(58px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
   nav.open{transform:none}
   #tutor{
     position:fixed;left:0;right:0;width:auto;top:auto;
-    bottom:calc(52px + env(safe-area-inset-bottom));
+    bottom:calc(58px + env(safe-area-inset-bottom));
     height:min(72vh,560px);z-index:55;
     border-left:none;border-top:2px solid var(--thread);
     box-shadow:0 -6px 20px rgba(35,44,61,.18);
   }
-  #reader{padding:20px 14px calc(84px + env(safe-area-inset-bottom))}
+  #reader{padding:20px 14px calc(90px + env(safe-area-inset-bottom))}
   #content{padding:30px 22px 40px}
   .progress{display:none}
   .brand .en{display:none}
+  /* 五个大触控区:目录 / 搜索 / 笔记 / 助教 / 我 */
   #mbar{
-    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:7px;
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:2px;
     background:var(--panel);border-top:1px solid var(--stitch);
-    padding:7px 10px calc(7px + env(safe-area-inset-bottom));
+    padding:4px 4px calc(4px + env(safe-area-inset-bottom));
   }
   #mbar button{
-    flex:1;background:none;border:1px solid var(--stitch);border-radius:999px;
-    padding:7px 0;font-size:12.5px;color:var(--denim);cursor:pointer;white-space:nowrap;
+    flex:1;background:none;border:none;border-radius:10px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:48px;padding:5px 0;font-size:10.5px;color:#6f7889;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
   }
-  #mbar button.active{background:var(--thread);color:#fff;border-color:var(--thread)}
+  #mbar button .ic{font-size:18px;line-height:1.1}
+  #mbar button.active{color:var(--thread)}
+  #mbar button:active{background:#f2efe8}
+  body.dark #mbar button{color:#8b919e}
+  body.dark #mbar button:active{background:#242936}
+  /* 弹层在手机上从底部升起 */
+  .sheet{
+    left:0;right:0;bottom:0;top:auto;width:auto;
+    transform:translateY(100%);max-height:88vh;
+    border-radius:16px 16px 0 0;border-left:none;border-right:none;border-bottom:none;
+  }
+  .sheet.on{transform:translateY(0)}
+  .sheet .grip{
+    display:block;width:38px;height:4px;border-radius:2px;
+    background:var(--stitch);margin:9px auto 1px;flex-shrink:0;
+  }
+  .sh-body{padding-bottom:calc(22px + env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;scroll-behavior:auto!important}
@@ -309,10 +605,13 @@ nav a.on .dot{background:var(--thread)}
   </div>
   <div class="progress">小白入行帽子厂贸实战 · 全书完成 <b id="prog"></b></div>
   <div class="spacer"></div>
+  <button class="hbtn" id="searchBtn" title="全书搜索">🔍 搜索</button>
   <button class="hbtn" id="fontMinus" title="缩小字号">A−</button>
   <button class="hbtn" id="fontPlus" title="放大字号">A＋</button>
   <button class="hbtn" id="themeToggle" title="切换深浅色">🌙 深色</button>
+  <button class="hbtn" id="notebookToggle">✎ 我的笔记本</button>
   <button class="hbtn active" id="tutorToggle">🧵 随书助教</button>
+  <button class="hbtn" id="acctBtn" title="账号与设置"><span class="syncdot off" id="syncDot"></span> 登录</button>
 </header>
 
 <main>
@@ -338,14 +637,29 @@ nav a.on .dot{background:var(--thread)}
   </aside>
 </main>
 
-<button id="askBtn">问这段</button>
+<div id="selbar">
+  <button data-act="hl"><span class="sw-dot c-yellow"></span>划线</button>
+  <button data-act="note">✎ 笔记</button>
+  <button data-act="ask">✂ 问这段</button>
+</div>
 
 <div id="mbar">
-  <button id="mToc">☰ 目录</button>
-  <button id="mFontMinus">A−</button>
-  <button id="mFontPlus">A＋</button>
-  <button id="mTheme">🌙</button>
-  <button id="mTutor">🧵 助教</button>
+  <button id="mToc"><span class="ic">☰</span>目录</button>
+  <button id="mSearch"><span class="ic">🔍</span>搜索</button>
+  <button id="mNotebook"><span class="ic">✎</span>笔记</button>
+  <button id="mTutor"><span class="ic">🧵</span>助教</button>
+  <button id="mAcct"><span class="ic">●</span>我</button>
+</div>
+
+<!-- ══ 通用弹层(手机=底部抽屉 / 桌面=居中卡片)══ -->
+<div class="mask" id="mask"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grip"></div>
+  <div class="sh-head">
+    <div class="sh-title" id="shTitle"></div>
+    <button class="sh-x" id="shX" aria-label="关闭">✕</button>
+  </div>
+  <div class="sh-body" id="shBody"></div>
 </div>
 
 <!-- ══ 书稿内容(构建脚本注入)══ -->
@@ -353,7 +667,10 @@ nav a.on .dot{background:var(--thread)}
 
 <script>
 /* ═════ 部署配置 ═════ */
-const CONFIG = { WORKER_URL: 'https://REPLACE-ME.workers.dev' };
+const CONFIG = {
+  WORKER_URL: 'https://REPLACE-ME.workers.dev',       // 随书助教代理
+  DATA_URL:   'https://REPLACE-ME-DATA.workers.dev',  // 账号与笔记数据
+};
 
 /* ───────── 书籍数据 ───────── */
 const CHAPTERS = [
@@ -413,15 +730,28 @@ function renderNav(){
 }
 
 /* ───────── 章节渲染 ───────── */
-function openChapter(id){
+/**
+ * @param {string} id 章节 id
+ * @param {object} [opt] {pos:{bi,ratio}} 恢复到指定位置;{silent:true} 不向助教报告
+ */
+function openChapter(id, opt){
+  opt = opt || {};
+  flushReadTime();
   cur = id;
   document.getElementById('content').innerHTML = marked.parse(md(id));
-  document.getElementById('reader').scrollTop = 0;
+  indexBlocks();
+  applyDecorations();
+  if(opt.pos) restorePos(opt.pos);
+  else document.getElementById('reader').scrollTop = 0;
   renderNav();
   document.getElementById('nav').classList.remove('open');
-  saveState();
-  const cn = CHAPTERS.find(c=>c.id===id);
-  addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+  saveChat();
+  chapterEnterAt = Date.now();
+  onPosChanged(true);
+  if(!opt.silent){
+    const cn = CHAPTERS.find(c=>c.id===id);
+    addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+  }
 }
 function addHint(t){
   const box = document.getElementById('msgs');
@@ -430,41 +760,489 @@ function addHint(t){
   box.appendChild(d); box.scrollTop = box.scrollHeight;
 }
 
-/* ───────── 选中提问 ───────── */
-/* 用 selectionchange 而非 mouseup:iOS 长按选词不触发 mouseup,这是手机上"问这段"不出现的原因 */
-const askBtn = document.getElementById('askBtn');
+/* ═══════════════════════════════════════════════════════
+   选中文字 → 划线 / 笔记 / 问这段
+   用 selectionchange 而非 mouseup:iOS 长按选词不触发 mouseup
+   ═══════════════════════════════════════════════════════ */
+const selbar   = document.getElementById('selbar');
 const readerEl = document.getElementById('reader');
 let selTimer = null;
-function updateAskBtn(){
+let selCache = null;      // {anchors, text} —— 动作触发时选区可能已被系统清掉,提前存好
+
+function hideSelbar(){ selbar.classList.remove('on'); }
+
+function updateSelbar(){
   const sel = window.getSelection();
   const t = sel ? sel.toString().trim() : '';
-  if(t.length > 3 && t.length < 800 && sel.rangeCount){
-    const node = sel.anchorNode;
-    const el = node && (node.nodeType === 1 ? node : node.parentNode);
-    if(!el || !readerEl.contains(el)){ askBtn.style.display = 'none'; return; }
-    const r = sel.getRangeAt(0).getBoundingClientRect();
-    askBtn.style.left = Math.max(8, Math.min(r.left + r.width/2 - 40, window.innerWidth - 110)) + 'px';
-    askBtn.style.top  = Math.min(r.bottom + 10, window.innerHeight - 150) + 'px';
-    askBtn.style.display = 'block';
-    askBtn.dataset.text = t;
-  } else askBtn.style.display = 'none';
+  if(!(t.length > 1 && t.length < 3000 && sel.rangeCount && !sel.isCollapsed)){ hideSelbar(); return; }
+  const node = sel.anchorNode;
+  const el = node && (node.nodeType === 1 ? node : node.parentNode);
+  if(!el || !document.getElementById('content').contains(el)){ hideSelbar(); return; }
+
+  const anchors = anchorsFromSelection();
+  if(!anchors.length){ hideSelbar(); return; }
+  selCache = { anchors, text:t };
+
+  const rects = sel.getRangeAt(0).getClientRects();
+  const first = rects[0], last = rects[rects.length - 1];
+  if(!first){ hideSelbar(); return; }
+  selbar.classList.add('on');
+  const w = selbar.offsetWidth || 250, h = selbar.offsetHeight || 46;
+  const left = Math.min(Math.max(8, (first.left + last.right) / 2 - w / 2), window.innerWidth - w - 8);
+  // 优先放选区上方:iOS 的「拷贝/查询」菜单通常占着下方
+  let top = first.top - h - 12;
+  if(top < 58) top = Math.min(last.bottom + 14, window.innerHeight - h - 14);
+  selbar.style.left = left + 'px';
+  selbar.style.top  = Math.max(58, top) + 'px';
 }
+
 document.addEventListener('selectionchange', ()=>{
   clearTimeout(selTimer);
-  selTimer = setTimeout(updateAskBtn, 220);
+  selTimer = setTimeout(updateSelbar, 200);
 });
-document.addEventListener('mousedown', e=>{ if(e.target!==askBtn) askBtn.style.display='none'; });
-/* iOS:touchstart 直接触发,防止系统在点击瞬间清空选区导致按钮先消失 */
-askBtn.addEventListener('touchstart', e=>{ e.preventDefault(); askBtn.click(); }, {passive:false});
-askBtn.onclick = ()=>{
-  pendingQuote = askBtn.dataset.text;
-  document.getElementById('quoteText').textContent = pendingQuote.length>120 ? pendingQuote.slice(0,120)+'…' : pendingQuote;
-  document.getElementById('quoteBox').style.display = 'block';
-  askBtn.style.display = 'none';
-  setTutor(true);
-  document.getElementById('q').focus();
-};
-function clearQuote(){ pendingQuote=''; document.getElementById('quoteBox').style.display='none'; }
+document.addEventListener('mousedown', e=>{ if(!selbar.contains(e.target)) hideSelbar(); });
+
+let selActing = false;
+function bindSelAction(btn){
+  const run = e=>{
+    e.preventDefault();
+    if(selActing) return;
+    selActing = true;
+    setTimeout(()=>{ selActing = false; }, 400);
+    doSelAction(btn.dataset.act);
+  };
+  // iOS:touchstart 直接动手,否则系统会先清掉选区
+  btn.addEventListener('touchstart', run, {passive:false});
+  btn.addEventListener('click', run);
+}
+selbar.querySelectorAll('button').forEach(bindSelAction);
+
+function doSelAction(act){
+  const cache = selCache;
+  hideSelbar();
+  if(!cache || !cache.anchors.length) return;
+  try{ window.getSelection().removeAllRanges(); }catch(e){}
+
+  if(act === 'ask'){
+    pendingQuote = cache.text;
+    document.getElementById('quoteText').textContent =
+      pendingQuote.length > 120 ? pendingQuote.slice(0, 120) + '…' : pendingQuote;
+    document.getElementById('quoteBox').style.display = 'block';
+    setTutor(true);
+    document.getElementById('q').focus();
+    return;
+  }
+  const ids = createAnnotation(cache.anchors);
+  if(act === 'note') openAnnoSheet(ids, {focusNote:true});
+  else toast('已划线');
+}
+function clearQuote(){ pendingQuote = ''; document.getElementById('quoteBox').style.display = 'none'; }
+
+/* ═══════════════════════════════════════════════════════
+   锚点引擎:把选区变成可长期保存、书稿改动后仍能找回的坐标
+   ═══════════════════════════════════════════════════════ */
+/** 块的纯文本 —— 排除事后插入的作业控件,保证锚点偏移始终对齐原文 */
+function blockText(el){
+  if(!el) return '';
+  if(el.querySelector && el.querySelector('.hwbox')){
+    let s = '';
+    for(const n of el.childNodes){
+      if(n.nodeType === 1 && n.classList && n.classList.contains('hwbox')) continue;
+      s += n.textContent || '';
+    }
+    return s;
+  }
+  return el.textContent || '';
+}
+
+/** 从块首到 (container,offset) 的纯文本长度 —— 比遍历文本节点更稳 */
+function offsetFromBlockStart(el, container, offset){
+  const r = document.createRange();
+  try{
+    r.selectNodeContents(el);
+    r.setEnd(container, offset);
+  }catch(e){ return -1; }
+  return r.toString().length;
+}
+
+/** 按纯文本偏移在块内还原 Range */
+function rangeInBlock(el, start, end){
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  let pos = 0, sNode = null, sOff = 0, eNode = null, eOff = 0, n;
+  while((n = w.nextNode())){
+    const len = n.nodeValue.length;
+    if(sNode === null && pos + len > start){ sNode = n; sOff = start - pos; }
+    if(pos + len >= end){ eNode = n; eOff = end - pos; break; }
+    pos += len;
+  }
+  if(!sNode || !eNode) return null;
+  const r = document.createRange();
+  try{
+    r.setStart(sNode, Math.max(0, Math.min(sOff, sNode.nodeValue.length)));
+    r.setEnd(eNode,   Math.max(0, Math.min(eOff, eNode.nodeValue.length)));
+  }catch(e){ return null; }
+  return r.collapsed ? null : r;
+}
+
+/** 当前选区 → 每个跨到的块一份锚点(跨段划线会拆成同组的多条) */
+function anchorsFromSelection(){
+  const sel = window.getSelection();
+  if(!sel || !sel.rangeCount || sel.isCollapsed) return [];
+  const range = sel.getRangeAt(0);
+  const content = document.getElementById('content');
+  if(!content.contains(range.commonAncestorContainer) && range.commonAncestorContainer !== content) return [];
+
+  const out = [], kids = content.children;
+  for(let i = 0; i < kids.length; i++){
+    const el = kids[i];
+    let hit = false;
+    try{ hit = range.intersectsNode(el); }catch(e){ hit = false; }
+    if(!hit) continue;
+    const full = blockText(el);
+    if(!full) continue;
+
+    const sub = range.cloneRange();
+    const whole = document.createRange();
+    whole.selectNodeContents(el);
+    try{
+      if(sub.compareBoundaryPoints(Range.START_TO_START, whole) < 0) sub.setStart(el, 0);
+      if(sub.compareBoundaryPoints(Range.END_TO_END, whole) > 0)     sub.setEnd(el, el.childNodes.length);
+    }catch(e){ continue; }
+
+    const start = offsetFromBlockStart(el, sub.startContainer, sub.startOffset);
+    const end   = offsetFromBlockStart(el, sub.endContainer, sub.endOffset);
+    if(start < 0 || end <= start) continue;
+    const quote = full.slice(start, end);
+    if(!quote.trim()) continue;
+
+    out.push({
+      bi:i, start, end, quote,
+      prefix: full.slice(Math.max(0, start - 30), start),
+      suffix: full.slice(end, end + 30),
+    });
+    if(out.length >= 12) break;   // 一次划太多段不合理,截断
+  }
+  return out;
+}
+
+/** 三级容错:原坐标 → 前后文重定位 → 全章找原文 */
+let anchorRepaired = false;
+function resolveAnchor(a){
+  const el = blockEl(a.block_index);
+  if(el && blockText(el).slice(a.start_offset, a.end_offset) === a.quote){
+    return { bi:a.block_index, start:a.start_offset, end:a.end_offset };
+  }
+  const kids = document.getElementById('content').children;
+  const withCtx = (a.prefix || '') + a.quote + (a.suffix || '');
+  for(let pass = 0; pass < 2; pass++){
+    for(let i = 0; i < kids.length; i++){
+      const txt = blockText(kids[i]);
+      if(pass === 0){
+        const p = txt.indexOf(withCtx);
+        if(p >= 0){
+          const s = p + (a.prefix || '').length;
+          return repair(a, i, s, s + a.quote.length);
+        }
+      }else{
+        const p = txt.indexOf(a.quote);
+        if(p >= 0) return repair(a, i, p, p + a.quote.length);
+      }
+    }
+  }
+  return null;   // 找不着也不丢:笔记本里仍在,标「原文已变动」
+}
+function repair(a, bi, start, end){
+  if(a.block_index !== bi || a.start_offset !== start || a.end_offset !== end){
+    if(a.user_id === myId()){
+      a.block_index = bi; a.start_offset = start; a.end_offset = end;
+      a.updated_at = Date.now(); a._dirty = true;
+      anchorRepaired = true;
+    }
+  }
+  return { bi, start, end };
+}
+
+/* ═══════════════════════════════════════════════════════
+   标注数据
+   ═══════════════════════════════════════════════════════ */
+const myId = ()=> auth.user ? auth.user.id : 'guest';
+const isMine = a => (a.user_id || 'guest') === myId();
+const groupOf = id => String(id).split('#')[0];
+const userName = id => (store.users && store.users[id]) || (auth.user && auth.user.id === id ? auth.user.name : id);
+
+function chapterAnnotations(ch){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(!a || a.deleted || a.chapter !== ch) continue;
+    if(!isMine(a) && !prefs.peer) continue;
+    out.push(a);
+  }
+  return out;
+}
+function groupMembers(gid){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(a && !a.deleted && groupOf(a.id) === gid) out.push(a);
+  }
+  return out.sort((x, y)=> (x.block_index - y.block_index) || (x.start_offset - y.start_offset));
+}
+const groupQuote = gid => groupMembers(gid).map(a => a.quote).join('');
+
+function createAnnotation(anchors, opt){
+  opt = opt || {};
+  const gid = uid(), t = Date.now(), ids = [];
+  anchors.forEach((a, idx)=>{
+    const id = anchors.length > 1 ? gid + '#' + idx : gid;
+    store.annotations[id] = {
+      id, user_id: myId(), chapter: cur,
+      block_index: a.bi, start_offset: a.start, end_offset: a.end,
+      quote: a.quote, prefix: a.prefix, suffix: a.suffix,
+      color: opt.color || prefs.color || 'yellow',
+      note: opt.note || '', private: 0,
+      created_at: t, updated_at: t, _dirty: true,
+    };
+    ids.push(id);
+  });
+  saveStore(); scheduleSync(); renderHighlights();
+  return ids;
+}
+function updateGroup(gid, patch){
+  const t = Date.now();
+  for(const a of groupMembers(gid)){
+    if(!isMine(a)) continue;
+    Object.assign(a, patch, {updated_at:t, _dirty:true});
+  }
+  saveStore(); scheduleSync(); renderHighlights();
+}
+function deleteGroup(gid){
+  const t = Date.now();
+  for(const a of groupMembers(gid)){
+    if(!isMine(a)) continue;
+    a.deleted = 1; a.updated_at = t; a._dirty = true;
+  }
+  saveStore(); scheduleSync(); renderHighlights();
+}
+
+/* ═══════════════════════════════════════════════════════
+   高亮渲染:区间切片后从后往前包裹,重叠也不会串
+   ═══════════════════════════════════════════════════════ */
+/** 拆掉高亮与术语标记,让正文回到干净状态再重画 */
+function clearHighlights(){
+  const content = document.getElementById('content');
+  content.querySelectorAll('mark.hl, span.term').forEach(m=>{
+    const p = m.parentNode;
+    if(!p) return;
+    while(m.firstChild) p.insertBefore(m.firstChild, m);
+    p.removeChild(m);
+  });
+  content.normalize();
+}
+
+function renderHighlights(){
+  clearHighlights();
+  const list = chapterAnnotations(cur);
+  if(!list.length) return;
+
+  anchorRepaired = false;
+  const byBlock = {};
+  for(const a of list){
+    const at = resolveAnchor(a);
+    if(!at) continue;
+    (byBlock[at.bi] = byBlock[at.bi] || []).push({a, s:at.start, e:at.end});
+  }
+  for(const bi in byBlock){
+    const el = blockEl(parseInt(bi, 10));
+    if(el) paintBlock(el, byBlock[bi]);
+  }
+  if(anchorRepaired){ saveStore(); scheduleSync(); }
+}
+
+function paintBlock(el, items){
+  const cuts = new Set();
+  items.forEach(it=>{ cuts.add(it.s); cuts.add(it.e); });
+  const pts = [...cuts].sort((a, b)=> a - b);
+
+  const segs = [];
+  for(let i = 0; i < pts.length - 1; i++){
+    const s = pts[i], e = pts[i + 1];
+    const hits = items.filter(it => it.s <= s && it.e >= e);
+    if(hits.length) segs.push({s, e, hits});
+  }
+  // 从后往前:先改后面的,前面的偏移才不会失效
+  for(let i = segs.length - 1; i >= 0; i--){
+    const seg = segs[i];
+    const r = rangeInBlock(el, seg.s, seg.e);
+    if(!r) continue;
+    const mine = seg.hits.filter(h => isMine(h.a));
+    const top  = (mine.length ? mine : seg.hits)[mine.length ? mine.length - 1 : seg.hits.length - 1].a;
+    const m = document.createElement('mark');
+    m.className = 'hl c-' + (top.color || 'yellow')
+                + (mine.length ? '' : ' peer')
+                + (seg.hits.some(h => h.a.note) ? ' hasnote' : '');
+    m.dataset.gids = [...new Set(seg.hits.map(h => groupOf(h.a.id)))].join(',');
+    try{
+      m.appendChild(r.extractContents());
+      r.insertNode(m);
+    }catch(e){}
+  }
+}
+
+document.getElementById('content').addEventListener('click', e=>{
+  if(!e.target.closest) return;
+  const sel = window.getSelection();
+  if(sel && !sel.isCollapsed) return;          // 正在选字,别抢
+  const term = e.target.closest('span.term');
+  if(term){ e.preventDefault(); openTermCard(term.dataset.t); return; }
+  const m = e.target.closest('mark.hl');
+  if(!m) return;
+  e.preventDefault();
+  openAnnoSheet((m.dataset.gids || '').split(',').filter(Boolean));
+});
+
+/* ═══════════════════════════════════════════════════════
+   标注卡片
+   ═══════════════════════════════════════════════════════ */
+const COLORS = [['yellow','黄'], ['green','绿'], ['blue','蓝'], ['pink','粉']];
+
+function openAnnoSheet(idsOrGids, opt){
+  opt = opt || {};
+  const gids = [...new Set((idsOrGids || []).map(groupOf))];
+  if(!gids.length) return;
+  const cards = gids.map(gid => annoCardHtml(gid)).join('<hr style="border:none;border-top:1px dashed var(--stitch);margin:16px 0">');
+  openSheet(gids.length > 1 ? '这里有 ' + gids.length + ' 条批注' : '批注', cards, box=>{
+    gids.forEach(gid => bindAnnoCard(box, gid, opt));
+  }, 'anno');
+}
+
+function annoCardHtml(gid){
+  const ms = groupMembers(gid);
+  if(!ms.length) return '';
+  const a = ms[0], mine = isMine(a);
+  const quote = groupQuote(gid);
+  const rs = repliesOf(gid);
+
+  const colorRow = mine ? `
+    <div class="srow">
+      <div class="lbl">颜色</div>
+      <div class="ctl">${COLORS.map(([c, n])=>
+        `<button class="cbtn c-${c} ${a.color===c?'on':''}" data-g="${gid}" data-c="${c}" title="${n}"></button>`).join('')}</div>
+    </div>` : '';
+
+  const noteBlock = mine ? `
+    <div class="fld"><label>我的笔记</label>
+      <textarea data-note="${gid}" placeholder="这段为什么值得记?写给三个月后的自己。">${escapeHtml(a.note || '')}</textarea>
+    </div>` :
+    (a.note ? `<div class="peernote">${escapeHtml(a.note)}</div>` : '');
+
+  const acts = mine ? `
+    <div class="srow">
+      <div class="lbl">仅自己可见<div class="sub">开启后对方看不到这条</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" data-priv="${gid}" ${a.private?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="btnrow">
+      <button class="btn" data-ask="${gid}">问助教</button>
+      <button class="btn danger" data-del="${gid}">删除</button>
+    </div>` : `
+    <div class="btnrow">
+      <button class="btn" data-ask="${gid}">问助教</button>
+      <button class="btn primary" data-reply="${gid}">回一句</button>
+    </div>`;
+
+  return `
+    <div class="annocard">
+      <div class="who">
+        <span class="avatar ${mine?'':'peer'}">${escapeHtml((mine ? (auth.user?auth.user.name:'我') : userName(a.user_id) || '?').slice(0,1))}</span>
+        <span>${mine ? '我' : escapeHtml(userName(a.user_id))}划的</span>
+        <span class="when">${fmtTime(a.created_at)}</span>
+      </div>
+      <blockquote class="qt c-${a.color || 'yellow'}">${escapeHtml(quote.length > 300 ? quote.slice(0,300) + '…' : quote)}</blockquote>
+      ${colorRow}
+      ${noteBlock}
+      ${rs.length ? '<div class="replies">' + rs.map(r=>
+        `<div class="rp"><b>${escapeHtml(userName(r.user_id))}</b>${escapeHtml(r.body)}</div>`).join('') + '</div>' : ''}
+      <div class="rpbox" data-rpbox="${gid}" style="display:none">
+        <div class="fld"><textarea data-rptext="${gid}" placeholder="说一句…"></textarea></div>
+        <div class="btnrow"><button class="btn primary" data-rpsend="${gid}">发出</button></div>
+      </div>
+      ${acts}
+    </div>`;
+}
+
+function bindAnnoCard(box, gid, opt){
+  const q = s => box.querySelector(s);
+  box.querySelectorAll(`.cbtn[data-g="${gid}"]`).forEach(b=>{
+    b.onclick = ()=>{
+      updateGroup(gid, {color:b.dataset.c});
+      prefs.color = b.dataset.c; savePrefs();
+      box.querySelectorAll(`.cbtn[data-g="${gid}"]`).forEach(x => x.classList.toggle('on', x === b));
+      const qt = box.querySelector(`.annocard blockquote.qt`);
+      if(qt) qt.className = 'qt c-' + b.dataset.c;
+    };
+  });
+  const ta = q(`textarea[data-note="${gid}"]`);
+  if(ta){
+    let tt = null;
+    ta.addEventListener('input', ()=>{
+      clearTimeout(tt);
+      tt = setTimeout(()=>updateGroup(gid, {note: ta.value.trim()}), 500);
+    });
+    if(opt && opt.focusNote) setTimeout(()=>{ try{ ta.focus(); }catch(e){} }, 150);
+  }
+  const pv = q(`input[data-priv="${gid}"]`);
+  if(pv) pv.onchange = ()=> updateGroup(gid, {private: pv.checked ? 1 : 0});
+
+  const del = q(`[data-del="${gid}"]`);
+  if(del) del.onclick = ()=>{
+    if(del.dataset.sure !== '1'){ del.dataset.sure = '1'; del.textContent = '真的删?'; return; }
+    deleteGroup(gid); closeSheet(); toast('已删除');
+  };
+  const ask = q(`[data-ask="${gid}"]`);
+  if(ask) ask.onclick = ()=>{
+    pendingQuote = groupQuote(gid);
+    document.getElementById('quoteText').textContent =
+      pendingQuote.length > 120 ? pendingQuote.slice(0,120) + '…' : pendingQuote;
+    document.getElementById('quoteBox').style.display = 'block';
+    closeSheet(); setTutor(true);
+    document.getElementById('q').focus();
+  };
+  const rp = q(`[data-reply="${gid}"]`);
+  if(rp) rp.onclick = ()=>{
+    const bx = q(`[data-rpbox="${gid}"]`);
+    bx.style.display = 'block';
+    setTimeout(()=>{ try{ q(`textarea[data-rptext="${gid}"]`).focus(); }catch(e){} }, 100);
+  };
+  const send = q(`[data-rpsend="${gid}"]`);
+  if(send) send.onclick = ()=>{
+    const t = q(`textarea[data-rptext="${gid}"]`).value.trim();
+    if(!t) return;
+    addReply(gid, t);
+    closeSheet(); toast('已回复');
+  };
+}
+
+function repliesOf(gid){
+  const out = [];
+  for(const k in store.replies){
+    const r = store.replies[k];
+    if(r && !r.deleted && groupOf(r.annotation_id) === gid) out.push(r);
+  }
+  return out.sort((a, b)=> (a.created_at || 0) - (b.created_at || 0));
+}
+function addReply(gid, body){
+  const id = uid(), t = Date.now();
+  store.replies[id] = {id, annotation_id:gid, user_id:myId(), body, created_at:t, updated_at:t, _dirty:true};
+  saveStore(); scheduleSync();
+}
+function fmtTime(ts){
+  if(!ts) return '';
+  const d = new Date(ts), n = new Date();
+  const same = d.toDateString() === n.toDateString();
+  const p = x => String(x).padStart(2, '0');
+  return same ? p(d.getHours()) + ':' + p(d.getMinutes())
+              : (d.getMonth() + 1) + '月' + d.getDate() + '日';
+}
 
 /* ───────── 助教对话 ───────── */
 function addMsg(role, content, quote){
@@ -532,7 +1310,7 @@ ${md(curCh.id)}`;
       const ans = data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
       history.push({role:'assistant', content:ans});
       addMsg('assistant', ans);
-      saveState();
+      saveChat();
     } else {
       const detail = (data && data.error && data.error.message) ? data.error.message : raw.slice(0,300);
       addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`');
@@ -556,7 +1334,7 @@ document.getElementById('clearBtn').onclick = ()=>{
   history = [];
   document.getElementById('msgs').innerHTML = '';
   addHint('对话已清空。');
-  saveState();
+  saveChat();
 };
 
 /* ───────── 面板开关 ───────── */
@@ -575,61 +1353,1045 @@ let fontSize = 15;
 function applyFont(){
   document.getElementById('content').style.fontSize = fontSize + 'px';
   try{ localStorage.setItem('hatbook-font', fontSize); }catch(e){}
+  const v = document.getElementById('fontVal'); if(v) v.textContent = fontSize;
 }
-function bumpFont(d){ fontSize = Math.max(13, Math.min(20, fontSize + d)); applyFont(); }
+function bumpFont(d){ fontSize = Math.max(13, Math.min(22, fontSize + d)); applyFont(); }
 function applyTheme(dark){
   document.body.classList.toggle('dark', dark);
   document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
-  document.getElementById('mTheme').textContent = dark ? '☀️' : '🌙';
   try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
+  const sw = document.getElementById('themeSw'); if(sw) sw.checked = dark;
 }
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);
 document.getElementById('fontPlus').onclick  = ()=>bumpFont(1);
 document.getElementById('themeToggle').onclick = toggleTheme;
 
-/* ───────── 手机底部工具栏 ───────── */
-document.getElementById('mToc').onclick = toggleToc;
-document.getElementById('mFontMinus').onclick = ()=>bumpFont(-1);
-document.getElementById('mFontPlus').onclick  = ()=>bumpFont(1);
-document.getElementById('mTheme').onclick = toggleTheme;
-document.getElementById('mTutor').onclick = toggleTutor;
+/* ═══════════════════════════════════════════════════════
+   弹层:手机从底部升起(拇指可达),桌面居中卡片
+   ═══════════════════════════════════════════════════════ */
+const maskEl  = document.getElementById('mask');
+const sheetEl = document.getElementById('sheet');
+const shBody  = document.getElementById('shBody');
+let sheetTag = '';
 
-/* ───────── 进度与对话持久化 ───────── */
-async function saveState(){
+function openSheet(title, html, onMount, tag){
+  document.getElementById('shTitle').textContent = title;
+  shBody.innerHTML = html;
+  shBody.scrollTop = 0;
+  sheetTag = tag || '';
+  maskEl.classList.add('on');
+  sheetEl.classList.add('on');
+  if(onMount) onMount(shBody);
+}
+function closeSheet(){
+  maskEl.classList.remove('on');
+  sheetEl.classList.remove('on');
+  sheetTag = '';
+}
+const sheetIsOpen = ()=> sheetEl.classList.contains('on');
+maskEl.onclick = closeSheet;
+document.getElementById('shX').onclick = closeSheet;
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && sheetIsOpen()) closeSheet(); });
+
+/* 手机:按住顶部往下拖可关闭 */
+(function(){
+  let y0 = null;
+  const onStart = e=>{
+    if(!matchMedia('(max-width:900px)').matches) return;
+    y0 = e.touches[0].clientY; sheetEl.style.transition = 'none';
+  };
+  const onMove = e=>{
+    if(y0 === null) return;
+    const dy = e.touches[0].clientY - y0;
+    if(dy > 0) sheetEl.style.transform = 'translateY(' + dy + 'px)';
+  };
+  const onEnd = e=>{
+    if(y0 === null) return;
+    const dy = e.changedTouches[0].clientY - y0;
+    sheetEl.style.transition = ''; sheetEl.style.transform = '';
+    if(dy > 90) closeSheet();
+    y0 = null;
+  };
+  [sheetEl.querySelector('.grip'), sheetEl.querySelector('.sh-head')].forEach(el=>{
+    el.addEventListener('touchstart', onStart, {passive:true});
+    el.addEventListener('touchmove',  onMove,  {passive:true});
+    el.addEventListener('touchend',   onEnd);
+  });
+})();
+
+/* 轻提示 */
+let toastTimer = null;
+function toast(msg, actionLabel, onAction){
+  let t = document.getElementById('toast');
+  if(!t){ t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+  t.innerHTML = '<span>' + escapeHtml(msg) + '</span>' +
+    (actionLabel ? '<button class="tact">' + escapeHtml(actionLabel) + '</button>' : '');
+  t.classList.add('on');
+  if(actionLabel) t.querySelector('.tact').onclick = ()=>{ t.classList.remove('on'); if(onAction) onAction(); };
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('on'), actionLabel ? 9000 : 3200);
+}
+
+/* ═══════════════════════════════════════════════════════
+   云端连接与账号
+   ═══════════════════════════════════════════════════════ */
+const CLOUD_ON = !!CONFIG.DATA_URL && CONFIG.DATA_URL.indexOf('REPLACE-ME') < 0;
+const auth = { token:null, user:null };
+let syncState = 'off';   // ok / busy / bad / off
+
+function loadAuth(){
+  try{
+    const v = JSON.parse(localStorage.getItem('hatbook-auth') || 'null');
+    if(v && v.token){ auth.token = v.token; auth.user = v.user; }
+  }catch(e){}
+}
+function saveAuth(){ try{ localStorage.setItem('hatbook-auth', JSON.stringify({token:auth.token, user:auth.user})); }catch(e){} }
+function clearAuth(){ auth.token = null; auth.user = null; try{ localStorage.removeItem('hatbook-auth'); }catch(e){} }
+const loggedIn = ()=> !!(CLOUD_ON && auth.token);
+
+async function api(path, body, method){
+  if(!CLOUD_ON) throw new Error('云端未配置');
+  const headers = {'Content-Type':'application/json'};
+  if(auth.token) headers['Authorization'] = 'Bearer ' + auth.token;
+  const r = await fetch(CONFIG.DATA_URL + path, {
+    method: method || 'POST', headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = {};
+  try{ data = await r.json(); }catch(e){}
+  if(r.status === 401){
+    clearAuth(); setSync('off'); renderAcctBtn();
+    throw new Error(data.error || '登录已过期,请重新登录');
+  }
+  if(!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+  return data;
+}
+
+function setSync(s){
+  syncState = s;
+  const d = document.getElementById('syncDot');
+  if(d) d.className = 'syncdot' + (s === 'ok' ? '' : ' ' + s);
+}
+function renderAcctBtn(){
+  const b = document.getElementById('acctBtn');
+  if(b){
+    b.innerHTML = '<span class="syncdot ' + (loggedIn() ? (syncState==='ok'?'':syncState) : 'off') + '" id="syncDot"></span> ' +
+                  (auth.user ? escapeHtml(auth.user.name) : '登录');
+  }
+  const m = document.getElementById('mAcct');
+  if(m) m.querySelector('.ic').textContent = loggedIn() ? '◉' : '●';
+}
+
+/* ═══════════════════════════════════════════════════════
+   本地数据仓(游客与每个账号各一份)
+   ═══════════════════════════════════════════════════════ */
+const EMPTY_STORE = ()=>({ pos:null, peerPos:{}, annotations:{}, notes:{}, replies:{},
+                           homework:{}, progress:{}, users:{}, lastSync:0 });
+let store = EMPTY_STORE();
+
+const dataKey = ()=> 'hatbook-data-' + (auth.user ? auth.user.id : 'guest');
+function saveStore(){ try{ localStorage.setItem(dataKey(), JSON.stringify(store)); }catch(e){} }
+function loadStore(){
+  store = EMPTY_STORE();
+  try{
+    const v = JSON.parse(localStorage.getItem(dataKey()) || 'null');
+    if(v) store = Object.assign(EMPTY_STORE(), v);
+  }catch(e){}
+}
+const uid = ()=> (crypto.randomUUID ? crypto.randomUUID()
+                 : 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+
+/* ═══════════════════════════════════════════════════════
+   同步:本地为主(离线可用),云端为跨设备兜底
+   ═══════════════════════════════════════════════════════ */
+let syncTimer = null;
+function scheduleSync(){
+  if(!loggedIn()) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=>syncNow(), 1500);
+}
+
+/** 把本地带 _dirty 标记的改动推上去 */
+async function pushDirty(){
+  const pack = (map, fields)=>{
+    const up = [], del = [];
+    for(const k in map){
+      const it = map[k];
+      if(!it._dirty) continue;
+      if(it.deleted) del.push(it.id);
+      else{
+        const o = {};
+        for(const f of fields) o[f] = it[f];
+        up.push(o);
+      }
+    }
+    return {up, del};
+  };
+
+  const A = pack(store.annotations,
+    ['id','chapter','block_index','start_offset','end_offset','quote','prefix','suffix','color','note','private','created_at']);
+  if(A.up.length || A.del.length){
+    await api('/api/annotations', {upsert:A.up, delete:A.del});
+    for(const k in store.annotations) if(store.annotations[k]._dirty) delete store.annotations[k]._dirty;
+  }
+
+  const N = pack(store.notes, ['id','chapter','body','private','created_at']);
+  if(N.up.length || N.del.length){
+    await api('/api/notes', {upsert:N.up, delete:N.del});
+    for(const k in store.notes) if(store.notes[k]._dirty) delete store.notes[k]._dirty;
+  }
+
+  for(const k in store.replies){
+    const r = store.replies[k];
+    if(!r._dirty) continue;
+    await api('/api/replies', r.deleted ? {delete:r.id}
+              : {id:r.id, annotation_id:r.annotation_id, body:r.body, created_at:r.created_at});
+    delete r._dirty;
+  }
+
+  for(const k in store.homework){
+    const h = store.homework[k];
+    if(!h._dirty) continue;
+    await api('/api/homework', {chapter:h.chapter, done:h.done, log:h.log});
+    delete h._dirty;
+  }
+
+  if(store.pos && store.pos._dirty){ await pushPos(); }
+}
+
+function mergeRemote(d){
+  store.users = d.users || store.users;
+  const meId = d.me ? d.me.id : (auth.user ? auth.user.id : '');
+
+  const absorb = (list, map)=>{
+    for(const it of (list || [])){
+      const local = map[it.id];
+      if(local && local._dirty && (local.updated_at || 0) >= it.updated_at) continue; // 本地更新且未推,先留着
+      if(it.deleted) delete map[it.id];
+      else map[it.id] = it;
+    }
+  };
+  absorb(d.annotations, store.annotations);
+  absorb(d.notes, store.notes);
+  absorb(d.replies, store.replies);
+
+  for(const h of (d.homework || [])){
+    if(h.user_id !== meId) continue;
+    const k = h.chapter, local = store.homework[k];
+    if(local && local._dirty) continue;
+    store.homework[k] = h;
+  }
+  for(const p of (d.progress || [])){
+    if(p.user_id !== meId) continue;
+    const local = store.progress[p.chapter] || {};
+    store.progress[p.chapter] = {
+      max_ratio: Math.max(local.max_ratio || 0, p.max_ratio || 0),
+      seconds: Math.max(local.seconds || 0, p.seconds || 0),
+    };
+  }
+  for(const p of (d.pos || [])){
+    if(p.user_id === meId){
+      const cloud = {chapter:p.chapter, bi:p.block_index, ratio:p.ratio, snippet:p.snippet, updated_at:p.updated_at};
+      if(!store.pos || (store.pos.updated_at || 0) < p.updated_at) store.pos = cloud;
+    } else {
+      store.peerPos[p.user_id] = p;
+    }
+  }
+}
+
+async function syncNow(opt){
+  opt = opt || {};
+  if(!loggedIn()) return null;
+  setSync('busy');
+  try{
+    await pushDirty();
+    const d = await api('/api/sync?since=' + (store.lastSync || 0), null, 'GET');
+    mergeRemote(d);
+    store.lastSync = d.now;
+    saveStore();
+    setSync('ok');
+    if(typeof onSynced === 'function') onSynced(d);
+    return d;
+  }catch(e){
+    setSync('bad');
+    if(opt.loud) toast('同步失败:' + e.message);
+    return null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   块索引与阅读位置
+   —— 手机切后台被系统杀掉时,靠 sendBeacon 把位置发出去
+   ═══════════════════════════════════════════════════════ */
+let chapterEnterAt = Date.now();
+let readSecondsPending = 0;
+let scrollTimer = null, cloudPosTimer = null;
+
+function indexBlocks(){
+  const kids = document.getElementById('content').children;
+  for(let i = 0; i < kids.length; i++) kids[i].setAttribute('data-bi', String(i));
+}
+const blockEl = bi => document.getElementById('content').children[bi] || null;
+
+function capturePos(){
+  const rr = readerEl.getBoundingClientRect();
+  const kids = document.getElementById('content').children;
+  for(let i = 0; i < kids.length; i++){
+    const r = kids[i].getBoundingClientRect();
+    if(r.bottom > rr.top + 4){
+      const ratio = r.height > 0 ? Math.min(1, Math.max(0, (rr.top - r.top) / r.height)) : 0;
+      return { chapter:cur, bi:i, ratio:Math.round(ratio * 1000) / 1000,
+               snippet:(kids[i].textContent || '').slice(0, 60) };
+    }
+  }
+  return { chapter:cur, bi:0, ratio:0, snippet:'' };
+}
+function chapterRatio(){
+  const max = readerEl.scrollHeight - readerEl.clientHeight;
+  return max > 0 ? Math.min(1, readerEl.scrollTop / max) : 0;
+}
+function restorePos(p){
+  if(!p) return;
+  const el = blockEl(parseInt(p.bi, 10) || 0);
+  if(!el){ readerEl.scrollTop = 0; return; }
+  const prev = readerEl.style.scrollBehavior;
+  readerEl.style.scrollBehavior = 'auto';
+  const rr = readerEl.getBoundingClientRect(), er = el.getBoundingClientRect();
+  readerEl.scrollTop += (er.top - rr.top) + (Number(p.ratio) || 0) * er.height;
+  readerEl.style.scrollBehavior = prev || '';
+}
+
+function flushReadTime(){
+  if(chapterEnterAt){
+    readSecondsPending += Math.min(3600, (Date.now() - chapterEnterAt) / 1000);
+    chapterEnterAt = Date.now();
+  }
+}
+function takeReadSeconds(){ const s = readSecondsPending; readSecondsPending = 0; return Math.round(s); }
+
+function onPosChanged(immediate){
+  const p = capturePos();
+  p.updated_at = Date.now();
+  p._dirty = true;
+  store.pos = p;
+  const pr = store.progress[cur] || {max_ratio:0, seconds:0};
+  pr.max_ratio = Math.max(pr.max_ratio || 0, chapterRatio());
+  store.progress[cur] = pr;
+
+  if(immediate) saveStore();
+  else { clearTimeout(scrollTimer); scrollTimer = setTimeout(saveStore, 400); }
+
+  if(loggedIn()){
+    clearTimeout(cloudPosTimer);
+    cloudPosTimer = setTimeout(pushPos, 5000);
+  }
+}
+async function pushPos(){
+  if(!loggedIn() || !store.pos) return;
+  flushReadTime();
+  try{
+    await api('/api/pos', {
+      chapter: store.pos.chapter, bi: store.pos.bi, ratio: store.pos.ratio, snippet: store.pos.snippet,
+      chapterRatio: (store.progress[store.pos.chapter] || {}).max_ratio || 0,
+      seconds: takeReadSeconds(),
+    });
+    delete store.pos._dirty;
+    saveStore();
+    setSync('ok');
+  }catch(e){ setSync('bad'); }
+}
+
+/** 页面随时可能被系统回收,这是最后一次发送机会 */
+function beaconFlush(){
+  saveStore();
+  if(!loggedIn() || !navigator.sendBeacon || !store.pos) return;
+  flushReadTime();
+  try{
+    const payload = JSON.stringify({
+      _t: auth.token,
+      chapter: store.pos.chapter, bi: store.pos.bi, ratio: store.pos.ratio, snippet: store.pos.snippet,
+      chapterRatio: (store.progress[store.pos.chapter] || {}).max_ratio || 0,
+      seconds: takeReadSeconds(),
+    });
+    // text/plain 属简单请求,不触发预检;令牌走 body 的 _t(sendBeacon 带不了请求头)
+    navigator.sendBeacon(CONFIG.DATA_URL + '/api/pos', new Blob([payload], {type:'text/plain'}));
+    delete store.pos._dirty;
+    saveStore();
+  }catch(e){}
+}
+
+readerEl.addEventListener('scroll', ()=>{
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(()=>onPosChanged(), 300);
+}, {passive:true});
+
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'hidden'){ onPosChanged(true); beaconFlush(); }
+  else { chapterEnterAt = Date.now(); if(loggedIn()) syncNow(); }
+});
+window.addEventListener('pagehide', ()=>{ onPosChanged(true); beaconFlush(); });
+
+/* ═══════════════════════════════════════════════════════
+   账号与设置面板
+   ═══════════════════════════════════════════════════════ */
+function openAccount(){
+  const u = auth.user;
+  const acct = !CLOUD_ON
+    ? '<div class="hint">云端尚未配置,笔记与阅读位置只存在这台设备上。</div>'
+    : (u
+      ? `<div class="srow">
+           <div class="avatar">${escapeHtml((u.name || '?').slice(0,1))}</div>
+           <div class="lbl"><b>${escapeHtml(u.name)}</b><div class="sub">已登录 · 阅读位置与笔记正在云端同步</div></div>
+           <div class="ctl"><button class="btn" id="acLogout">退出</button></div>
+         </div>`
+      : `<div class="srow">
+           <div class="lbl"><b>未登录</b><div class="sub">登录后换设备也能接着读,还能看到对方的批注</div></div>
+           <div class="ctl"><button class="btn primary" id="acLogin">登录</button></div>
+         </div>`);
+
+  openSheet('账号与设置', acct + `
+    <div class="srow">
+      <div class="lbl">字号<div class="sub">正文文字大小</div></div>
+      <div class="ctl stepper">
+        <button id="stMinus">A−</button><span class="val" id="fontVal">${fontSize}</span><button id="stPlus">A＋</button>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="lbl">深色模式<div class="sub">夜里看书护眼</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="themeSw" ${document.body.classList.contains('dark')?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="srow">
+      <div class="lbl">术语释义<div class="sub">正文里的行话加虚线,点一下看解释</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="glossSw" ${prefs.gloss?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="srow">
+      <div class="lbl">显示对方的批注<div class="sub">共读:看到对方划的线和写的话</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="peerSw" ${prefs.peer?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+  `, box=>{
+    const q = s => box.querySelector(s);
+    if(q('#acLogin'))  q('#acLogin').onclick  = openLogin;
+    if(q('#acLogout')) q('#acLogout').onclick = doLogout;
+    q('#stMinus').onclick = ()=>bumpFont(-1);
+    q('#stPlus').onclick  = ()=>bumpFont(1);
+    q('#themeSw').onchange = e => applyTheme(e.target.checked);
+    q('#glossSw').onchange = e => { prefs.gloss = e.target.checked; savePrefs(); applyDecorations(); };
+    q('#peerSw').onchange  = e => { prefs.peer  = e.target.checked; savePrefs(); applyDecorations(); };
+  }, 'acct');
+}
+
+function openLogin(){
+  openSheet('登录', `
+    <div class="hint">登录后,阅读位置、划线和笔记都会存到云端 —— 换手机、清缓存都不会丢,也能看到对方读到哪、划了什么。</div>
+    <div class="fld"><label>用户名</label>
+      <input id="lgUser" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+    <div class="fld"><label>密码</label>
+      <input id="lgPass" type="password" autocomplete="current-password"></div>
+    <div class="sh-err" id="lgErr"></div>
+    <div class="btnrow"><button class="btn primary block" id="lgGo">登 录</button></div>
+  `, box=>{
+    const q = s => box.querySelector(s);
+    const go = async ()=>{
+      const u = q('#lgUser').value.trim(), p = q('#lgPass').value;
+      if(!u || !p) return;
+      q('#lgGo').disabled = true; q('#lgGo').textContent = '登录中…';
+      try{
+        await doLogin(u, p);
+        closeSheet();
+        toast('已登录:' + auth.user.name);
+      }catch(e){
+        const el = q('#lgErr'); el.style.display = 'block'; el.textContent = e.message;
+        q('#lgGo').disabled = false; q('#lgGo').textContent = '登 录';
+      }
+    };
+    q('#lgGo').onclick = go;
+    q('#lgPass').addEventListener('keydown', e=>{
+      if(e.isComposing || e.keyCode === 229) return;
+      if(e.key === 'Enter') go();
+    });
+    setTimeout(()=>{ try{ q('#lgUser').focus(); }catch(e){} }, 120);
+  }, 'login');
+}
+
+async function doLogin(user, pass){
+  const d = await api('/api/login', {user, pass});
+  let guest = null;
+  try{ guest = JSON.parse(localStorage.getItem('hatbook-data-guest') || 'null'); }catch(e){}
+  auth.token = d.token; auth.user = d.user;
+  saveAuth();
+  loadStore();                       // 切到这个账号的本地库
+  if(guest) absorbGuest(guest);
+  renderAcctBtn();
+  const before = store.pos ? store.pos.updated_at || 0 : 0;
+  await syncNow({loud:true});
+  offerCloudPos(before);
+}
+
+/** 把游客期间攒下的划线、笔记、位置并进当前账号,并标记待上传 */
+function absorbGuest(g){
+  let n = 0;
+  for(const k in (g.annotations || {})){
+    if(!store.annotations[k]){ store.annotations[k] = Object.assign({}, g.annotations[k], {_dirty:true}); n++; }
+  }
+  for(const k in (g.notes || {})){
+    if(!store.notes[k]){ store.notes[k] = Object.assign({}, g.notes[k], {_dirty:true}); n++; }
+  }
+  for(const k in (g.homework || {})){
+    if(!store.homework[k]){ store.homework[k] = Object.assign({}, g.homework[k], {_dirty:true}); n++; }
+  }
+  if(g.pos && (!store.pos || (store.pos.updated_at || 0) < (g.pos.updated_at || 0))){
+    store.pos = Object.assign({}, g.pos, {_dirty:true});
+  }
+  saveStore();
+  try{ localStorage.removeItem('hatbook-data-guest'); }catch(e){}
+  if(n) toast('已把本机的 ' + n + ' 条笔记并入账号');
+}
+
+async function doLogout(){
+  try{ await api('/api/logout'); }catch(e){}
+  clearAuth();
+  loadStore();
+  setSync('off');
+  renderAcctBtn();
+  closeSheet();
+  applyDecorations();
+  toast('已退出登录。这台设备上的记录仍然保留。');
+}
+
+/** 云端位置比本机新时,不打断阅读,只给一个可点的提示 */
+function offerCloudPos(beforeTs){
+  const p = store.pos;
+  if(!p || !p.chapter) return;
+  if((p.updated_at || 0) <= beforeTs + 3000) return;
+  const here = capturePos();
+  if(p.chapter === cur && Math.abs((p.bi|0) - here.bi) <= 2) return;
+  const ch = CHAPTERS.find(c => c.id === p.chapter);
+  if(!ch) return;
+  toast('云端读到:' + ch.title, '接着读', ()=>{
+    if(p.chapter === cur) restorePos(p);
+    else openChapter(p.chapter, {pos:p});
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   偏好开关
+   ═══════════════════════════════════════════════════════ */
+const prefs = { gloss:true, peer:true };
+function savePrefs(){ try{ localStorage.setItem('hatbook-prefs', JSON.stringify(prefs)); }catch(e){} }
+function loadPrefs(){
+  try{ Object.assign(prefs, JSON.parse(localStorage.getItem('hatbook-prefs') || '{}')); }catch(e){}
+}
+
+/* 正文装饰:先划线,再术语,最后作业控件 */
+function applyDecorations(){ renderHighlights(); renderGlossary(); renderHomework(); }
+
+/** 云端同步回来后:对方新划的线要立刻显出来 */
+function onSynced(){
+  if(!sheetIsOpen()) applyDecorations();
+  renderAcctBtn();
+}
+
+/* ═══ 章节级自由笔记(不挂在某段话上) ═══ */
+function openNewNote(){
+  const ch = CHAPTERS.find(c => c.id === cur) || {title:''};
+  openSheet('写一条笔记', `
+    <div class="hint">记在「${escapeHtml(ch.title)}」名下,不挂具体段落 —— 适合写整章的心得、要落地的事、想问工厂的问题。</div>
+    <div class="fld"><textarea id="nnBody" placeholder="想到什么写什么。"></textarea></div>
+    <div class="btnrow"><button class="btn primary block" id="nnSave">保 存</button></div>
+  `, box=>{
+    box.querySelector('#nnSave').onclick = ()=>{
+      const v = box.querySelector('#nnBody').value.trim();
+      if(!v) return;
+      const id = uid(), t = Date.now();
+      store.notes[id] = {id, user_id:myId(), chapter:cur, body:v, private:0,
+                         created_at:t, updated_at:t, _dirty:true};
+      saveStore(); scheduleSync();
+      closeSheet(); toast('笔记已保存');
+    };
+    setTimeout(()=>{ try{ box.querySelector('#nnBody').focus(); }catch(e){} }, 150);
+  }, 'newnote');
+}
+
+/* ═══════════════════════════════════════════════════════
+   我的笔记本
+   ═══════════════════════════════════════════════════════ */
+let nbMode = 'mine';   // mine / all / hw
+
+function openNotebook(){
+  openSheet('我的笔记本', notebookHtml(), box=>bindNotebook(box), 'nb');
+}
+
+function notebookItems(){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(!a || a.deleted) continue;
+    if(nbMode === 'mine' && !isMine(a)) continue;
+    if(groupOf(a.id) !== a.id && String(a.id).indexOf('#0') < 0) continue;  // 跨段划线只列首段
+    out.push({type:'anno', chapter:a.chapter, gid:groupOf(a.id), a,
+              time:a.created_at || 0, quote:groupQuote(groupOf(a.id)), note:a.note || ''});
+  }
+  for(const k in store.notes){
+    const n = store.notes[k];
+    if(!n || n.deleted) continue;
+    if(nbMode === 'mine' && !isMine(n)) continue;
+    out.push({type:'note', chapter:n.chapter, n, time:n.created_at || 0, quote:'', note:n.body || ''});
+  }
+  return out;
+}
+
+function notebookHtml(){
+  const items = notebookItems();
+  const hlCount = items.filter(i => i.type === 'anno').length;
+  const ntCount = items.filter(i => i.note).length;
+  const hwDone  = CHAPTERS.filter(c => (store.homework[c.id] || {}).done).length;
+  const hwTotal = 28;
+
+  const tabs = `
+    <div class="nbtabs">
+      <button data-m="mine" class="${nbMode==='mine'?'on':''}">我的</button>
+      <button data-m="all"  class="${nbMode==='all'?'on':''}">共读(含对方)</button>
+      <button data-m="hw"   class="${nbMode==='hw'?'on':''}">作业进度</button>
+      <button id="nbNew">＋ 本章笔记</button>
+      <button id="nbExport">导出</button>
+    </div>`;
+
+  if(nbMode === 'hw'){
+    let rows = '';
+    for(const c of CHAPTERS){
+      const h = store.homework[c.id];
+      if(!/^ch(0[1-9]|1\d|2[0-8])$/.test(c.id)) continue;
+      rows += `<div class="nbitem" data-ch="${c.id}">
+          <div class="qt"><b>${h && h.done ? '✔' : '○'}</b> ${escapeHtml(c.title)}</div>
+          ${h && h.log ? '<div class="nt">' + escapeHtml(h.log.slice(0,160)) + (h.log.length>160?'…':'') + '</div>' : ''}
+        </div>`;
+    }
+    return tabs + `
+      <div class="nbstat"><div><b>${hwDone}</b> / ${hwTotal} 章作业已完成</div></div>
+      <div class="bar"><i style="width:${Math.round(hwDone/hwTotal*100)}%"></i></div>
+      ${rows}`;
+  }
+
+  let body = '';
+  for(const c of CHAPTERS){
+    const list = items.filter(i => i.chapter === c.id).sort((a, b)=> a.time - b.time);
+    if(!list.length) continue;
+    body += `<div class="nbch"><h4>${escapeHtml(c.title)}<span class="n">${list.length} 条</span></h4>`;
+    for(const it of list){
+      const who = it.type === 'anno' ? it.a : it.n;
+      const mine = isMine(who);
+      body += `<div class="nbitem" data-jump="${it.type}" data-ch="${c.id}" data-gid="${it.gid || ''}">
+        ${it.quote ? '<div class="qt">' + escapeHtml(it.quote.length > 160 ? it.quote.slice(0,160) + '…' : it.quote) + '</div>' : ''}
+        ${it.note ? '<div class="nt">' + escapeHtml(it.note) + '</div>' : ''}
+        <div class="meta">${mine ? '我' : escapeHtml(userName(who.user_id))} · ${fmtTime(it.time)}${who.private ? ' · 私密' : ''}</div>
+      </div>`;
+    }
+    body += '</div>';
+  }
+  if(!body) body = `<div class="nbempty">还没有笔记。<br>在正文里长按选中一段文字,点「划线」或「笔记」就会出现在这里。</div>`;
+
+  return tabs + `
+    <div class="nbstat">
+      <div><b>${hlCount}</b> 处划线</div>
+      <div><b>${ntCount}</b> 条笔记</div>
+      <div><b>${hwDone}</b>/${hwTotal} 章作业</div>
+    </div>` + body;
+}
+
+function bindNotebook(box){
+  box.querySelectorAll('.nbtabs button[data-m]').forEach(b=>{
+    b.onclick = ()=>{ nbMode = b.dataset.m; openNotebook(); };
+  });
+  const ex = box.querySelector('#nbExport');
+  if(ex) ex.onclick = openExport;
+  const nw = box.querySelector('#nbNew');
+  if(nw) nw.onclick = openNewNote;
+  box.querySelectorAll('.nbitem').forEach(el=>{
+    el.onclick = ()=>{
+      const ch = el.dataset.ch, gid = el.dataset.gid;
+      closeSheet();
+      const go = ()=>{
+        if(!gid) return;
+        const a = groupMembers(gid)[0];
+        if(!a) return;
+        const at = resolveAnchor(a);
+        if(at) restorePos({bi:at.bi, ratio:0});
+        const bel = blockEl(at ? at.bi : 0);
+        if(bel){ bel.classList.add('flashhit'); setTimeout(()=>bel.classList.remove('flashhit'), 1700); }
+      };
+      if(ch !== cur) openChapter(ch, {silent:true, pos:{bi:0, ratio:0}});
+      setTimeout(go, ch !== cur ? 60 : 0);
+    };
+  });
+}
+
+/* ═══ 导出 Markdown ═══ */
+function buildExportMd(){
+  const lines = ['# 《一顶帽子的全球旅行》读书笔记', '',
+                 '导出时间:' + new Date().toLocaleString('zh-CN'),
+                 auth.user ? '读者:' + auth.user.name : '', ''];
+  const items = notebookItems();
+  for(const c of CHAPTERS){
+    const list = items.filter(i => i.chapter === c.id).sort((a, b)=> a.time - b.time);
+    const hw = store.homework[c.id];
+    if(!list.length && !(hw && (hw.done || hw.log))) continue;
+    lines.push('## ' + c.title, '');
+    for(const it of list){
+      const who = it.type === 'anno' ? it.a : it.n;
+      const tag = isMine(who) ? '' : '(' + userName(who.user_id) + ')';
+      if(it.quote) lines.push('> ' + it.quote.replace(/\n+/g, ' '));
+      if(it.note)  lines.push('', '**笔记' + tag + ':** ' + it.note);
+      lines.push('');
+    }
+    if(hw && (hw.done || hw.log)){
+      lines.push('**本章作业:** ' + (hw.done ? '已完成 ✔' : '未完成'));
+      if(hw.log) lines.push('', hw.log);
+      lines.push('');
+    }
+  }
+  const hwDone = CHAPTERS.filter(c => (store.homework[c.id] || {}).done).length;
+  lines.push('---', '', '共 ' + items.filter(i => i.type === 'anno').length + ' 处划线、' +
+             items.filter(i => i.note).length + ' 条笔记,' + hwDone + '/28 章作业已完成。');
+  return lines.join('\n');
+}
+
+function openExport(){
+  const md = buildExportMd();
+  openSheet('导出笔记', `
+    <div class="hint">导出为 Markdown。可以存进手机的「文件」,也可以复制后粘到备忘录或提交进 git 仓库长期保存。</div>
+    <div class="fld"><textarea id="exText" style="min-height:180px;font-size:12.5px">${escapeHtml(md)}</textarea></div>
+    <div class="btnrow">
+      <button class="btn primary" id="exCopy">复制全文</button>
+      <button class="btn" id="exDl">下载文件</button>
+    </div>
+  `, box=>{
+    box.querySelector('#exCopy').onclick = async ()=>{
+      const ta = box.querySelector('#exText');
+      try{
+        await navigator.clipboard.writeText(md);
+        toast('已复制到剪贴板');
+      }catch(e){
+        ta.select(); ta.setSelectionRange(0, md.length);
+        try{ document.execCommand('copy'); toast('已复制'); }catch(_){ toast('请长按文本框手动复制'); }
+      }
+    };
+    box.querySelector('#exDl').onclick = ()=>{
+      const blob = new Blob([md], {type:'text/markdown;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '帽子书读书笔记-' + new Date().toISOString().slice(0, 10) + '.md';
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    };
+  }, 'export');
+}
+
+/* ═══════════════════════════════════════════════════════
+   全书搜索:内容已在页面里,纯前端即可
+   ═══════════════════════════════════════════════════════ */
+let searchIndex = null;
+const stripMd = s => s
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+  .replace(/[*_`>#|]/g, '')
+  .replace(/[ \t]+/g, ' ')
+  .trim();
+
+function buildSearchIndex(){
+  if(searchIndex) return searchIndex;
+  searchIndex = [];
+  for(const c of CHAPTERS){
+    if(!c.done || c.id === 'toc') continue;
+    const parts = md(c.id).split(/\n{2,}/);
+    for(const p of parts){
+      const plain = stripMd(p);
+      if(plain.length < 2) continue;
+      searchIndex.push({ch:c.id, title:c.title, plain, low:plain.toLowerCase()});
+    }
+  }
+  return searchIndex;
+}
+
+function openSearch(){
+  openSheet('全书搜索', `
+    <div class="sbox">
+      <input id="sq" placeholder="搜术语、章节、任何一句话…" autocapitalize="none" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="hint" id="sTip">全书 28 章 + 附录都能搜。试试「保险」「AQL」「退税」。</div>
+    <div id="sRes"></div>
+  `, box=>{
+    const inp = box.querySelector('#sq'), res = box.querySelector('#sRes'), tip = box.querySelector('#sTip');
+    let t = null;
+    const run = ()=>{
+      const q = inp.value.trim();
+      if(q.length < 1){ res.innerHTML = ''; tip.style.display = 'block'; return; }
+      const t0 = performance.now();
+      const idx = buildSearchIndex();
+      const low = q.toLowerCase();
+      const hits = [];
+      for(const it of idx){
+        const p = it.low.indexOf(low);
+        if(p < 0) continue;
+        hits.push({it, p});
+        if(hits.length >= 120) break;
+      }
+      tip.style.display = 'none';
+      if(!hits.length){ res.innerHTML = '<div class="nbempty">没找到「' + escapeHtml(q) + '」</div>'; return; }
+      const ms = Math.round(performance.now() - t0);
+      res.innerHTML = '<div class="hint">找到 ' + hits.length + (hits.length >= 120 ? '+' : '') + ' 处 · ' + ms + 'ms</div>' +
+        hits.map((h, i)=>{
+          const s = Math.max(0, h.p - 28), e = Math.min(h.it.plain.length, h.p + q.length + 52);
+          const ctx = (s > 0 ? '…' : '') + escapeHtml(h.it.plain.slice(s, h.p)) +
+                      '<b>' + escapeHtml(h.it.plain.substr(h.p, q.length)) + '</b>' +
+                      escapeHtml(h.it.plain.slice(h.p + q.length, e)) + (e < h.it.plain.length ? '…' : '');
+          return `<div class="shit" data-i="${i}"><div class="ttl">${escapeHtml(h.it.title)}</div><div class="ctx">${ctx}</div></div>`;
+        }).join('');
+      res.querySelectorAll('.shit').forEach(el=>{
+        el.onclick = ()=>{
+          const h = hits[parseInt(el.dataset.i, 10)];
+          closeSheet();
+          jumpToText(h.it.ch, h.it.plain.substr(h.p, Math.min(20, q.length + 12)));
+        };
+      });
+    };
+    inp.addEventListener('input', ()=>{ clearTimeout(t); t = setTimeout(run, 180); });
+    inp.addEventListener('keydown', e=>{
+      if(e.isComposing || e.keyCode === 229) return;
+      if(e.key === 'Enter'){ clearTimeout(t); run(); }
+    });
+    setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 150);
+  }, 'search');
+}
+
+function jumpToText(ch, key){
+  const go = ()=>{
+    const kids = document.getElementById('content').children;
+    const k = key.trim();
+    for(let i = 0; i < kids.length; i++){
+      if(blockText(kids[i]).indexOf(k) >= 0){
+        restorePos({bi:i, ratio:0});
+        kids[i].classList.add('flashhit');
+        setTimeout(()=>kids[i].classList.remove('flashhit'), 1700);
+        return;
+      }
+    }
+  };
+  if(ch !== cur){ openChapter(ch, {silent:true, pos:{bi:0, ratio:0}}); setTimeout(go, 60); }
+  else go();
+}
+
+/* ═══════════════════════════════════════════════════════
+   术语释义:附录 A1 的 447 条,构建时注入
+   ═══════════════════════════════════════════════════════ */
+let GLOSS = null, GLOSS_RE = null, GLOSS_MAP = null;
+function loadGloss(){
+  if(GLOSS) return GLOSS;
+  try{ GLOSS = JSON.parse(document.getElementById('glossary').textContent) || []; }
+  catch(e){ GLOSS = []; }
+  GLOSS_MAP = {};
+  GLOSS.forEach(t => { if(t.cn && !GLOSS_MAP[t.cn]) GLOSS_MAP[t.cn] = t; });
+  const words = Object.keys(GLOSS_MAP)
+    .filter(w => w.length >= 2 && w.length <= 12)
+    .sort((a, b)=> b.length - a.length)                       // 长词优先,避免"纱支"吃掉"纱支数"
+    .map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  GLOSS_RE = words.length ? new RegExp(words.join('|'), 'g') : null;
+  return GLOSS;
+}
+
+const SKIP_TAGS = {H1:1, H2:1, H3:1, H4:1, CODE:1, PRE:1, TH:1, A:1, TEXTAREA:1, BUTTON:1};
+function renderGlossary(){
+  if(!prefs.gloss) return;
+  loadGloss();
+  if(!GLOSS_RE) return;
+
+  const content = document.getElementById('content');
+  const nodes = [];
+  const w = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      if(!n.nodeValue || n.nodeValue.length < 2) return NodeFilter.FILTER_REJECT;
+      for(let p = n.parentNode; p && p !== content; p = p.parentNode){
+        if(SKIP_TAGS[p.tagName] || (p.classList && (p.classList.contains('term') || p.classList.contains('hwbox'))))
+          return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let n;
+  while((n = w.nextNode())) nodes.push(n);
+
+  const seen = new Set();
+  let i = 0;
+  // 分片:手机上一次做完会卡住滚动
+  const step = ()=>{
+    const t0 = performance.now();
+    while(i < nodes.length && performance.now() - t0 < 10) markTerms(nodes[i++], seen);
+    if(i < nodes.length){
+      (window.requestIdleCallback || (f => setTimeout(f, 16)))(step);
+    }
+  };
+  step();
+}
+
+function markTerms(node, seen){
+  const txt = node.nodeValue;
+  if(!txt || !node.parentNode) return;
+  GLOSS_RE.lastIndex = 0;
+  let m, last = 0, frag = null;
+  while((m = GLOSS_RE.exec(txt))){
+    const word = m[0];
+    if(seen.has(word)) continue;      // 每章每词只标首次,免得满屏虚线
+    seen.add(word);
+    frag = frag || document.createDocumentFragment();
+    if(m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+    const s = document.createElement('span');
+    s.className = 'term'; s.dataset.t = word; s.textContent = word;
+    frag.appendChild(s);
+    last = m.index + word.length;
+  }
+  if(frag){
+    if(last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+}
+
+function openTermCard(word){
+  const t = (GLOSS_MAP || {})[word];
+  if(!t) return;
+  openSheet(word, `
+    <div class="termcard">
+      <div class="en">${escapeHtml(t.en || '')}</div>
+      <div class="def">${escapeHtml(t.def || '')}</div>
+      ${t.src ? '<div class="src">首见 ' + escapeHtml(t.src) + ' · <a href="#" id="tmGo" style="color:var(--thread)">去看原文</a></div>' : ''}
+    </div>
+  `, box=>{
+    const go = box.querySelector('#tmGo');
+    if(go) go.onclick = e=>{
+      e.preventDefault();
+      const chNum = String(t.src).split('.')[0].replace(/[^\d]/g, '');
+      const id = 'ch' + String(chNum).padStart(2, '0');
+      if(CHAPTERS.find(c => c.id === id && c.done)){ closeSheet(); jumpToText(id, word); }
+      else toast('这条术语来自附录');
+    };
+  }, 'term');
+}
+
+/* ═══════════════════════════════════════════════════════
+   本章作业:打勾 + 写下完成记录
+   ═══════════════════════════════════════════════════════ */
+function renderHomework(){
+  const content = document.getElementById('content');
+  content.querySelectorAll('.hwbox').forEach(x => x.remove());
+  if(!/^ch(0[1-9]|1\d|2[0-8])$/.test(cur)) return;
+
+  let target = null;
+  content.querySelectorAll('blockquote').forEach(bq=>{
+    if(!target && (bq.textContent || '').indexOf('本章作业') >= 0) target = bq;
+  });
+  if(!target) return;
+
+  const h = store.homework[cur] || {chapter:cur, done:0, log:''};
+  const box = document.createElement('div');
+  box.className = 'hwbox' + (h.done ? ' done' : '');
+  box.innerHTML = `
+    <div class="top">
+      <div class="tick">${h.done ? '✓' : ''}</div>
+      <div>
+        <div class="lb">${h.done ? '这章作业已完成' : '做完了就打个勾'}</div>
+        <div class="sub">写下你的做法和结果,导出时会一并带走</div>
+      </div>
+    </div>
+    <textarea placeholder="我是怎么做的?遇到什么?结果如何?">${escapeHtml(h.log || '')}</textarea>`;
+  // 挂在作业框内部,不打乱 #content 的块索引
+  target.appendChild(box);
+
+  const ta = box.querySelector('textarea');
+  box.querySelector('.top').onclick = ()=>{
+    const curH = store.homework[cur] || {chapter:cur, done:0, log:''};
+    const done = curH.done ? 0 : 1;
+    saveHomework({done, log:ta.value});
+    box.classList.toggle('done', !!done);
+    box.querySelector('.tick').textContent = done ? '✓' : '';
+    box.querySelector('.lb').textContent = done ? '这章作业已完成' : '做完了就打个勾';
+    if(done) toast('第 ' + cur.replace('ch', '') + ' 章作业完成 ✔');
+  };
+  let tt = null;
+  ta.addEventListener('input', ()=>{
+    clearTimeout(tt);
+    tt = setTimeout(()=>saveHomework({log:ta.value}), 600);
+  });
+}
+
+function saveHomework(patch){
+  const h = store.homework[cur] || {chapter:cur, done:0, log:''};
+  Object.assign(h, patch, {chapter:cur, updated_at:Date.now(), _dirty:true});
+  store.homework[cur] = h;
+  saveStore(); scheduleSync();
+}
+
+/* ───────── 手机底部工具栏 ───────── */
+document.getElementById('mToc').onclick   = toggleToc;
+document.getElementById('mTutor').onclick = toggleTutor;
+document.getElementById('mSearch').onclick   = ()=>openSearch();
+document.getElementById('mNotebook').onclick = ()=>openNotebook();
+document.getElementById('mAcct').onclick     = ()=>openAccount();
+document.getElementById('searchBtn').onclick      = ()=>openSearch();
+document.getElementById('notebookToggle').onclick = ()=>openNotebook();
+document.getElementById('acctBtn').onclick        = ()=>openAccount();
+
+/* ───────── 助教对话持久化 ───────── */
+function saveChat(){
   try{ localStorage.setItem('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
 }
-async function loadState(){
+function loadChat(){
   try{
     const v = localStorage.getItem('hatbook-state');
-    if(v){
-      const s = JSON.parse(v);
-      if(s.cur && CHAPTERS.find(c=>c.id===s.cur && c.done)) cur = s.cur;
-      if(Array.isArray(s.history)){
-        history = s.history;
-        for(const m of history){
-          if(m.role==='user') addMsg('user', m.content.startsWith('我选中了')? m.content.split('我的问题:').pop() : m.content);
-          else addMsg('assistant', m.content);
-        }
+    if(!v) return;
+    const s = JSON.parse(v);
+    if(Array.isArray(s.history)){
+      history = s.history;
+      for(const m of history){
+        if(m.role === 'user') addMsg('user', m.content.startsWith('我选中了') ? m.content.split('我的问题:').pop() : m.content);
+        else addMsg('assistant', m.content);
       }
     }
   }catch(e){}
 }
 
 /* ───────── 启动 ───────── */
-(async function(){
+(function(){
+  loadAuth();
+  loadPrefs();
+  loadStore();
   try{
     const f = parseInt(localStorage.getItem('hatbook-font'), 10);
-    if(f >= 13 && f <= 20) fontSize = f;
+    if(f >= 13 && f <= 22) fontSize = f;
     const savedTheme = localStorage.getItem('hatbook-theme');
     applyTheme(savedTheme ? savedTheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
   }catch(e){ applyTheme(false); }
   applyFont();
   if(matchMedia('(max-width:900px)').matches) setTutor(false);
-  await loadState();
+  setSync(loggedIn() ? 'busy' : 'off');
+  renderAcctBtn();
+  loadChat();
+
+  // 先用本机记录瞬时恢复:即使被系统杀过进程、即使没网,也能立刻回到原处
+  const p = store.pos;
+  if(p && p.chapter && CHAPTERS.find(c => c.id === p.chapter && c.done)) cur = p.chapter;
   renderNav();
   document.getElementById('content').innerHTML = marked.parse(md(cur));
-  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
+  indexBlocks();
+  applyDecorations();
+  if(p && p.chapter === cur) restorePos(p);
+  chapterEnterAt = Date.now();
+
+  if(history.length === 0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
+
+  // 再拉云端:换了设备/清过缓存时才用得上,不打断当前阅读
+  if(loggedIn()){
+    const before = p ? (p.updated_at || 0) : 0;
+    syncNow().then(()=>offerCloudPos(before));
+  }
 })();
 </script>
 </body>

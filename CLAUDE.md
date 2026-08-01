@@ -22,9 +22,17 @@
 - 阅读器模板 `reader_web_template.html`,构建脚本 `build.py`:读取模板 + 注入各章 markdown + 写入 Worker 地址,产出根目录 `index.html`。
 - 每章审查通过后运行 `python3 build.py`,确认构建校验通过,再 `git add -A && git commit && git push`,GitHub Pages 自动更新。
 - 新完成的章节要同步三处:`chapters/` 的 md 文件、`build.py` 的 files 列表、模板中 CHAPTERS 数组的 done 状态与 toc.md 的 ✅ 标记。
-- 构建硬校验(build.py 内已含断言):不得出现 `api.anthropic.com` 直连;WORKER_URL 必须是 `https://shy-brook-76ea.kevinren1108.workers.dev`;不得出现 pingBtn;`isComposing` 修复必须在。
+- 构建硬校验(build.py 内已含断言):不得出现 `api.anthropic.com` 直连;WORKER_URL 必须是 `https://shy-brook-76ea.kevinren1108.workers.dev`;不得出现 pingBtn;`isComposing` 修复必须在;术语表须解析出 400 条以上;`sendBeacon` 与术语字典须已注入。
+
+## 阅读器功能层(2026-07-31 加)
+
+- 账号登录、阅读位置云同步、划线标注、笔记、共读批注、全书搜索、术语释义、作业打勾。**手机优先**:弹层在窄屏为底部抽屉,底栏五键为 目录/搜索/笔记/助教/我。
+- 后端在 `worker/`(独立的第二个 Worker + Cloudflare D1),与助教代理 Worker 互不影响。部署步骤见 `worker/README.md`;地址填进 `build.py` 的 `DATA_WORKER_URL`,留空则阅读器自动降级为纯本机存储。
+- 阅读位置采用「本机瞬时 + 云端兜底」双层:滚动落定写 localStorage,`visibilitychange:hidden` / `pagehide` 用 `navigator.sendBeacon` 上报(令牌走 body 的 `_t`,因为 beacon 带不了请求头)。这是手机切后台被系统杀掉后仍能回到原处的关键,改动此处务必回归验证。
+- 划线锚点 = 块序号 + 块内纯文本偏移 + 前后文,三级容错(原坐标 → 前后文重定位 → 全章找原文)。**若日后修订已发布章节的正文,划线会自动重定位,但仍应抽查一次。**
+- 术语字典由 `build.py` 从附录 A1 的十四张表解析生成(447 条),不要手工维护第二份;改动 A1 表格式会影响解析。
 
 ## 边界
 
-- 不改动 Worker/部署架构;不在前端引入任何密钥。
+- 不改动助教代理 Worker 的部署架构;不在前端引入任何密钥(数据 Worker 的 ADMIN_KEY 只存在 wrangler secret 里)。
 - 目录小节的合并/拆分、主线剧情的重大转折,先提案获作者确认。

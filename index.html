@@ -180,15 +180,165 @@ nav a.on .dot{background:var(--thread)}
 #content hr{border:none;border-top:1px dashed var(--stitch);margin:30px 0}
 #content a{color:var(--thread);text-decoration:none;border-bottom:1px dashed var(--thread)}
 
-/* ═══ 选中提问浮钮 ═══ */
-#askBtn{
-  position:fixed;display:none;z-index:80;
-  background:var(--denim-deep);color:#fff;border:none;border-radius:999px;
-  padding:7px 16px;font-size:12.5px;cursor:pointer;
-  box-shadow:0 4px 14px rgba(35,44,61,.3);
+/* ═══ 选中文字后的工具条:划线 / 笔记 / 问这段 ═══ */
+#selbar{
+  position:fixed;display:none;z-index:88;
+  background:var(--denim-deep);border-radius:999px;padding:4px;
+  box-shadow:0 5px 18px rgba(35,44,61,.34);
+  gap:2px;
 }
-#askBtn::before{content:"✂ ";color:var(--thread-soft)}
-#askBtn:hover{background:var(--thread)}
+#selbar.on{display:flex}
+#selbar button{
+  background:none;border:none;color:#fff;cursor:pointer;
+  padding:8px 13px;font-size:13px;border-radius:999px;white-space:nowrap;
+  display:flex;align-items:center;gap:5px;min-height:38px;
+  -webkit-tap-highlight-color:transparent;
+}
+#selbar button:hover{background:rgba(255,255,255,.14)}
+#selbar button:active{background:var(--thread)}
+#selbar .sw-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+/* ═══ 划线高亮 ═══ */
+#content mark.hl{
+  background:none;color:inherit;padding:0;
+  border-radius:2px;cursor:pointer;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.c-yellow{background:#fbe6a2}  .c-green{background:#c8e6c0}
+.c-blue{background:#c3dcf2}    .c-pink{background:#f6cede}
+#content mark.hl.c-yellow{background:#fdefc0}
+#content mark.hl.c-green{background:#d8ecd0}
+#content mark.hl.c-blue{background:#d3e5f5}
+#content mark.hl.c-pink{background:#f8dbe6}
+body.dark #content mark.hl.c-yellow{background:#4a4123;color:#ecdfc4}
+body.dark #content mark.hl.c-green{background:#31432f;color:#d5e6d0}
+body.dark #content mark.hl.c-blue{background:#2c3f52;color:#d2e2f0}
+body.dark #content mark.hl.c-pink{background:#4a2f3a;color:#f0d6e0}
+body.dark .c-yellow{background:#4a4123} body.dark .c-green{background:#31432f}
+body.dark .c-blue{background:#2c3f52}   body.dark .c-pink{background:#4a2f3a}
+/* 带笔记的划线:末尾一枚小笔尖 */
+#content mark.hl.hasnote::after{
+  content:"✎";font-size:.72em;color:var(--thread);vertical-align:super;margin-left:1px;
+}
+/* 对方的划线:只在下方加一道虚线,不抢自己的颜色 */
+#content mark.hl.peer{
+  background:none;border-bottom:2px dotted var(--thread);
+}
+body.dark #content mark.hl.peer{color:inherit}
+
+/* ═══ 批注卡片 ═══ */
+.annocard .who{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:#8f8879;margin-bottom:10px;
+}
+.annocard .who .when{margin-left:auto;font-size:11.5px}
+.annocard blockquote.qt{
+  margin:0 0 4px;padding:11px 14px;border-radius:3px;
+  border-left:3px solid var(--thread);
+  font-size:13.5px;line-height:1.85;color:#5c5343;
+}
+body.dark .annocard blockquote.qt{color:#cfd4de}
+.cbtn{
+  width:30px;height:30px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;padding:0;
+}
+.cbtn.on{border-color:var(--denim-deep);box-shadow:0 0 0 2px var(--panel) inset}
+.peernote{
+  background:var(--tutor-bg);border:1px dashed var(--stitch);border-radius:8px;
+  padding:10px 13px;margin:12px 0;font-size:13.5px;line-height:1.8;
+}
+.replies{margin:12px 0 4px;display:flex;flex-direction:column;gap:8px}
+.replies .rp{
+  font-size:13px;line-height:1.75;background:var(--tutor-bg);
+  border-radius:8px;padding:9px 12px;
+}
+.replies .rp b{color:var(--thread);margin-right:7px;font-weight:700}
+
+/* ═══ 笔记本 ═══ */
+.nbtabs{display:flex;gap:7px;margin-bottom:4px;flex-wrap:wrap}
+.nbtabs button{
+  border:1px solid var(--stitch);background:var(--panel);color:var(--denim);
+  border-radius:999px;padding:7px 14px;font-size:12.5px;font-family:inherit;cursor:pointer;min-height:36px;
+}
+.nbtabs button.on{background:var(--thread);color:#fff;border-color:var(--thread)}
+.nbstat{
+  display:flex;gap:16px;font-size:12px;color:#8f8879;margin:12px 0 4px;flex-wrap:wrap;
+}
+.nbstat b{color:var(--thread);font-size:15px;font-family:'Noto Serif SC',serif}
+.bar{height:7px;border-radius:4px;background:var(--stitch);overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--thread);border-radius:4px}
+.nbch{margin:18px 0 0}
+.nbch > h4{
+  font-family:'Noto Serif SC',serif;font-size:13.5px;color:var(--denim-deep);
+  margin:0 0 8px;padding-bottom:6px;border-bottom:1px dashed var(--stitch);
+  display:flex;align-items:center;gap:8px;
+}
+.nbch > h4 .n{margin-left:auto;font-size:11px;color:#a39c8e;font-weight:400}
+.nbitem{
+  border-left:3px solid var(--thread);padding:8px 0 8px 12px;margin:10px 0;cursor:pointer;
+}
+.nbitem:hover{background:#faf8f3}
+body.dark .nbitem:hover{background:#20242e}
+.nbitem .qt{font-size:13px;line-height:1.8;color:#5c5343}
+body.dark .nbitem .qt{color:#b6bcc9}
+.nbitem .nt{font-size:13px;line-height:1.8;margin-top:6px;color:var(--ink)}
+.nbitem .nt::before{content:"✎ ";color:var(--thread)}
+.nbitem .meta{font-size:11px;color:#a39c8e;margin-top:5px;display:flex;gap:8px;align-items:center}
+.nbitem.broken .qt{opacity:.6;text-decoration:line-through}
+.nbempty{text-align:center;color:#a39c8e;font-size:13px;line-height:1.9;padding:30px 10px}
+
+/* ═══ 搜索 ═══ */
+.sbox{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.sbox input{
+  flex:1;border:1px solid var(--stitch);border-radius:9px;padding:11px 13px;
+  font-size:16px;font-family:inherit;background:var(--paper);color:var(--ink);
+}
+.sbox input:focus{outline:none;border-color:var(--thread)}
+.shit{padding:11px 2px;border-bottom:1px dashed var(--stitch);cursor:pointer}
+.shit:last-child{border-bottom:none}
+.shit .ttl{font-size:12px;color:var(--thread);font-weight:700;margin-bottom:4px}
+.shit .ctx{font-size:13px;line-height:1.8;color:#5c5343}
+body.dark .shit .ctx{color:#b6bcc9}
+.shit .ctx b{background:var(--thread-soft);color:var(--denim-deep);border-radius:2px;padding:0 2px}
+body.dark .shit .ctx b{background:#54371e;color:#f3dcc6}
+.shit:hover{background:#faf8f3}
+body.dark .shit:hover{background:#20242e}
+/* 跳转后短暂闪一下命中处 */
+@keyframes flashhit{0%,100%{background:transparent}20%,60%{background:var(--thread-soft)}}
+#content .flashhit{animation:flashhit 1.6s ease-in-out}
+body.dark #content .flashhit{animation:flashhitd 1.6s ease-in-out}
+@keyframes flashhitd{0%,100%{background:transparent}20%,60%{background:#54371e}}
+
+/* ═══ 术语 ═══ */
+#content .term{
+  border-bottom:1px dotted var(--denim);cursor:pointer;
+}
+body.dark #content .term{border-bottom-color:#7f93b8}
+.termcard .en{
+  font-size:12.5px;color:#8f8879;letter-spacing:.04em;margin-bottom:10px;
+}
+.termcard .def{font-size:14.5px;line-height:1.9}
+.termcard .src{margin-top:14px;font-size:12px;color:#a39c8e}
+
+/* ═══ 本章作业 ═══ */
+.hwbox{
+  margin:14px 0 6px;padding:13px 15px;border:1px solid var(--stitch);
+  border-radius:8px;background:var(--tutor-bg);
+}
+.hwbox .top{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:32px}
+.hwbox .tick{
+  width:24px;height:24px;border-radius:6px;border:2px solid var(--thread);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:#fff;font-size:14px;line-height:1;
+}
+.hwbox.done .tick{background:var(--thread)}
+.hwbox .lb{font-size:13.5px;font-weight:700;color:var(--denim-deep)}
+.hwbox .sub{font-size:11.5px;color:#a39c8e;margin-top:2px}
+.hwbox textarea{
+  width:100%;margin-top:10px;border:1px solid var(--stitch);border-radius:8px;
+  padding:10px 12px;font-family:inherit;font-size:14px;line-height:1.8;
+  background:var(--panel);color:var(--ink);resize:vertical;min-height:80px;
+}
+.hwbox textarea:focus{outline:none;border-color:var(--thread)}
 
 /* ═══ 助教面板 ═══ */
 #tutor{
@@ -262,35 +412,181 @@ nav a.on .dot{background:var(--thread)}
 #send:hover{background:#b25617}
 #send:disabled{opacity:.45;cursor:default}
 
+/* ═══════════════════════════════════════════════
+   通用弹层:手机=底部抽屉(拇指可达),桌面=居中卡片
+   ═══════════════════════════════════════════════ */
+.mask{
+  position:fixed;inset:0;background:rgba(20,23,30,.45);z-index:90;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.mask.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;z-index:95;background:var(--panel);color:var(--ink);
+  display:flex;flex-direction:column;
+  left:50%;top:50%;transform:translate(-50%,-50%) scale(.97);
+  width:min(540px,92vw);max-height:82vh;
+  border:1px solid var(--stitch);border-radius:10px;
+  box-shadow:0 12px 40px rgba(35,44,61,.28);
+  opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+}
+.sheet.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.sheet .grip{display:none}
+.sh-head{
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  padding:14px 16px 11px;border-bottom:2px dashed var(--thread);
+}
+.sh-title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:15px;color:var(--denim-deep)}
+.sh-x{
+  margin-left:auto;background:none;border:none;font-size:20px;line-height:1;
+  color:#a39c8e;cursor:pointer;padding:6px 8px;border-radius:6px;
+}
+.sh-x:hover{color:var(--thread)}
+.sh-body{padding:14px 16px 20px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sh-body .hint{font-size:12px;color:#a39c8e;line-height:1.8;margin:8px 0}
+.sh-err{
+  display:none;background:#fdece2;border:1px solid var(--thread);color:#a4531a;
+  border-radius:6px;padding:8px 11px;font-size:12.5px;line-height:1.6;margin:10px 0 0;
+}
+body.dark .sh-err{background:#33231a;color:#e0904f}
+
+/* —— 弹层里的表单 —— */
+.fld{margin:14px 0}
+.fld label{display:block;font-size:12px;color:#8f8879;letter-spacing:.04em;margin-bottom:6px}
+.fld input,.fld textarea{
+  width:100%;border:1px solid var(--stitch);border-radius:9px;padding:11px 13px;
+  font-family:inherit;font-size:16px;   /* 16px:iOS 聚焦时不自动放大页面 */
+  background:var(--paper);color:var(--ink);
+}
+.fld textarea{resize:vertical;min-height:96px;line-height:1.75;font-size:15px}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--thread)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--stitch);background:var(--panel);color:var(--denim);
+  border-radius:999px;padding:10px 18px;font-size:14px;font-family:inherit;
+  cursor:pointer;min-height:44px;   /* 手机触控目标 */
+}
+.btn:hover{border-color:var(--denim)}
+.btn.primary{background:var(--thread);color:#fff;border-color:var(--thread);font-weight:500}
+.btn.primary:hover{background:#b25617}
+.btn.block{display:flex;width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.danger{color:#b2402a;border-color:#e2c3ba}
+.btnrow{display:flex;gap:9px;margin-top:16px}
+.btnrow .btn{flex:1}
+
+/* —— 设置行 —— */
+.srow{
+  display:flex;align-items:center;gap:12px;min-height:54px;
+  padding:10px 0;border-bottom:1px dashed var(--stitch);font-size:14px;
+}
+.srow:last-child{border-bottom:none}
+.srow .lbl{flex:1;min-width:0}
+.srow .sub{font-size:11.5px;color:#a39c8e;margin-top:3px;line-height:1.6}
+.srow .ctl{display:flex;gap:7px;align-items:center;flex-shrink:0}
+.stepper{display:flex;align-items:center;gap:4px}
+.stepper button{
+  width:38px;height:38px;border-radius:9px;border:1px solid var(--stitch);
+  background:var(--panel);color:var(--denim);font-size:15px;cursor:pointer;
+}
+.stepper .val{min-width:34px;text-align:center;font-size:13px;color:#8f8879}
+/* 开关 */
+.sw{position:relative;width:48px;height:29px;flex-shrink:0;cursor:pointer}
+.sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.sw .track{
+  position:absolute;inset:0;background:var(--stitch);border-radius:999px;transition:background .18s;
+}
+.sw .knob{
+  position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .18s;
+}
+.sw input:checked ~ .track{background:var(--thread)}
+.sw input:checked ~ .knob{transform:translateX(19px)}
+
+/* —— 账号头像小圆片 —— */
+.avatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;background:var(--denim);
+}
+.avatar.peer{background:var(--thread)}
+#acctBtn .avatar{width:21px;height:21px;font-size:10.5px}
+.syncdot{
+  width:7px;height:7px;border-radius:50%;background:#9bbf7a;flex-shrink:0;
+  transition:background .2s;
+}
+.syncdot.busy{background:var(--thread)}
+.syncdot.off{background:#c9c3b5}
+.syncdot.bad{background:#c4553a}
+
+/* —— 轻提示 —— */
+#toast{
+  position:fixed;z-index:98;left:50%;transform:translateX(-50%) translateY(14px);
+  bottom:26px;max-width:min(520px,92vw);
+  display:flex;align-items:center;gap:12px;
+  background:var(--denim-deep);color:#fff;border-radius:999px;
+  padding:11px 16px;font-size:13px;line-height:1.5;
+  box-shadow:0 6px 22px rgba(35,44,61,.32);
+  opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+}
+#toast.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+#toast .tact{
+  background:var(--thread);color:#fff;border:none;border-radius:999px;
+  padding:7px 14px;font-size:12.5px;font-family:inherit;cursor:pointer;flex-shrink:0;
+}
+@media(max-width:900px){
+  #toast{bottom:calc(66px + env(safe-area-inset-bottom));left:10px;right:10px;transform:translateY(14px);max-width:none}
+  #toast.on{transform:translateY(0)}
+}
+
 /* ═══ 手机底部工具栏 ═══ */
 #mbar{display:none}
 
 /* ═══ 窄屏 ═══ */
 @media(max-width:900px){
   header .hbtn{display:none}
-  nav{position:fixed;left:0;top:53px;bottom:calc(52px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
+  header #acctBtn{display:none}
+  nav{position:fixed;left:0;top:53px;bottom:calc(58px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
   nav.open{transform:none}
   #tutor{
     position:fixed;left:0;right:0;width:auto;top:auto;
-    bottom:calc(52px + env(safe-area-inset-bottom));
+    bottom:calc(58px + env(safe-area-inset-bottom));
     height:min(72vh,560px);z-index:55;
     border-left:none;border-top:2px solid var(--thread);
     box-shadow:0 -6px 20px rgba(35,44,61,.18);
   }
-  #reader{padding:20px 14px calc(84px + env(safe-area-inset-bottom))}
+  #reader{padding:20px 14px calc(90px + env(safe-area-inset-bottom))}
   #content{padding:30px 22px 40px}
   .progress{display:none}
   .brand .en{display:none}
+  /* 五个大触控区:目录 / 搜索 / 笔记 / 助教 / 我 */
   #mbar{
-    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:7px;
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:2px;
     background:var(--panel);border-top:1px solid var(--stitch);
-    padding:7px 10px calc(7px + env(safe-area-inset-bottom));
+    padding:4px 4px calc(4px + env(safe-area-inset-bottom));
   }
   #mbar button{
-    flex:1;background:none;border:1px solid var(--stitch);border-radius:999px;
-    padding:7px 0;font-size:12.5px;color:var(--denim);cursor:pointer;white-space:nowrap;
+    flex:1;background:none;border:none;border-radius:10px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:48px;padding:5px 0;font-size:10.5px;color:#6f7889;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
   }
-  #mbar button.active{background:var(--thread);color:#fff;border-color:var(--thread)}
+  #mbar button .ic{font-size:18px;line-height:1.1}
+  #mbar button.active{color:var(--thread)}
+  #mbar button:active{background:#f2efe8}
+  body.dark #mbar button{color:#8b919e}
+  body.dark #mbar button:active{background:#242936}
+  /* 弹层在手机上从底部升起 */
+  .sheet{
+    left:0;right:0;bottom:0;top:auto;width:auto;
+    transform:translateY(100%);max-height:88vh;
+    border-radius:16px 16px 0 0;border-left:none;border-right:none;border-bottom:none;
+  }
+  .sheet.on{transform:translateY(0)}
+  .sheet .grip{
+    display:block;width:38px;height:4px;border-radius:2px;
+    background:var(--stitch);margin:9px auto 1px;flex-shrink:0;
+  }
+  .sh-body{padding-bottom:calc(22px + env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;scroll-behavior:auto!important}
@@ -309,10 +605,13 @@ nav a.on .dot{background:var(--thread)}
   </div>
   <div class="progress">小白入行帽子厂贸实战 · 全书完成 <b id="prog"></b></div>
   <div class="spacer"></div>
+  <button class="hbtn" id="searchBtn" title="全书搜索">🔍 搜索</button>
   <button class="hbtn" id="fontMinus" title="缩小字号">A−</button>
   <button class="hbtn" id="fontPlus" title="放大字号">A＋</button>
   <button class="hbtn" id="themeToggle" title="切换深浅色">🌙 深色</button>
+  <button class="hbtn" id="notebookToggle">✎ 我的笔记本</button>
   <button class="hbtn active" id="tutorToggle">🧵 随书助教</button>
+  <button class="hbtn" id="acctBtn" title="账号与设置"><span class="syncdot off" id="syncDot"></span> 登录</button>
 </header>
 
 <main>
@@ -338,14 +637,29 @@ nav a.on .dot{background:var(--thread)}
   </aside>
 </main>
 
-<button id="askBtn">问这段</button>
+<div id="selbar">
+  <button data-act="hl"><span class="sw-dot c-yellow"></span>划线</button>
+  <button data-act="note">✎ 笔记</button>
+  <button data-act="ask">✂ 问这段</button>
+</div>
 
 <div id="mbar">
-  <button id="mToc">☰ 目录</button>
-  <button id="mFontMinus">A−</button>
-  <button id="mFontPlus">A＋</button>
-  <button id="mTheme">🌙</button>
-  <button id="mTutor">🧵 助教</button>
+  <button id="mToc"><span class="ic">☰</span>目录</button>
+  <button id="mSearch"><span class="ic">🔍</span>搜索</button>
+  <button id="mNotebook"><span class="ic">✎</span>笔记</button>
+  <button id="mTutor"><span class="ic">🧵</span>助教</button>
+  <button id="mAcct"><span class="ic">●</span>我</button>
+</div>
+
+<!-- ══ 通用弹层(手机=底部抽屉 / 桌面=居中卡片)══ -->
+<div class="mask" id="mask"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grip"></div>
+  <div class="sh-head">
+    <div class="sh-title" id="shTitle"></div>
+    <button class="sh-x" id="shX" aria-label="关闭">✕</button>
+  </div>
+  <div class="sh-body" id="shBody"></div>
 </div>
 
 <!-- ══ 书稿内容(构建脚本注入)══ -->
@@ -14870,9 +15184,14 @@ than debate where it gets posted."
 
 </script>
 
+<script type="application/json" id="glossary">[{"cn":"精梳","en":"combed cotton","src":"1.1.1","def":"多一道梳理工序,去短绒,纱线更匀更光,帽子摸起来\"细\""},{"cn":"普梳","en":"carded cotton","src":"1.1.1","def":"未经精梳,毛羽多、成本低,便宜帽子的主力"},{"cn":"纱支","en":"yarn count (s)","src":"1.1.5","def":"纱线粗细,数字越大越细;帽用主流21支"},{"cn":"经纬密度","en":"thread count (warp × weft)","src":"1.1.5","def":"每英寸的经纱与纬纱根数,如108×58;允差±4根"},{"cn":"双股纱","en":"two-ply yarn (21/2)","src":"1.1.5","def":"两根单纱合捻,强度与挺括度高于单纱,同支数更贵"},{"cn":"涤纶","en":"polyester","src":"1.1.2","def":"化纤主力,快干、不缩水、吸湿仅0.4%,运动款首选"},{"cn":"旦数","en":"denier (D)","src":"1.1.2","def":"化纤长丝的粗细单位,如150D、70D,数字越大越粗"},{"cn":"长丝","en":"filament","src":"1.1.2","def":"连续不断的化纤丝,区别于短纤,表面光滑"},{"cn":"涤棉","en":"T/C (poly-cotton)","src":"1.1.3","def":"涤多棉少(如65/35),走价定位的起谈点"},{"cn":"棉占优混纺","en":"CVC (chief value cotton)","src":"1.1.3","def":"棉多涤少(如60/40),中间市场的锚点"},{"cn":"烧毛测试","en":"burn test","src":"1.1.3","def":"点火看灰烬与气味,三十秒验证成分标签真假"},{"cn":"腈纶","en":"acrylic","src":"1.1.4","def":"仿羊毛手感,beanie的主流材料,出厂¥6-10"},{"cn":"羊毛缩绒","en":"wool felting","src":"1.1.4","def":"羊毛受热受力后毡化收缩,决定羊毛帽的洗涤禁忌"},{"cn":"尼龙","en":"nylon / polyamide","src":"1.1.4","def":"强度最高的化纤,户外帽与轻量款用"},{"cn":"氨纶","en":"spandex / elastane","src":"1.1.4","def":"弹力纤维,加入后布价+15-25%,flex帽必备"},{"cn":"公定回潮率","en":"official moisture regain","src":"1.3.2","def":"计重时法定含水率,棉8.5%;称克重争议的裁判线"},{"cn":"洗后尺寸","en":"after-wash measurement","src":"1.1.1","def":"成品尺寸一律按洗后计,写进规格表才有效"},{"cn":"缩水率","en":"shrinkage","src":"1.1.1","def":"棉1-3%;不预缩就按洗后尺寸验货,必然吵架"},{"cn":"平纹","en":"plain weave","src":"1.2.1","def":"一上一下最简单的组织,轻薄、易皱,结构化帽型不用"},{"cn":"府绸","en":"poplin","src":"1.2.1","def":"高密平纹,细腻挺括,衬衫布常见"},{"cn":"斜纹","en":"twill","src":"1.2.2","def":"表面有斜向纹路,厚实耐磨,帽用主流组织"},{"cn":"卡其/华达呢","en":"khaki / gabardine","src":"1.2.2","def":"高密斜纹,挺括有身骨,复古故事款常用"},{"cn":"牛仔布","en":"denim","src":"1.2.2","def":"靛蓝经纱+白纬,可做旧,¥13-16/米"},{"cn":"磨毛斜纹","en":"brushed twill","src":"1.2.2","def":"斜纹表面起细绒,手感柔厚,dad hat与做旧定位默认布"},{"cn":"帆布","en":"canvas","src":"1.2.3","def":"粗厚平纹,工装帽型专用,logo走印花或贴布"},{"cn":"灯芯绒","en":"corduroy","src":"1.2.3","def":"表面竖向绒条,秋冬复古款,¥14-20/米"},{"cn":"条数","en":"wale","src":"1.2.3","def":"灯芯绒每英寸的绒条数,数字越大条越细"},{"cn":"倒顺毛","en":"nap direction","src":"1.2.3","def":"绒面布有方向性,排料必须同向,否则深浅不一"},{"cn":"梭织","en":"woven","src":"1.2.4","def":"经纬交织,帽身主体永远用梭织"},{"cn":"针织","en":"knit","src":"1.2.4","def":"线圈串套,beanie走针织成型"},{"cn":"网布","en":"mesh","src":"1.2.4","def":"trucker后幅用,单层与双层是品质分水岭"},{"cn":"克重","en":"GSM (g/m²)","src":"1.3.1","def":"每平方米克数,帽用主流200-240g;允差±5%"},{"cn":"圆刀取样器","en":"GSM round cutter","src":"1.3.1","def":"11.3cm圆刀取100cm²布样上秤,克重的唯一硬证据"},{"cn":"盎司换算","en":"oz conversion","src":"1.3.1","def":"oz/yd² × 34 ≈ g/m²,美式报价换算用"},{"cn":"浆纱/退浆","en":"sizing / desizing","src":"1.3.2","def":"织造前上浆、成品前退浆;克重必须按退浆后计"},{"cn":"加重浆","en":"heavy sizing","src":"1.3.2","def":"虚增15-25克冒充厚布;洗后减重>5%即判"},{"cn":"同缸布头","en":"same-lot fabric swatch","src":"1.3.2","def":"大货随附2米同缸布,是日后检测与对色的证物"},{"cn":"染缸","en":"dye vat","src":"1.4.1","def":"染色的最小批次单位,一缸就是一个色"},{"cn":"坯布","en":"greige fabric","src":"1.4.1","def":"未染色的原坯,染厂的输入品"},{"cn":"色差","en":"colour variation","src":"1.4.1","def":"与标准色不一致的统称"},{"cn":"缸差","en":"dye-lot variation","src":"1.4.1","def":"不同染缸之间的色差,帽子最常见的颜色事故源"},{"cn":"灯箱房","en":"light box","src":"1.4.1","def":"标准光源对色间,D65/TL84/UV等光源可切换"},{"cn":"潘通","en":"Pantone / PMS","src":"1.4.2","def":"国际通用色号体系,颜色沟通的唯一硬通货"},{"cn":"C卡/U卡","en":"coated / uncoated chip","src":"1.4.2","def":"铜版纸/胶版纸色卡,同一色号在两卡上不一样"},{"cn":"同色异谱","en":"metamerism","src":"1.4.2","def":"两块布在一种光下同色、换光源就不同色"},{"cn":"比色四姿势","en":"colour matching posture","src":"1.4.2","def":"自然光、北窗、45度、不隔玻璃——对色的动作规范"},{"cn":"lab dip","en":"lab dip","src":"1.4.3","def":"染厂打的小块色样,定制色以双方签字lab dip为准"},{"cn":"门幅","en":"fabric width","src":"1.5.1","def":"布的有效宽度,常见1.5米,决定用料反算"},{"cn":"起订量","en":"MOQ","src":"1.5.2","def":"最小订购量,面料起染量常在300-500米"},{"cn":"浴比","en":"liquor ratio","src":"1.5.2","def":"染液与布的重量比,决定染缸开不开得起"},{"cn":"现货色","en":"stock colour","src":"1.5.2","def":"布厂常备色,小单唯一现实的选择"},{"cn":"凑缸/开小缸","en":"dye-lot pooling / small-vat dyeing","src":"1.5.2","def":"拼别人的缸,或加价三到五成单独开缸"},{"cn":"前幅","en":"front panel","src":"2.1.1","def":"帽子正面两片,logo的落点"},{"cn":"衬布","en":"buckram / fusing","src":"2.1.1","def":"前幅内衬,决定帽子挺不挺"},{"cn":"结构化","en":"structured","src":"2.1.1","def":"有前幅衬布,帽型硬挺(棒球帽/snapback)"},{"cn":"软顶","en":"unstructured","src":"2.1.1","def":"无衬布,戴上塌下来(dad hat)"},{"cn":"老爹帽","en":"dad hat","src":"2.1.2","def":"6片软顶弯檐,复古休闲款,R&B主款"},{"cn":"后扣帽","en":"snapback","src":"2.1.2","def":"平檐结构化+塑料排扣,街头款"},{"cn":"平檐","en":"flat brim","src":"2.1.2","def":"不预弯的直檐"},{"cn":"高尔夫帽","en":"golf cap","src":"2.1.2","def":"轻量运动帽型,出厂¥10-15"},{"cn":"渔夫帽","en":"bucket hat","src":"2.1.2","def":"全周软檐,用平纹须≥240克"},{"cn":"空顶帽","en":"visor","src":"2.1.2","def":"只有檐和帽围,出厂¥8-12"},{"cn":"帽身","en":"crown","src":"2.2.1","def":"帽子的球冠部分"},{"cn":"帽片","en":"panel","src":"2.2.1","def":"组成帽身的裁片,常见5片/6片"},{"cn":"中缝","en":"centre seam","src":"2.2.1","def":"前中两片的接缝,跨缝绣的技术难点"},{"cn":"缝份","en":"seam allowance","src":"2.2.2","def":"缝合留边,包净才不毛"},{"cn":"沿条","en":"taping / seam tape","src":"2.2.2","def":"包住内部缝份的布条,翻内里第一眼看它"},{"cn":"顶扣","en":"squatchee / button","src":"2.3.1","def":"帽顶包布小扣,须同缸裁片"},{"cn":"气眼","en":"eyelet","src":"2.3.1","def":"帽片上的透气孔"},{"cn":"绣眼","en":"embroidered eyelet","src":"2.3.1","def":"用线绣出的气眼,比金属鸡眼高级"},{"cn":"金属鸡眼","en":"metal eyelet","src":"2.3.1","def":"打进去的金属环,6粒+¥0.1-0.2"},{"cn":"檐芯","en":"brim insert / visor board","src":"2.3.2","def":"帽檐里的塑料板,原生PE 2.5-3mm是好料"},{"cn":"檐面线","en":"brim stitching rows","src":"2.3.2","def":"帽檐上的平行线,4/6/8行对应促销/主流/精品"},{"cn":"汗带","en":"sweatband","src":"2.3.3","def":"帽围内圈的吸汗条,棉涤¥0.3-0.5"},{"cn":"织唛","en":"woven label","src":"2.3.4","def":"织出来的主标,MOQ千枚,¥0.08-0.15"},{"cn":"印唛","en":"printed label","src":"2.3.4","def":"印上去的标,¥0.02-0.05"},{"cn":"洗水标","en":"care label","src":"2.3.4","def":"成分+产地+洗涤图标,合规硬件"},{"cn":"吊牌","en":"hangtag","src":"2.3.4","def":"挂牌,零售场景必备,¥0.15-0.3"},{"cn":"调节扣","en":"closure","src":"2.4.1","def":"后开口的收紧装置统称"},{"cn":"塑料排扣","en":"plastic snap","src":"2.4.1","def":"snapback的标志,¥0.05-0.12"},{"cn":"魔术贴","en":"hook-and-loop","src":"2.4.1","def":"尼龙搭扣,¥0.15-0.25"},{"cn":"日字扣","en":"slide buckle","src":"2.4.1","def":"织带穿过的塑料扣,¥0.3-0.5"},{"cn":"金属滑扣+收尾环","en":"metal slider + tail ring","src":"2.4.1","def":"高档dad hat标配,套装¥0.8-1.5"},{"cn":"古铜色","en":"antique brass","src":"2.4.2","def":"做旧铜色电镀,R&B主款用色"},{"cn":"电镀批次","en":"plating lot","src":"2.4.2","def":"不同批电镀会有色差,必须写\"同批\""},{"cn":"定码帽","en":"fitted","src":"2.4.3","def":"无调节、按头围分码,三千顶以下不做"},{"cn":"弹力帽","en":"flex","src":"2.4.3","def":"含氨纶弹力帽围,两码S/M与L/XL"},{"cn":"帽围","en":"head circumference","src":"2.5.1","def":"贴汗带内圈绕量,成人可调56-60cm,允差±1cm"},{"cn":"帽深","en":"crown height","src":"2.5.1","def":"帽顶到帽口,浅冠9-9.5/标准10-11/深冠11.5+"},{"cn":"檐长","en":"brim length","src":"2.5.1","def":"帽檐前伸长度,常见7-7.5cm,允差±0.5cm"},{"cn":"规格表","en":"spec sheet","src":"2.5.1","def":"打样、报价、验货三程共用的同一份文件"},{"cn":"版本纪律","en":"version control","src":"2.5.2","def":"改动必升版号+邮件确认,口头不作数"},{"cn":"加式针织帽","en":"toque","src":"20.3.1","def":"加拿大对beanie的本地叫法,报价沟通别用错词"},{"cn":"针","en":"stitch","src":"3.1.1","def":"绣花的计价原子,一针就是一次穿刺"},{"cn":"包针","en":"satin stitch","src":"3.1.1","def":"平行密排,字母与细线条用"},{"cn":"榻榻米针","en":"tatami / fill stitch","src":"3.1.1","def":"大面积填充针法,省线但耐磨性弱"},{"cn":"底针","en":"underlay","src":"3.1.1","def":"面针之下的打底,决定绣花平不平"},{"cn":"多头机","en":"multi-head machine","src":"3.1.4","def":"6/12/20头同绣,12头日产约480片"},{"cn":"帽绣机","en":"cap frame machine","src":"3.1.4","def":"带弧形绷架、能绣成品帽的绣花机"},{"cn":"千针计价","en":"price per 1,000 stitches","src":"3.1.5","def":"绣花的行业计价单位,¥0.35-0.55"},{"cn":"制版费/打带费","en":"digitizing fee","src":"3.1.5","def":"一次性做绣花文件的钱,¥150-300"},{"cn":"制版","en":"digitizing","src":"3.1.6","def":"把图形转成机器可读的针迹路径"},{"cn":"绣花文件","en":".dst file","src":"3.1.6","def":"通用绣花机文件格式,可查针数与色序"},{"cn":"拉力补偿","en":"pull compensation","src":"3.1.6","def":"制版时预留的变形量,防绣完走样"},{"cn":"色序表","en":"colour sequence sheet","src":"3.1.6","def":"哪根针换哪个色号,换线的书面依据"},{"cn":"平绣","en":"flat embroidery","src":"3.1.7","def":"最常规的贴面绣,R&B主款工艺"},{"cn":"立体绣/泡绣","en":"3D puff embroidery","src":"3.1.7","def":"线下垫泡棉,笔画须≥3mm,+¥1.5-3/顶"},{"cn":"贴布绣","en":"applique","src":"3.1.7","def":"先贴布再锁边,大图省针30-40%"},{"cn":"混绣","en":"mixed embroidery","src":"3.1.7","def":"平绣+3D+贴布组合"},{"cn":"涤纶绣花线","en":"polyester embroidery thread","src":"3.1.8","def":"120D/2主流,耐洗耐晒"},{"cn":"样带","en":"sew-out swatch","src":"3.1.8","def":"同布同机试绣的实物色带,线色确认的唯一凭据"},{"cn":"丝网印","en":"screen printing","src":"3.2.1","def":"按色计价,版费¥50-80/色,≤3色大色块首选"},{"cn":"水浆/胶浆","en":"water-based / plastisol ink","src":"3.2.1","def":"前者软透气,后者遮盖力强"},{"cn":"热转印","en":"heat transfer","src":"3.2.2","def":"¥1-2/顶,全彩但耐洗30-50次"},{"cn":"转印膜","en":"DTF","src":"3.2.2","def":"打印+烫粉的转印工艺,小批量全彩"},{"cn":"数码直喷","en":"DTG","src":"3.2.3","def":"¥3-6/顶,无版费,与丝印平衡点≈70顶"},{"cn":"皮标","en":"leather patch","src":"3.3.1","def":"¥0.8-2/枚,户外与复古款质感项"},{"cn":"金属标","en":"metal badge","src":"3.3.1","def":"¥1-3/枚,有模具费"},{"cn":"PVC胶章","en":"PVC patch","src":"3.3.1","def":"¥0.6-1.5/枚,立体感强"},{"cn":"织唛贴布","en":"woven patch","src":"3.3.1","def":"¥0.3-0.8/枚,最省钱的贴标方案"},{"cn":"激光穿孔","en":"laser perforation","src":"3.3.2","def":"¥0.5-1/顶,全棉禁用"},{"cn":"成衣水洗","en":"garment wash","src":"3.3.3","def":"做完帽子再洗,vintage感的来源"},{"cn":"酵素洗","en":"enzyme wash","src":"3.3.3","def":"轻酵素¥0.8-1.5/顶,R&B按¥1,工期+2-3天"},{"cn":"石磨洗","en":"stone wash","src":"3.3.3","def":"重做旧¥2-3/顶"},{"cn":"水洗封样","en":"wash approval sample","src":"3.3.3","def":"做旧深浅必须封样,否则无法判定合格"},{"cn":"生产通知单","en":"production order","src":"4.1.1","def":"跟单员下给车间的内部指令,订单落地的起点"},{"cn":"流转卡","en":"bundle ticket","src":"4.1.1","def":"跟着裁片走的工序卡,查进度就查它"},{"cn":"验布四分制","en":"four-point system","src":"4.2.1","def":"按疵点长度记1-4分的国际验布法"},{"cn":"松布","en":"relaxing","src":"4.2.2","def":"裁前摊开静置回缩,省掉它就等着尺寸出事"},{"cn":"唛架/排料","en":"marker","src":"4.2.3","def":"裁片在布面上的排布方案,用料率优85%/差75%"},{"cn":"拉布","en":"spreading","src":"4.2.4","def":"多层铺布,一次可拉几十至上百层"},{"cn":"扎号","en":"bundling / ticketing","src":"4.2.5","def":"按层号捆扎编号,同缸同层的唯一保证"},{"cn":"上绷","en":"hooping","src":"4.3.2","def":"把裁片撑上绣花绷架"},{"cn":"定型","en":"blocking / steaming","src":"4.5.1","def":"蒸汽定出帽型,装箱前须晾置≥12小时"},{"cn":"单塑袋","en":"polybag","src":"4.6.1","def":"每顶一袋,2.5-4丝,¥0.05-0.12"},{"cn":"窒息警告","en":"suffocation warning","src":"4.6.1","def":"开口≥5英寸的塑袋必须印,北美硬要求"},{"cn":"箱唛","en":"shipping marks","src":"4.6.3","def":"外箱刷唛,须与PL、CI三者一致"},{"cn":"产业带","en":"industrial cluster","src":"6.1.1","def":"同类工厂与配套在一地高度聚集"},{"cn":"一小时配套圈","en":"one-hour supply circle","src":"6.1.1","def":"所需物料一小时车程内配齐,产业带成色的标尺"},{"cn":"工人池","en":"labour pool","src":"6.1.2","def":"区域内可流动的熟练工存量"},{"cn":"信息池","en":"information pool","src":"6.1.2","def":"产业带里靠饭桌流通的行情"},{"cn":"裂变","en":"spin-off","src":"6.1.2","def":"班组长出去开小厂,外发网络的来源"},{"cn":"转厂","en":"order transfer","src":"6.1.2","def":"你的单被悄悄转给别家做,合同须明禁"},{"cn":"美单","en":"US-market order","src":"6.2.1","def":"北美出口订单,山东产业带的基因"},{"cn":"快反","en":"quick response","src":"6.3.1","def":"小批量多款短交期,100-300顶/款、7-15天"},{"cn":"版房","en":"sample room","src":"6.3.1","def":"工厂里专做样品的部门"},{"cn":"现货贴牌","en":"stock-blank private label","src":"6.5.1","def":"买现货白帽再绣logo,100顶级的最低成本起步法"},{"cn":"白帽","en":"blank cap","src":"5.4.1","def":"无装饰的素帽,批发$3-8/顶"},{"cn":"中国+1","en":"China Plus One","src":"6.6","def":"把部分产能移出中国的采购策略"},{"cn":"双主体","en":"dual entities","src":"8.1.1","def":"工厂+外贸公司两个抬头,合同与收款的分家"},{"cn":"报价权分层","en":"quoting authority","src":"8.2.1","def":"业务员能报到哪一档、经理才能批哪一档"},{"cn":"跟单员","en":"merchandiser","src":"8.2.2","def":"你九成事情的默认入口"},{"cn":"单证员","en":"documentation clerk","src":"8.2.3","def":"出CI/PL/报关资料的人"},{"cn":"排产表","en":"production schedule","src":"8.3.1","def":"车间白板上的上线计划,催单的真凭实据"},{"cn":"班组长","en":"line leader","src":"8.3.1","def":"管一条线的分工与做工水平"},{"cn":"驻线检","en":"in-line QC","src":"8.4.2","def":"生产过程中的在线检验"},{"cn":"尾查","en":"final audit","src":"8.4.2","def":"出货前的最后一道厂内检验"},{"cn":"成本拆分","en":"BOM / breakdown","src":"9.1.1","def":"报价按项拆开,核价的前提"},{"cn":"辅料清单","en":"trim sheet","src":"9.3.1","def":"扣、眼、汗带、标、袋、箱逐项列价的附件"},{"cn":"工缴","en":"CMT / making charge","src":"9.5","def":"裁剪车缝的加工费,车缝¥2.5-4/顶,不砍"},{"cn":"损耗率","en":"wastage rate","src":"9.6.1","def":"备料余量,2-3%正常/>4%问/<1.5%警惕"},{"cn":"数量阶梯","en":"quantity break","src":"9.7.1","def":"不同数量档对应不同单价,一次要三档"},{"cn":"内部汇率","en":"internal exchange rate","src":"9.7.2","def":"报价时自用的保守汇率,比市价低3%"},{"cn":"现成样","en":"stock sample","src":"10.1.1","def":"工厂现有的成品样,用于确认手感与版型"},{"cn":"开发样","en":"development sample","src":"10.1.1","def":"按你的规格首次打出来的样,¥80-150/顶"},{"cn":"确认样/封样","en":"approved / sealed sample","src":"10.1.1","def":"签字封存的最高裁判,一式两份"},{"cn":"产前样","en":"PP sample","src":"10.1.1","def":"用大货料在大货线上做的样,交期从它确认起算"},{"cn":"船头样","en":"shipping sample","src":"10.1.1","def":"大货中留取的出货样"},{"cn":"打样需求单","en":"sample request sheet","src":"10.2.1","def":"规格表+面料卡+文件包+期限的一页纸"},{"cn":"参照样","en":"reference sample","src":"10.2.3","def":"一顶旧帽子胜过一页文字,须写明参照什么、不参照什么"},{"cn":"到付账号","en":"freight collect account","src":"10.4.2","def":"寄样运费谁出的行规工具"},{"cn":"大货首件","en":"first off-line piece","src":"10.7","def":"流水线第一顶必须确认,错一件等于错一批"},{"cn":"回头率","en":"repeat-buyer rate","src":"12.1.1","def":"1688店铺的复购信号,>30%好/<10%避"},{"cn":"验厂","en":"factory audit","src":"12.4.1","def":"到现场或视频看八个细节"},{"cn":"BSCI","en":"BSCI","src":"12.4.2","def":"社会责任审核,A-E五档,不是品质认证"},{"cn":"Sedex/SMETA","en":"Sedex / SMETA","src":"12.4.2","def":"另一套社会责任审核体系"},{"cn":"分单","en":"order splitting","src":"12.5","def":"主力厂与备份厂8:2分配订单流"},{"cn":"备份厂","en":"backup factory","src":"12.5","def":"同产业带、厂型相当、非主力关联的第二家"},{"cn":"疵点分级","en":"defect classification","src":"11.2.1","def":"致命/严重/轻微三级,判级用三问法"},{"cn":"致命疵点","en":"critical defect","src":"11.2.1","def":"伤人或违法,AQL一律0,见一拒批"},{"cn":"严重疵点","en":"major defect","src":"11.2.1","def":"买家会放回货架或退货,AQL 2.5"},{"cn":"轻微疵点","en":"minor defect","src":"11.2.1","def":"贴着才看得见,AQL 4.0"},{"cn":"抽样标准","en":"AQL (ANSI/ASQ Z1.4)","src":"11.3.1","def":"可接受质量水平,抽样判批的国际标准"},{"cn":"一般检验水平II","en":"general inspection level II","src":"11.3.2","def":"默认检验水平,查字码用它"},{"cn":"样本字码","en":"sample size code letter","src":"11.3.2","def":"批量对应的字母,500顶=H"},{"cn":"判定数","en":"Ac / Re number","src":"11.3.2","def":"允收数/拒收数,H码AQL2.5为3/4"},{"cn":"全检","en":"100% inspection","src":"11.3.1","def":"逐顶检,抽样判拒后的常规动作"},{"cn":"让步接受","en":"concession acceptance","src":"11.6.2","def":"明知不合格仍书面同意折价收货,须书面+货物加标识"},{"cn":"第三方验货","en":"third-party inspection","src":"11.4.2","def":"SGS/BV/QIMA上门,$200-350/人日"},{"cn":"复验费","en":"re-inspection fee","src":"11.2.2","def":"返工后重验的钱,写进合同由卖方承担"},{"cn":"驻厂终验","en":"final random inspection","src":"11.2.2","def":"100%完工、80%装箱、发运之前的三个时点"},{"cn":"钱货分离","en":"separation of goods and payment","src":"13.1.1","def":"外贸的本质困境:货和钱不同时到场"},{"cn":"敞口","en":"exposure","src":"13.1.1","def":"你在某一时刻可能损失的最大金额"},{"cn":"国际贸易术语解释通则","en":"Incoterms® 2020","src":"13.2","def":"ICC制定的交货条款体系,写术语必带版本年份"},{"cn":"工厂交货","en":"EXW","src":"13.3.1","def":"卖方厂门口交货,中国实务上办不了"},{"cn":"船上交货","en":"FOB","src":"13.3.1","def":"装上船责任费用风险三线同止,你向工厂采购的标准口径"},{"cn":"装上船","en":"on board","src":"13.3.1","def":"FOB的交货节点"},{"cn":"订舱","en":"booking","src":"13.3.1","def":"向船公司或货代订舱位"},{"cn":"码头操作费","en":"THC","src":"13.3.1","def":"港口装卸费,FOB报价必须问含不含"},{"cn":"成本加运费","en":"CFR","src":"13.3.2","def":"卖方付到目的港,风险仍在装上船转移"},{"cn":"成本保险费加运费","en":"CIF","src":"13.3.2","def":"CFR+保险,三线不重合的一组"},{"cn":"目的地交货","en":"DAP","src":"13.3.2","def":"送到但不清关不缴税"},{"cn":"完税后交货","en":"DDP","src":"13.3.2","def":"送到并包清关缴税,你向客户报价的标准口径"},{"cn":"卸货地交货","en":"DPU","src":"13.3.2","def":"送到并卸下,唯一要求卖方卸货的术语"},{"cn":"进口人","en":"importer of record","src":"13.3.2","def":"对进口申报负法律责任的主体"},{"cn":"责任线/费用线/风险线","en":"obligation / cost / risk line","src":"13.3.3","def":"读任何术语都要分开问的三条线"},{"cn":"装运合同/到达合同","en":"shipment / arrival contract","src":"13.3.3","def":"F、C组是装运合同,D组是到达合同"},{"cn":"协会货物条款","en":"ICC (A)/(B)/(C)","src":"13.4","def":"海运险三档,(A)最全,费率0.08-0.15%"},{"cn":"保额110%","en":"110% of invoice value","src":"13.4","def":"行业惯例保额,含预期利润10%"},{"cn":"无知溢价","en":"ignorance premium","src":"13.5","def":"因为不懂条款而多付的钱"},{"cn":"询盘","en":"inquiry","src":"15.1.1","def":"买家的问价,用五特征评分卡分诊"},{"cn":"报价单","en":"quotation","src":"15.2","def":"八要素齐全的PDF,不发Excel"},{"cn":"要约与要约邀请","en":"offer / invitation to treat","src":"15.2","def":"报价单写不写有效期,法律性质完全不同"},{"cn":"有效期","en":"validity","src":"15.2","def":"报价单30天、PI 7-15天"},{"cn":"形式发票","en":"PI (proforma invoice)","src":"15.5.1","def":"不是发票,是销售合同,十三栏缺一不可"},{"cn":"数量允差","en":"quantity tolerance","src":"15.5.1","def":"±3%,按实际发货数结算"},{"cn":"受益人","en":"Beneficiary","src":"15.5.1","def":"收款人,须与卖方抬头一字不差"},{"cn":"通知方","en":"Notify Party","src":"15.5.1","def":"提单上货到通知的对象"},{"cn":"背靠背","en":"back-to-back","src":"15.5.1","def":"给客户的PI与给工厂的采购单六项逐行对齐"},{"cn":"让步阶梯","en":"concession ladder","src":"15.4.2","def":"五级让步次序,幅度递减5%→2%→0.5%"},{"cn":"三方案应对法","en":"three-option response","src":"15.4.1","def":"面对砍价给A/B/C,不给\"再便宜点\""},{"cn":"电汇","en":"T/T (telegraphic transfer)","src":"14.1.1","def":"主力收款方式,30/70为常规节奏"},{"cn":"银行识别码","en":"SWIFT / BIC","src":"14.1.1","def":"8或11位,填错钱在路上转十天"},{"cn":"中转行","en":"intermediary bank","src":"14.1.1","def":"中间扣费的银行,BEN条款下由你承担"},{"cn":"费用条款","en":"OUR / SHA / BEN","src":"14.1.1","def":"谁付手续费;对客户一律要OUR"},{"cn":"水单","en":"MT103 payment advice","src":"14.1.1","def":"SWIFT报文,含UETR追踪号,催款查账的钥匙"},{"cn":"见提单副本付款","en":"against copy of B/L","src":"14.1.2","def":"尾款触发点,专线场景须改写为装箱单+货代收货凭证"},{"cn":"款到交仓","en":"release on receipt of balance","src":"14.1.2","def":"无物权凭证的运输方式的唯一防线"},{"cn":"付款交单","en":"D/P","src":"14.2","def":"银行凭付款交单据,风险中等"},{"cn":"承兑交单","en":"D/A","src":"14.2","def":"凭承兑交单据,风险高"},{"cn":"赊销","en":"O/A (open account)","src":"14.2","def":"先发货后付款,须信保+额度上限"},{"cn":"出口信用保险","en":"export credit insurance","src":"14.2","def":"赊销与账期客户的必备对冲"},{"cn":"信用证","en":"L/C","src":"14.3.1","def":"银行信用替代商业信用,$30,000以下不用"},{"cn":"独立抽象原则","en":"autonomy principle","src":"14.3.1","def":"银行只认单据不认货"},{"cn":"即期/远期","en":"sight / usance","src":"14.3.1","def":"见单即付,或到期日付"},{"cn":"不符点","en":"discrepancy","src":"14.3.2","def":"单据与信用证不一致,银行可拒付"},{"cn":"跟单信用证统一惯例","en":"UCP 600","src":"14.3.2","def":"信用证的国际规则"},{"cn":"软条款","en":"soft clause","src":"14.3.2","def":"让开证方随时可以让你交不出单的陷阱条款"},{"cn":"拒付","en":"chargeback","src":"14.4","def":"信用卡/PayPal的付款撤回"},{"cn":"平台担保","en":"Trade Assurance","src":"14.4","def":"阿里信保,平台侧担保交易"},{"cn":"第三方跨境收款","en":"third-party payment provider","src":"14.4","def":"万里汇/PingPong/Wise一类,费率0.3-1%"},{"cn":"定金匹配公式","en":"deposit adequacy formula","src":"14.5.1","def":"a×S ≥ b×C + F,算出你最低需要的定金比例"},{"cn":"覆盖倍数","en":"deposit coverage ratio","src":"14.5.1","def":"定金÷专用投入,R&B为2.84"},{"cn":"垫资峰值","en":"peak working capital","src":"14.5.1","def":"现金流表上余额最低点,R&B为¥900"},{"cn":"锁汇","en":"forward FX contract","src":"14.5.2","def":"远期结汇,锁死未来的换汇价"},{"cn":"自然对冲","en":"natural hedge","src":"14.5.2","def":"用同币种的收支互相抵消"},{"cn":"结汇点差","en":"FX spread","src":"14.5.2","def":"银行买卖价差,0.3-0.5%"},{"cn":"单单一致","en":"consistency among documents","src":"16.1","def":"所有单据的同一口径必须完全相同"},{"cn":"单货一致","en":"document-goods consistency","src":"16.1","def":"单据描述与实际货物一致"},{"cn":"商业发票","en":"CI (commercial invoice)","src":"16.2.1","def":"品名、数量、价格的源头单据"},{"cn":"货描四要素","en":"four elements of description","src":"16.2.1","def":"材质+品名+结构+工艺,缺一归类就出错"},{"cn":"低报","en":"under-invoicing","src":"16.2.2","def":"少报货值,触发海关估价权与外汇核查"},{"cn":"装箱单","en":"PL (packing list)","src":"16.3","def":"件数、毛净重、材积的唯一出处"},{"cn":"净重","en":"N.W.","src":"16.3","def":"货物本身重量,R&B为55.00 KGS"},{"cn":"皮重","en":"tare weight","src":"16.3","def":"包装材料重量"},{"cn":"毛重","en":"G.W.","src":"16.3","def":"净重+皮重,R&B为62.50 KGS"},{"cn":"材积","en":"MEAS. / CBM","src":"16.3","def":"立方米体积,R&B为0.48 CBM"},{"cn":"提单","en":"B/L (bill of lading)","src":"16.4.1","def":"海运合同+收据+物权凭证三合一"},{"cn":"已装船提单","en":"shipped on board B/L","src":"16.4.1","def":"注明实际装船日期的提单"},{"cn":"清洁提单","en":"clean B/L","src":"16.4.1","def":"无货损批注的提单"},{"cn":"物权凭证","en":"document of title","src":"16.4.1","def":"谁持有谁提货,提单的核心属性"},{"cn":"记名/指示提单","en":"straight / order B/L","src":"16.4.1","def":"记名不可转让,指示可背书转让"},{"cn":"背书","en":"endorsement","src":"16.4.1","def":"在提单背面签章转让权利"},{"cn":"海牙-维斯比规则","en":"Hague-Visby Rules","src":"16.4.1","def":"承运人责任限额的国际公约"},{"cn":"正本提单","en":"original B/L","src":"16.4.2","def":"款未收齐时的标准做法"},{"cn":"电放","en":"telex release","src":"16.4.2","def":"电子放货,不可撤销"},{"cn":"海运单","en":"SWB (sea waybill)","src":"16.4.2","def":"不可转让,凭身份提货"},{"cn":"提货单","en":"D/O (delivery order)","src":"16.4.2","def":"目的港换单后取货的凭证"},{"cn":"空运单","en":"AWB","src":"16.5","def":"不可转让,货到即可能被提走"},{"cn":"主单/分单","en":"MAWB / HAWB","src":"16.5","def":"航司出主单,货代出分单"},{"cn":"一般原产地证","en":"CO (certificate of origin)","src":"16.6","def":"证明原产中国,适用MFN的凭据"},{"cn":"优惠原产地证","en":"FORM E / RCEP certificate","src":"16.6","def":"自贸协定下的降税凭证"},{"cn":"实质性改变","en":"substantial transformation","src":"16.6","def":"判定原产国的核心标准"},{"cn":"贸促会","en":"CCPIT","src":"16.6","def":"CO签发机构之一,办证¥100-200"},{"cn":"报关单","en":"customs declaration","src":"16.7","def":"出境凭证+退税凭证"},{"cn":"代理报关委托书","en":"customs power of attorney","src":"16.7","def":"授权报关行申报的盖章文件"},{"cn":"核注清单","en":"verification list","src":"16.7","def":"保税加贸专用,一般贸易用不上"},{"cn":"品牌授权书","en":"Letter of Authorization","src":"16.7","def":"客户抬头出具,带logo货物的合规基础"},{"cn":"知识产权海关保护备案","en":"customs IP recordation","src":"16.7","def":"权利人在海关备案后可主动拦截侵权货"},{"cn":"随货文件包","en":"document pouch","src":"16章工具四","def":"CI/PL/原产地声明/成分说明各一份贴1号箱内"},{"cn":"整柜","en":"FCL","src":"17.1.1","def":"一个集装箱独享"},{"cn":"拼箱","en":"LCL","src":"17.1.1","def":"按方与别人拼一个柜"},{"cn":"柜型","en":"20GP / 40GP / 40HQ","src":"17.1.1","def":"高柜40HQ实用容积约68CBM≈7万顶"},{"cn":"实用容积","en":"usable capacity","src":"17.1.1","def":"柜子理论容积打折后的可装量"},{"cn":"货物密度","en":"cargo density","src":"17.1.1","def":"kg/CBM,帽子约130,属抛货"},{"cn":"海运费","en":"O/F (ocean freight)","src":"17.1.2","def":"主运费本身"},{"cn":"单证费","en":"DOC","src":"17.1.2","def":"出单据的费用"},{"cn":"铅封费","en":"seal fee","src":"17.1.2","def":"集装箱封条费"},{"cn":"电子舱单","en":"EDI","src":"17.1.2","def":"舱单数据传输费"},{"cn":"核实总重","en":"VGM","src":"17.1.2","def":"集装箱重量申报,强制要求"},{"cn":"附加费","en":"BAF / CAF / PSS","src":"17.1.2","def":"燃油/货币/旺季附加费"},{"cn":"全包价","en":"all-in","src":"17.1.2","def":"必须跟\"终点\"一起说才有意义"},{"cn":"尺重比","en":"W/M","src":"17.2.1","def":"1 CBM = 1,000 kg,取大者计费"},{"cn":"最低计费方数","en":"minimum chargeable volume","src":"17.2.1","def":"拼箱最低一方,专线最低约0.3方"},{"cn":"拼箱站","en":"CFS","src":"17.2.2","def":"目的港拆箱仓,产生CFS费"},{"cn":"目的港交货费","en":"DDC","src":"17.2.2","def":"北美线常见的目的港固定费"},{"cn":"换单费","en":"D/O fee","src":"17.2.2","def":"目的港换提货单的钱"},{"cn":"整拼交叉点","en":"LCL/FCL break-even","src":"17.2.3","def":"(整柜价−拼箱票级费)÷拼箱每方价,经验12-15方"},{"cn":"实重/体积重/计费重","en":"actual / volumetric / chargeable weight","src":"17.3.1","def":"三者取大计费"},{"cn":"体积重除数","en":"volumetric divisor","src":"17.3.1","def":"空运6000、快递5000"},{"cn":"抛货/重货","en":"volumetric / dense cargo","src":"17.3.1","def":"密度低于167 kg/CBM即抛货"},{"cn":"抛重搭配","en":"density mixing","src":"17.3.1","def":"抛货与重货同票搭配摊薄计费重"},{"cn":"摞高安全线","en":"stack height limit","src":"17.3.2","def":"8顶摞高25-28cm,不得低于20cm"},{"cn":"专线","en":"dedicated line service","src":"17.4","def":"包板包舱的固定通道,分空派/海派/铁派"},{"cn":"空派/海派","en":"air / ocean express line","src":"17.4","def":"空派¥28-45/kg,海派¥2,600-3,500/方"},{"cn":"包板包舱","en":"space charter","src":"17.4","def":"专线商包下舱位,时效稳定的来源"},{"cn":"双清包税","en":"duty-paid door-to-door","src":"17.4","def":"DDP的商业替身,税不透明"},{"cn":"声明价值","en":"declared value","src":"17.4","def":"影响赔付上限的申报货值"},{"cn":"赔付上限","en":"liability limit","src":"17.4","def":"专线常见运费3倍、上限1万元"},{"cn":"货代","en":"freight forwarder","src":"17.5.1","def":"组织运输的中间人"},{"cn":"无船承运人","en":"NVOCC","src":"17.5.1","def":"有备案、可签发自己提单的货代"},{"cn":"分单/主单","en":"HB/L / MB/L","src":"17.5.1","def":"货代提单与船东提单"},{"cn":"自控货/指定货","en":"free hand / nominated","src":"17.5.1","def":"谁指定货代,决定谁掌握运价"},{"cn":"托盘","en":"pallet","src":"17.6","def":"EUR 1200×800 / GMA 1200×1000"},{"cn":"木质包装熏蒸","en":"IPPC treatment","src":"17.6","def":"木托必须有IPPC标识"},{"cn":"最低保费","en":"minimum premium","src":"17.7","def":"每票¥30-100,小票投保的成本地板"},{"cn":"免赔额","en":"deductible / franchise","src":"17.7","def":"绝对免赔扣除、相对免赔超过即全赔"},{"cn":"检验报告","en":"survey report","src":"17.7","def":"货损索赔的必备文件"},{"cn":"头程","en":"first-leg freight","src":"22.1.1","def":"从工厂到海外仓的这一段运输"},{"cn":"商品编码","en":"HS code","src":"18.1.1","def":"六位是世界语,后面是各国方言"},{"cn":"帽类品目","en":"Chapter 65 / heading 6505","src":"18.1.1","def":"帽子归第65章,针织钩编帽入6505"},{"cn":"预裁定","en":"advance ruling","src":"18.1.1","def":"提前3个月申请,60日内出,有效期3年"},{"cn":"申报不实","en":"inaccurate declaration","src":"18.1.2","def":"品名、数量、价格与实际不符的行政违法"},{"cn":"函调","en":"verification letter","src":"18.1.2","def":"税局向供货地税局核实业务真实性"},{"cn":"退税企业管理类别","en":"export tax refund category","src":"18.1.2","def":"一至四类,决定退税审核与到账速度"},{"cn":"单一窗口","en":"Single Window","src":"18.2.1","def":"中国国际贸易统一申报平台"},{"cn":"境内发货人","en":"domestic consignor","src":"18.2.1","def":"报关单上的出口方,退税退给它"},{"cn":"一般贸易","en":"general trade (0110)","src":"18.2.1","def":"最常用的监管方式代码"},{"cn":"进出口权","en":"import-export rights","src":"18.2.1","def":"六件备案的统称,自办抬头的前提"},{"cn":"买单出口","en":"buying an export licence","src":"18.2.2","def":"借别人抬头报关,永久放弃退税"},{"cn":"分拆结汇","en":"split settlement","src":"18.2.2","def":"拆成小额个人结汇,合规红线"},{"cn":"进项/销项","en":"input / output VAT","src":"18.3.1","def":"增值税抵扣的两端"},{"cn":"增值税专用发票","en":"VAT special invoice","src":"18.3.1","def":"退税的凭据,票面品名须与报关一致"},{"cn":"征退税率差","en":"rate differential","src":"18.3.1","def":"征13%退13%则无差额,有差额即不可退部分"},{"cn":"免抵退","en":"exemption-credit-refund","src":"18.3.1","def":"生产企业出口退税的计算办法"},{"cn":"出口退税","en":"export tax refund","src":"18.3.1","def":"帽类约13%,R&B专票¥8,750可退¥1,137.50"},{"cn":"加拿大企业号","en":"BN9 / BN15","src":"18.4.1","def":"九位企业号+两位账户后缀,进口须开RM账户"},{"cn":"加拿大海关评估计划","en":"CARM","src":"18.4.1","def":"CBSA的进口商在线申报与缴税系统"},{"cn":"进口商直付","en":"RPP","src":"18.4.1","def":"进口商自行向海关缴税的资格"},{"cn":"完税价格","en":"VFD (value for duty)","src":"18.4.1","def":"计税基数,R&B为CAD 4,681"},{"cn":"最惠国税率","en":"MFN","src":"18.4.1","def":"加拿大帽类全书统一取16%"},{"cn":"普通税率","en":"General Tariff 35%","src":"18.4.1","def":"无原产地证明时可能适用的惩罚性税率"},{"cn":"商品服务税","en":"GST / PST","src":"18.4.1","def":"加拿大联邦5%+各省销售税"},{"cn":"进项税抵扣","en":"ITC (input tax credit)","src":"18.4.1","def":"注册商可抵扣已缴GST"},{"cn":"美国税则号","en":"HTS (10-digit)","src":"18.4.2","def":"美国十位税号,一路要查到第99章附加标记"},{"cn":"复合税率","en":"compound duty","src":"18.4.2","def":"从价+从量的组合税率"},{"cn":"301加征","en":"Section 301 tariffs","src":"18.4.2","def":"对华额外加征,叠加在基础税率上"},{"cn":"微量豁免","en":"de minimis / Section 321","src":"18.4.2","def":"低值包裹免税门槛,政策易变"},{"cn":"海关估价六方法","en":"six valuation methods","src":"18.5","def":"成交价格法为首,依次退让"},{"cn":"企业信用等级","en":"AEO","src":"18.5","def":"高认/一般认证/一般/失信四档"},{"cn":"骗取出口退税罪","en":"export tax fraud","src":"18.5","def":"刑事红线,买单+假票的终点"},{"cn":"产地标","en":"country-of-origin marking","src":"18.6","def":"Made in China必须永久性标注"},{"cn":"加拿大标签法","en":"TLAR / CA number","src":"18.6","def":"纺织品标签须英法双语+CA号"},{"cn":"美国纤维标识法","en":"TFPIA / RN number","src":"18.6","def":"美国成分标识与注册识别号"},{"cn":"美国童品法","en":"CPSIA / CPC / tracking label","src":"18.6","def":"儿童产品须有合格证书与追溯标签"},{"cn":"加拿大消费品安全法","en":"CCPSA","src":"18.6","def":"加拿大消费品安全的总法"},{"cn":"加州65号提案","en":"Prop 65","src":"20.3.1","def":"加州有害物质警示要求"},{"cn":"欧盟通用产品安全法规","en":"GPSR","src":"20.3.2","def":"要求欧盟境内责任人"},{"cn":"检针证明","en":"needle detection certificate","src":"20.3.2","def":"日韩客户常要的断针检测文件"},{"cn":"沙特认证","en":"SASO / SABER","src":"20.3.2","def":"中东市场的准入认证体系"},{"cn":"标签合规三步法","en":"label compliance workflow","src":"18.6","def":"查目的国要求→写进规格表→打样确认存档"},{"cn":"72法则","en":"rule of 72","src":"5.1.1","def":"72÷增速=翻倍年数,年增3-4%即约二十年翻倍"},{"cn":"贴牌代工","en":"OEM","src":"5.3.1","def":"客户出设计出品牌,毛利5-15%"},{"cn":"设计代工","en":"ODM","src":"5.3.1","def":"工厂出设计,客户出品牌,毛利15-25%"},{"cn":"自有品牌","en":"OBM","src":"5.3.1","def":"设计品牌都自己出,毛利40%+但死得最快"},{"cn":"授权与提成","en":"licensing / royalty","src":"5.4.3","def":"授权费≈批发价10-15%+保底"},{"cn":"促销品行业","en":"ASI / PPAI","src":"5.5.2","def":"北美促销品双层协会体系,年200多亿美元"},{"cn":"季节企划","en":"seasonal plan","src":"5.5.1","def":"品牌提前9-12个月的开发节奏"},{"cn":"供应商名录","en":"vendor list","src":"5.5.1","def":"进得去才有资格报价"},{"cn":"价值链","en":"value chain","src":"7.1.1","def":"从出厂到零售的每一手加价与承担"},{"cn":"加价倍率","en":"markup multiple","src":"7.1.2","def":"卖价÷进价"},{"cn":"加价率","en":"markup rate","src":"7.1.2","def":"按成本算的加价百分比"},{"cn":"毛利率","en":"gross margin","src":"7.1.2","def":"按售价算;报价=成本÷(1−目标毛利率)"},{"cn":"翻倍定价","en":"keystone pricing","src":"7.2.3","def":"零售常规2.5-4倍,帽子行业惯例"},{"cn":"售罄率","en":"sell-through","src":"7.2.3","def":"决定零售那一手真实利润的隐藏变量"},{"cn":"直面消费者","en":"DTC","src":"7.2.3","def":"品牌直销模式,获客成本$10-14/单"},{"cn":"获客成本","en":"CAC","src":"7.2.3","def":"拿到一个客户平均花掉多少钱"},{"cn":"到岸成本","en":"landed cost","src":"19.1.1","def":"八块公式:货款+一次性+头程+关税+尾程+资金+备付−退税"},{"cn":"摊销基数","en":"amortisation base","src":"19.1.1","def":"一次性费用除以谁,首单量还是12个月量"},{"cn":"成本加成","en":"cost-plus","src":"19.6.1","def":"从成本往上加,适合无参照的新品"},{"cn":"市场锚定","en":"market anchoring","src":"19.6.1","def":"从客户现有选择往下打,适合有对标的成熟品"},{"cn":"目标成本法","en":"target costing","src":"19.6.1","def":"从客户目标价倒推允许的成本"},{"cn":"安全边际","en":"margin of safety","src":"19.6.2","def":"报价高出地板价的空间"},{"cn":"保本价/地板价","en":"walk-away price","src":"19.6.2","def":"低于它就该转身走,定制服务档为完全成本÷0.75"},{"cn":"天花板价","en":"ceiling price","src":"19.6.2","def":"客户现有选择的价格,你须比它便宜15-25%"},{"cn":"敏感性分析","en":"sensitivity analysis","src":"19.7","def":"单变量上下浮动看毛利变化,汇率杀伤力最大"},{"cn":"账面口径/完全成本口径","en":"book / fully-loaded costing","src":"19.5","def":"R&B账面53.6%,完全成本35.4%,差额¥4,690"},{"cn":"决策链","en":"decision chain","src":"20.1.1","def":"几个人、几层、多久,决定跟进节奏"},{"cn":"转单","en":"order pass-through","src":"20.1.2","def":"分销商把订单转给你做,稳定但压价"},{"cn":"目标价倒推","en":"target price back-calculation","src":"20.1.2","def":"净空间<10%放掉、10-15%谨慎、>15%接"},{"cn":"能力单","en":"capabilities sheet","src":"20.1.2","def":"一页纸讲清你能做什么,B端敲门砖"},{"cn":"终端小B","en":"small business end-user","src":"20.1.3","def":"自己用不转卖的小企业,你的主攻客群"},{"cn":"客户终身价值","en":"LTV","src":"20.1.3","def":"小B三年¥3-8万;可承受获客成本=LTV×20%"},{"cn":"缝隙市场","en":"niche","src":"20.4","def":"大厂不愿做、本地做不了的那一段"},{"cn":"射程","en":"strike range","src":"20.4","def":"量·交期·定制深度·客户属性四维定义的接单边界"},{"cn":"放单记录","en":"pass log","src":"20.4","def":"每放弃一单写一行为什么,半年后告诉你该扩哪条边"},{"cn":"平台竞价","en":"P4P","src":"21.1.1","def":"阿里国际站付费推广,单条有效询盘成本阈值¥1,500"},{"cn":"采购需求","en":"RFQ","src":"21.1.2","def":"买家发布的需求,报价要快要准"},{"cn":"关键词三层","en":"keyword tiers","src":"21.1.2","def":"大词/属性词/长尾词分层布局"},{"cn":"广交会三期","en":"Canton Fair phases","src":"21.2.1","def":"帽子在第三期"},{"cn":"扫楼","en":"booth sweeping","src":"21.2.1","def":"不摆摊,逐个展位收名片谈合作"},{"cn":"黄金48小时","en":"golden 48 hours","src":"21.2.1","def":"展后两天内跟进,回复率断崖式差别"},{"cn":"海外促销品展","en":"PPAI Expo / ASI Show / PSI / MAGIC","src":"21.2.2","def":"去买家在的展,不去同行在的展"},{"cn":"海关数据","en":"customs data","src":"21.3.1","def":"提单级进出口记录,加拿大不公开"},{"cn":"冷启动开发信","en":"cold email","src":"21.3.2","def":"首封回复率1-3%,四封总5-10%"},{"cn":"反垃圾邮件法","en":"CAN-SPAM / GDPR / CASL","src":"21.3.2","def":"加拿大CASL罚则上限1,000万加元"},{"cn":"发信认证","en":"SPF / DKIM / DMARC","src":"21.3.2","def":"三条DNS记录,不配就进垃圾箱"},{"cn":"养号","en":"domain warm-up","src":"21.3.2","def":"新域名从≤20封/天逐步升到≤50封/天"},{"cn":"领英销售工具","en":"Sales Navigator","src":"21.4","def":"精准找决策人,连接≤25个/天"},{"cn":"批发平台","en":"Faire","src":"21.5","def":"佣金25%/15%,客户归平台"},{"cn":"账期60天","en":"net 60","src":"21.5","def":"批发平台常见结算周期"},{"cn":"第三方仓配","en":"3PL","src":"21.5","def":"海外仓储与代发货服务商"},{"cn":"商品页","en":"listing","src":"22.1.1","def":"亚马逊的产品页面"},{"cn":"类目排名","en":"BSR","src":"22.1.1","def":"Best Sellers Rank,判断类目容量"},{"cn":"亚马逊仓配","en":"FBA","src":"0.2","def":"平台代仓储代发货,费用链见22.1.1"},{"cn":"平台佣金","en":"referral fee","src":"22.1.1","def":"按售价百分比抽取"},{"cn":"配送费","en":"fulfillment fee","src":"22.1.1","def":"按尺寸段与重量收取"},{"cn":"广告销售比","en":"ACOS","src":"22.1.2","def":"生死线35-37%,售价地板$17"},{"cn":"个性化定制","en":"personalization","src":"22.2","def":"Etsy的核心场景,一件起做"},{"cn":"制作周期","en":"processing time","src":"22.2","def":"平台承诺的出货时间,超时降权"},{"cn":"站外广告","en":"offsite ads","src":"22.2","def":"平台外投放,成交另收佣金"},{"cn":"询价站","en":"quote-request site","src":"22.3","def":"不卖货只收需求的落地页"},{"cn":"动线","en":"customer journey","src":"22.4.1","def":"从看到到下单的每一步点击"},{"cn":"效果图","en":"mockup","src":"22.4.1","def":"logo贴到帽子上的模拟图,三张图法则"},{"cn":"产品化","en":"productize","src":"22.4.2","def":"把起订量、加价、交期写成菜单,制度化砍不动"},{"cn":"菜单式报价","en":"menu pricing","src":"22.4.2","def":"三档MOQ+加价项的价目表"},{"cn":"加价项","en":"add-on","src":"22.4.2","def":"制版CAD40、加位+1.20、3D绣+1.80等"},{"cn":"样品包","en":"sample kit","src":"22.5","def":"成本约¥390,地推的敲门砖"},{"cn":"扫街漏斗","en":"door-to-door funnel","src":"22.5","def":"20家→12家进门→8家留资→3家要报价→1家成交"},{"cn":"复购日历","en":"reorder calendar","src":"24章工具一","def":"按客户活动日倒推的下单死线表"},{"cn":"锁价窗口","en":"price-lock window","src":"24.3","def":"30天+定金到账+交期截止,三参数缺一被钻空子"},{"cn":"劝退报价","en":"deterrent pricing","src":"24.5","def":"正常价+30-50%,三种结果都是好结果"},{"cn":"个体户/有限公司","en":"sole proprietorship / LLC","src":"25.1.1","def":"有限公司是有客户之后的标准答案"},{"cn":"挂靠","en":"affiliation with an agent","src":"25.1.1","def":"借正规抬头出口,零主体阶段的过渡"},{"cn":"一般纳税人","en":"general VAT taxpayer","src":"25.1.1","def":"上游能开13%专票才申请,退税的前提"},{"cn":"小规模纳税人","en":"small-scale taxpayer","src":"25.1.1","def":"账简单成本低,但没有退税"},{"cn":"海外主体","en":"overseas entity","src":"25.1.2","def":"两条以上触发条件才组双主体"},{"cn":"转移定价","en":"transfer pricing","src":"25.1.2","def":"留5-8个点给国内主体,须有依据"},{"cn":"居民企业认定","en":"resident enterprise test","src":"25.1.2","def":"\"实际管理机构在中国\"会被认定为中国居民企业"},{"cn":"外汇名录","en":"FX directory registration","src":"25.2.1","def":"贸易外汇收支企业名录,A类是正常状态"},{"cn":"涉外收入申报","en":"BOP declaration","src":"25.2.1","def":"每笔收汇按时申报"},{"cn":"资金货物比率","en":"fund-goods ratio","src":"25.2.1","def":"收汇额与报关额年度总量应接近100%"},{"cn":"收款三件套","en":"payment evidence set","src":"25.2.1","def":"MT103水单+申报回单+报关单,每笔存齐"},{"cn":"侵权连带责任","en":"joint infringement liability","src":"25.4.1","def":"代工方也跑不掉,授权书是唯一防线"},{"cn":"商标类别","en":"trademark class 25 / 35","src":"25.4.2","def":"服装类25类+销售服务35类,自有品牌起步组合"},{"cn":"马德里体系","en":"Madrid System","src":"25.4.2","def":"一次申请指定多国,覆盖3国以上更划算"},{"cn":"检测报告有效期","en":"test report validity","src":"25.5","def":"辅料合规档案须在12个月有效期内"}]</script>
+
 <script>
 /* ═════ 部署配置 ═════ */
-const CONFIG = { WORKER_URL: 'https://shy-brook-76ea.kevinren1108.workers.dev' };
+const CONFIG = {
+  WORKER_URL: 'https://shy-brook-76ea.kevinren1108.workers.dev',       // 随书助教代理
+  DATA_URL:   'https://hatbook-data.kevinren1108.workers.dev',  // 账号与笔记数据
+};
 
 /* ───────── 书籍数据 ───────── */
 const CHAPTERS = [
@@ -14932,15 +15251,28 @@ function renderNav(){
 }
 
 /* ───────── 章节渲染 ───────── */
-function openChapter(id){
+/**
+ * @param {string} id 章节 id
+ * @param {object} [opt] {pos:{bi,ratio}} 恢复到指定位置;{silent:true} 不向助教报告
+ */
+function openChapter(id, opt){
+  opt = opt || {};
+  flushReadTime();
   cur = id;
   document.getElementById('content').innerHTML = marked.parse(md(id));
-  document.getElementById('reader').scrollTop = 0;
+  indexBlocks();
+  applyDecorations();
+  if(opt.pos) restorePos(opt.pos);
+  else document.getElementById('reader').scrollTop = 0;
   renderNav();
   document.getElementById('nav').classList.remove('open');
-  saveState();
-  const cn = CHAPTERS.find(c=>c.id===id);
-  addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+  saveChat();
+  chapterEnterAt = Date.now();
+  onPosChanged(true);
+  if(!opt.silent){
+    const cn = CHAPTERS.find(c=>c.id===id);
+    addHint(`正在阅读:${cn.title}。助教已同步本章内容。`);
+  }
 }
 function addHint(t){
   const box = document.getElementById('msgs');
@@ -14949,41 +15281,489 @@ function addHint(t){
   box.appendChild(d); box.scrollTop = box.scrollHeight;
 }
 
-/* ───────── 选中提问 ───────── */
-/* 用 selectionchange 而非 mouseup:iOS 长按选词不触发 mouseup,这是手机上"问这段"不出现的原因 */
-const askBtn = document.getElementById('askBtn');
+/* ═══════════════════════════════════════════════════════
+   选中文字 → 划线 / 笔记 / 问这段
+   用 selectionchange 而非 mouseup:iOS 长按选词不触发 mouseup
+   ═══════════════════════════════════════════════════════ */
+const selbar   = document.getElementById('selbar');
 const readerEl = document.getElementById('reader');
 let selTimer = null;
-function updateAskBtn(){
+let selCache = null;      // {anchors, text} —— 动作触发时选区可能已被系统清掉,提前存好
+
+function hideSelbar(){ selbar.classList.remove('on'); }
+
+function updateSelbar(){
   const sel = window.getSelection();
   const t = sel ? sel.toString().trim() : '';
-  if(t.length > 3 && t.length < 800 && sel.rangeCount){
-    const node = sel.anchorNode;
-    const el = node && (node.nodeType === 1 ? node : node.parentNode);
-    if(!el || !readerEl.contains(el)){ askBtn.style.display = 'none'; return; }
-    const r = sel.getRangeAt(0).getBoundingClientRect();
-    askBtn.style.left = Math.max(8, Math.min(r.left + r.width/2 - 40, window.innerWidth - 110)) + 'px';
-    askBtn.style.top  = Math.min(r.bottom + 10, window.innerHeight - 150) + 'px';
-    askBtn.style.display = 'block';
-    askBtn.dataset.text = t;
-  } else askBtn.style.display = 'none';
+  if(!(t.length > 1 && t.length < 3000 && sel.rangeCount && !sel.isCollapsed)){ hideSelbar(); return; }
+  const node = sel.anchorNode;
+  const el = node && (node.nodeType === 1 ? node : node.parentNode);
+  if(!el || !document.getElementById('content').contains(el)){ hideSelbar(); return; }
+
+  const anchors = anchorsFromSelection();
+  if(!anchors.length){ hideSelbar(); return; }
+  selCache = { anchors, text:t };
+
+  const rects = sel.getRangeAt(0).getClientRects();
+  const first = rects[0], last = rects[rects.length - 1];
+  if(!first){ hideSelbar(); return; }
+  selbar.classList.add('on');
+  const w = selbar.offsetWidth || 250, h = selbar.offsetHeight || 46;
+  const left = Math.min(Math.max(8, (first.left + last.right) / 2 - w / 2), window.innerWidth - w - 8);
+  // 优先放选区上方:iOS 的「拷贝/查询」菜单通常占着下方
+  let top = first.top - h - 12;
+  if(top < 58) top = Math.min(last.bottom + 14, window.innerHeight - h - 14);
+  selbar.style.left = left + 'px';
+  selbar.style.top  = Math.max(58, top) + 'px';
 }
+
 document.addEventListener('selectionchange', ()=>{
   clearTimeout(selTimer);
-  selTimer = setTimeout(updateAskBtn, 220);
+  selTimer = setTimeout(updateSelbar, 200);
 });
-document.addEventListener('mousedown', e=>{ if(e.target!==askBtn) askBtn.style.display='none'; });
-/* iOS:touchstart 直接触发,防止系统在点击瞬间清空选区导致按钮先消失 */
-askBtn.addEventListener('touchstart', e=>{ e.preventDefault(); askBtn.click(); }, {passive:false});
-askBtn.onclick = ()=>{
-  pendingQuote = askBtn.dataset.text;
-  document.getElementById('quoteText').textContent = pendingQuote.length>120 ? pendingQuote.slice(0,120)+'…' : pendingQuote;
-  document.getElementById('quoteBox').style.display = 'block';
-  askBtn.style.display = 'none';
-  setTutor(true);
-  document.getElementById('q').focus();
-};
-function clearQuote(){ pendingQuote=''; document.getElementById('quoteBox').style.display='none'; }
+document.addEventListener('mousedown', e=>{ if(!selbar.contains(e.target)) hideSelbar(); });
+
+let selActing = false;
+function bindSelAction(btn){
+  const run = e=>{
+    e.preventDefault();
+    if(selActing) return;
+    selActing = true;
+    setTimeout(()=>{ selActing = false; }, 400);
+    doSelAction(btn.dataset.act);
+  };
+  // iOS:touchstart 直接动手,否则系统会先清掉选区
+  btn.addEventListener('touchstart', run, {passive:false});
+  btn.addEventListener('click', run);
+}
+selbar.querySelectorAll('button').forEach(bindSelAction);
+
+function doSelAction(act){
+  const cache = selCache;
+  hideSelbar();
+  if(!cache || !cache.anchors.length) return;
+  try{ window.getSelection().removeAllRanges(); }catch(e){}
+
+  if(act === 'ask'){
+    pendingQuote = cache.text;
+    document.getElementById('quoteText').textContent =
+      pendingQuote.length > 120 ? pendingQuote.slice(0, 120) + '…' : pendingQuote;
+    document.getElementById('quoteBox').style.display = 'block';
+    setTutor(true);
+    document.getElementById('q').focus();
+    return;
+  }
+  const ids = createAnnotation(cache.anchors);
+  if(act === 'note') openAnnoSheet(ids, {focusNote:true});
+  else toast('已划线');
+}
+function clearQuote(){ pendingQuote = ''; document.getElementById('quoteBox').style.display = 'none'; }
+
+/* ═══════════════════════════════════════════════════════
+   锚点引擎:把选区变成可长期保存、书稿改动后仍能找回的坐标
+   ═══════════════════════════════════════════════════════ */
+/** 块的纯文本 —— 排除事后插入的作业控件,保证锚点偏移始终对齐原文 */
+function blockText(el){
+  if(!el) return '';
+  if(el.querySelector && el.querySelector('.hwbox')){
+    let s = '';
+    for(const n of el.childNodes){
+      if(n.nodeType === 1 && n.classList && n.classList.contains('hwbox')) continue;
+      s += n.textContent || '';
+    }
+    return s;
+  }
+  return el.textContent || '';
+}
+
+/** 从块首到 (container,offset) 的纯文本长度 —— 比遍历文本节点更稳 */
+function offsetFromBlockStart(el, container, offset){
+  const r = document.createRange();
+  try{
+    r.selectNodeContents(el);
+    r.setEnd(container, offset);
+  }catch(e){ return -1; }
+  return r.toString().length;
+}
+
+/** 按纯文本偏移在块内还原 Range */
+function rangeInBlock(el, start, end){
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  let pos = 0, sNode = null, sOff = 0, eNode = null, eOff = 0, n;
+  while((n = w.nextNode())){
+    const len = n.nodeValue.length;
+    if(sNode === null && pos + len > start){ sNode = n; sOff = start - pos; }
+    if(pos + len >= end){ eNode = n; eOff = end - pos; break; }
+    pos += len;
+  }
+  if(!sNode || !eNode) return null;
+  const r = document.createRange();
+  try{
+    r.setStart(sNode, Math.max(0, Math.min(sOff, sNode.nodeValue.length)));
+    r.setEnd(eNode,   Math.max(0, Math.min(eOff, eNode.nodeValue.length)));
+  }catch(e){ return null; }
+  return r.collapsed ? null : r;
+}
+
+/** 当前选区 → 每个跨到的块一份锚点(跨段划线会拆成同组的多条) */
+function anchorsFromSelection(){
+  const sel = window.getSelection();
+  if(!sel || !sel.rangeCount || sel.isCollapsed) return [];
+  const range = sel.getRangeAt(0);
+  const content = document.getElementById('content');
+  if(!content.contains(range.commonAncestorContainer) && range.commonAncestorContainer !== content) return [];
+
+  const out = [], kids = content.children;
+  for(let i = 0; i < kids.length; i++){
+    const el = kids[i];
+    let hit = false;
+    try{ hit = range.intersectsNode(el); }catch(e){ hit = false; }
+    if(!hit) continue;
+    const full = blockText(el);
+    if(!full) continue;
+
+    const sub = range.cloneRange();
+    const whole = document.createRange();
+    whole.selectNodeContents(el);
+    try{
+      if(sub.compareBoundaryPoints(Range.START_TO_START, whole) < 0) sub.setStart(el, 0);
+      if(sub.compareBoundaryPoints(Range.END_TO_END, whole) > 0)     sub.setEnd(el, el.childNodes.length);
+    }catch(e){ continue; }
+
+    const start = offsetFromBlockStart(el, sub.startContainer, sub.startOffset);
+    const end   = offsetFromBlockStart(el, sub.endContainer, sub.endOffset);
+    if(start < 0 || end <= start) continue;
+    const quote = full.slice(start, end);
+    if(!quote.trim()) continue;
+
+    out.push({
+      bi:i, start, end, quote,
+      prefix: full.slice(Math.max(0, start - 30), start),
+      suffix: full.slice(end, end + 30),
+    });
+    if(out.length >= 12) break;   // 一次划太多段不合理,截断
+  }
+  return out;
+}
+
+/** 三级容错:原坐标 → 前后文重定位 → 全章找原文 */
+let anchorRepaired = false;
+function resolveAnchor(a){
+  const el = blockEl(a.block_index);
+  if(el && blockText(el).slice(a.start_offset, a.end_offset) === a.quote){
+    return { bi:a.block_index, start:a.start_offset, end:a.end_offset };
+  }
+  const kids = document.getElementById('content').children;
+  const withCtx = (a.prefix || '') + a.quote + (a.suffix || '');
+  for(let pass = 0; pass < 2; pass++){
+    for(let i = 0; i < kids.length; i++){
+      const txt = blockText(kids[i]);
+      if(pass === 0){
+        const p = txt.indexOf(withCtx);
+        if(p >= 0){
+          const s = p + (a.prefix || '').length;
+          return repair(a, i, s, s + a.quote.length);
+        }
+      }else{
+        const p = txt.indexOf(a.quote);
+        if(p >= 0) return repair(a, i, p, p + a.quote.length);
+      }
+    }
+  }
+  return null;   // 找不着也不丢:笔记本里仍在,标「原文已变动」
+}
+function repair(a, bi, start, end){
+  if(a.block_index !== bi || a.start_offset !== start || a.end_offset !== end){
+    if(a.user_id === myId()){
+      a.block_index = bi; a.start_offset = start; a.end_offset = end;
+      a.updated_at = Date.now(); a._dirty = true;
+      anchorRepaired = true;
+    }
+  }
+  return { bi, start, end };
+}
+
+/* ═══════════════════════════════════════════════════════
+   标注数据
+   ═══════════════════════════════════════════════════════ */
+const myId = ()=> auth.user ? auth.user.id : 'guest';
+const isMine = a => (a.user_id || 'guest') === myId();
+const groupOf = id => String(id).split('#')[0];
+const userName = id => (store.users && store.users[id]) || (auth.user && auth.user.id === id ? auth.user.name : id);
+
+function chapterAnnotations(ch){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(!a || a.deleted || a.chapter !== ch) continue;
+    if(!isMine(a) && !prefs.peer) continue;
+    out.push(a);
+  }
+  return out;
+}
+function groupMembers(gid){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(a && !a.deleted && groupOf(a.id) === gid) out.push(a);
+  }
+  return out.sort((x, y)=> (x.block_index - y.block_index) || (x.start_offset - y.start_offset));
+}
+const groupQuote = gid => groupMembers(gid).map(a => a.quote).join('');
+
+function createAnnotation(anchors, opt){
+  opt = opt || {};
+  const gid = uid(), t = Date.now(), ids = [];
+  anchors.forEach((a, idx)=>{
+    const id = anchors.length > 1 ? gid + '#' + idx : gid;
+    store.annotations[id] = {
+      id, user_id: myId(), chapter: cur,
+      block_index: a.bi, start_offset: a.start, end_offset: a.end,
+      quote: a.quote, prefix: a.prefix, suffix: a.suffix,
+      color: opt.color || prefs.color || 'yellow',
+      note: opt.note || '', private: 0,
+      created_at: t, updated_at: t, _dirty: true,
+    };
+    ids.push(id);
+  });
+  saveStore(); scheduleSync(); renderHighlights();
+  return ids;
+}
+function updateGroup(gid, patch){
+  const t = Date.now();
+  for(const a of groupMembers(gid)){
+    if(!isMine(a)) continue;
+    Object.assign(a, patch, {updated_at:t, _dirty:true});
+  }
+  saveStore(); scheduleSync(); renderHighlights();
+}
+function deleteGroup(gid){
+  const t = Date.now();
+  for(const a of groupMembers(gid)){
+    if(!isMine(a)) continue;
+    a.deleted = 1; a.updated_at = t; a._dirty = true;
+  }
+  saveStore(); scheduleSync(); renderHighlights();
+}
+
+/* ═══════════════════════════════════════════════════════
+   高亮渲染:区间切片后从后往前包裹,重叠也不会串
+   ═══════════════════════════════════════════════════════ */
+/** 拆掉高亮与术语标记,让正文回到干净状态再重画 */
+function clearHighlights(){
+  const content = document.getElementById('content');
+  content.querySelectorAll('mark.hl, span.term').forEach(m=>{
+    const p = m.parentNode;
+    if(!p) return;
+    while(m.firstChild) p.insertBefore(m.firstChild, m);
+    p.removeChild(m);
+  });
+  content.normalize();
+}
+
+function renderHighlights(){
+  clearHighlights();
+  const list = chapterAnnotations(cur);
+  if(!list.length) return;
+
+  anchorRepaired = false;
+  const byBlock = {};
+  for(const a of list){
+    const at = resolveAnchor(a);
+    if(!at) continue;
+    (byBlock[at.bi] = byBlock[at.bi] || []).push({a, s:at.start, e:at.end});
+  }
+  for(const bi in byBlock){
+    const el = blockEl(parseInt(bi, 10));
+    if(el) paintBlock(el, byBlock[bi]);
+  }
+  if(anchorRepaired){ saveStore(); scheduleSync(); }
+}
+
+function paintBlock(el, items){
+  const cuts = new Set();
+  items.forEach(it=>{ cuts.add(it.s); cuts.add(it.e); });
+  const pts = [...cuts].sort((a, b)=> a - b);
+
+  const segs = [];
+  for(let i = 0; i < pts.length - 1; i++){
+    const s = pts[i], e = pts[i + 1];
+    const hits = items.filter(it => it.s <= s && it.e >= e);
+    if(hits.length) segs.push({s, e, hits});
+  }
+  // 从后往前:先改后面的,前面的偏移才不会失效
+  for(let i = segs.length - 1; i >= 0; i--){
+    const seg = segs[i];
+    const r = rangeInBlock(el, seg.s, seg.e);
+    if(!r) continue;
+    const mine = seg.hits.filter(h => isMine(h.a));
+    const top  = (mine.length ? mine : seg.hits)[mine.length ? mine.length - 1 : seg.hits.length - 1].a;
+    const m = document.createElement('mark');
+    m.className = 'hl c-' + (top.color || 'yellow')
+                + (mine.length ? '' : ' peer')
+                + (seg.hits.some(h => h.a.note) ? ' hasnote' : '');
+    m.dataset.gids = [...new Set(seg.hits.map(h => groupOf(h.a.id)))].join(',');
+    try{
+      m.appendChild(r.extractContents());
+      r.insertNode(m);
+    }catch(e){}
+  }
+}
+
+document.getElementById('content').addEventListener('click', e=>{
+  if(!e.target.closest) return;
+  const sel = window.getSelection();
+  if(sel && !sel.isCollapsed) return;          // 正在选字,别抢
+  const term = e.target.closest('span.term');
+  if(term){ e.preventDefault(); openTermCard(term.dataset.t); return; }
+  const m = e.target.closest('mark.hl');
+  if(!m) return;
+  e.preventDefault();
+  openAnnoSheet((m.dataset.gids || '').split(',').filter(Boolean));
+});
+
+/* ═══════════════════════════════════════════════════════
+   标注卡片
+   ═══════════════════════════════════════════════════════ */
+const COLORS = [['yellow','黄'], ['green','绿'], ['blue','蓝'], ['pink','粉']];
+
+function openAnnoSheet(idsOrGids, opt){
+  opt = opt || {};
+  const gids = [...new Set((idsOrGids || []).map(groupOf))];
+  if(!gids.length) return;
+  const cards = gids.map(gid => annoCardHtml(gid)).join('<hr style="border:none;border-top:1px dashed var(--stitch);margin:16px 0">');
+  openSheet(gids.length > 1 ? '这里有 ' + gids.length + ' 条批注' : '批注', cards, box=>{
+    gids.forEach(gid => bindAnnoCard(box, gid, opt));
+  }, 'anno');
+}
+
+function annoCardHtml(gid){
+  const ms = groupMembers(gid);
+  if(!ms.length) return '';
+  const a = ms[0], mine = isMine(a);
+  const quote = groupQuote(gid);
+  const rs = repliesOf(gid);
+
+  const colorRow = mine ? `
+    <div class="srow">
+      <div class="lbl">颜色</div>
+      <div class="ctl">${COLORS.map(([c, n])=>
+        `<button class="cbtn c-${c} ${a.color===c?'on':''}" data-g="${gid}" data-c="${c}" title="${n}"></button>`).join('')}</div>
+    </div>` : '';
+
+  const noteBlock = mine ? `
+    <div class="fld"><label>我的笔记</label>
+      <textarea data-note="${gid}" placeholder="这段为什么值得记?写给三个月后的自己。">${escapeHtml(a.note || '')}</textarea>
+    </div>` :
+    (a.note ? `<div class="peernote">${escapeHtml(a.note)}</div>` : '');
+
+  const acts = mine ? `
+    <div class="srow">
+      <div class="lbl">仅自己可见<div class="sub">开启后对方看不到这条</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" data-priv="${gid}" ${a.private?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="btnrow">
+      <button class="btn" data-ask="${gid}">问助教</button>
+      <button class="btn danger" data-del="${gid}">删除</button>
+    </div>` : `
+    <div class="btnrow">
+      <button class="btn" data-ask="${gid}">问助教</button>
+      <button class="btn primary" data-reply="${gid}">回一句</button>
+    </div>`;
+
+  return `
+    <div class="annocard">
+      <div class="who">
+        <span class="avatar ${mine?'':'peer'}">${escapeHtml((mine ? (auth.user?auth.user.name:'我') : userName(a.user_id) || '?').slice(0,1))}</span>
+        <span>${mine ? '我' : escapeHtml(userName(a.user_id))}划的</span>
+        <span class="when">${fmtTime(a.created_at)}</span>
+      </div>
+      <blockquote class="qt c-${a.color || 'yellow'}">${escapeHtml(quote.length > 300 ? quote.slice(0,300) + '…' : quote)}</blockquote>
+      ${colorRow}
+      ${noteBlock}
+      ${rs.length ? '<div class="replies">' + rs.map(r=>
+        `<div class="rp"><b>${escapeHtml(userName(r.user_id))}</b>${escapeHtml(r.body)}</div>`).join('') + '</div>' : ''}
+      <div class="rpbox" data-rpbox="${gid}" style="display:none">
+        <div class="fld"><textarea data-rptext="${gid}" placeholder="说一句…"></textarea></div>
+        <div class="btnrow"><button class="btn primary" data-rpsend="${gid}">发出</button></div>
+      </div>
+      ${acts}
+    </div>`;
+}
+
+function bindAnnoCard(box, gid, opt){
+  const q = s => box.querySelector(s);
+  box.querySelectorAll(`.cbtn[data-g="${gid}"]`).forEach(b=>{
+    b.onclick = ()=>{
+      updateGroup(gid, {color:b.dataset.c});
+      prefs.color = b.dataset.c; savePrefs();
+      box.querySelectorAll(`.cbtn[data-g="${gid}"]`).forEach(x => x.classList.toggle('on', x === b));
+      const qt = box.querySelector(`.annocard blockquote.qt`);
+      if(qt) qt.className = 'qt c-' + b.dataset.c;
+    };
+  });
+  const ta = q(`textarea[data-note="${gid}"]`);
+  if(ta){
+    let tt = null;
+    ta.addEventListener('input', ()=>{
+      clearTimeout(tt);
+      tt = setTimeout(()=>updateGroup(gid, {note: ta.value.trim()}), 500);
+    });
+    if(opt && opt.focusNote) setTimeout(()=>{ try{ ta.focus(); }catch(e){} }, 150);
+  }
+  const pv = q(`input[data-priv="${gid}"]`);
+  if(pv) pv.onchange = ()=> updateGroup(gid, {private: pv.checked ? 1 : 0});
+
+  const del = q(`[data-del="${gid}"]`);
+  if(del) del.onclick = ()=>{
+    if(del.dataset.sure !== '1'){ del.dataset.sure = '1'; del.textContent = '真的删?'; return; }
+    deleteGroup(gid); closeSheet(); toast('已删除');
+  };
+  const ask = q(`[data-ask="${gid}"]`);
+  if(ask) ask.onclick = ()=>{
+    pendingQuote = groupQuote(gid);
+    document.getElementById('quoteText').textContent =
+      pendingQuote.length > 120 ? pendingQuote.slice(0,120) + '…' : pendingQuote;
+    document.getElementById('quoteBox').style.display = 'block';
+    closeSheet(); setTutor(true);
+    document.getElementById('q').focus();
+  };
+  const rp = q(`[data-reply="${gid}"]`);
+  if(rp) rp.onclick = ()=>{
+    const bx = q(`[data-rpbox="${gid}"]`);
+    bx.style.display = 'block';
+    setTimeout(()=>{ try{ q(`textarea[data-rptext="${gid}"]`).focus(); }catch(e){} }, 100);
+  };
+  const send = q(`[data-rpsend="${gid}"]`);
+  if(send) send.onclick = ()=>{
+    const t = q(`textarea[data-rptext="${gid}"]`).value.trim();
+    if(!t) return;
+    addReply(gid, t);
+    closeSheet(); toast('已回复');
+  };
+}
+
+function repliesOf(gid){
+  const out = [];
+  for(const k in store.replies){
+    const r = store.replies[k];
+    if(r && !r.deleted && groupOf(r.annotation_id) === gid) out.push(r);
+  }
+  return out.sort((a, b)=> (a.created_at || 0) - (b.created_at || 0));
+}
+function addReply(gid, body){
+  const id = uid(), t = Date.now();
+  store.replies[id] = {id, annotation_id:gid, user_id:myId(), body, created_at:t, updated_at:t, _dirty:true};
+  saveStore(); scheduleSync();
+}
+function fmtTime(ts){
+  if(!ts) return '';
+  const d = new Date(ts), n = new Date();
+  const same = d.toDateString() === n.toDateString();
+  const p = x => String(x).padStart(2, '0');
+  return same ? p(d.getHours()) + ':' + p(d.getMinutes())
+              : (d.getMonth() + 1) + '月' + d.getDate() + '日';
+}
 
 /* ───────── 助教对话 ───────── */
 function addMsg(role, content, quote){
@@ -15051,7 +15831,7 @@ ${md(curCh.id)}`;
       const ans = data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
       history.push({role:'assistant', content:ans});
       addMsg('assistant', ans);
-      saveState();
+      saveChat();
     } else {
       const detail = (data && data.error && data.error.message) ? data.error.message : raw.slice(0,300);
       addMsg('assistant', '接口调用失败(HTTP ' + resp.status + '):`' + detail + '`');
@@ -15075,7 +15855,7 @@ document.getElementById('clearBtn').onclick = ()=>{
   history = [];
   document.getElementById('msgs').innerHTML = '';
   addHint('对话已清空。');
-  saveState();
+  saveChat();
 };
 
 /* ───────── 面板开关 ───────── */
@@ -15094,61 +15874,1045 @@ let fontSize = 15;
 function applyFont(){
   document.getElementById('content').style.fontSize = fontSize + 'px';
   try{ localStorage.setItem('hatbook-font', fontSize); }catch(e){}
+  const v = document.getElementById('fontVal'); if(v) v.textContent = fontSize;
 }
-function bumpFont(d){ fontSize = Math.max(13, Math.min(20, fontSize + d)); applyFont(); }
+function bumpFont(d){ fontSize = Math.max(13, Math.min(22, fontSize + d)); applyFont(); }
 function applyTheme(dark){
   document.body.classList.toggle('dark', dark);
   document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
-  document.getElementById('mTheme').textContent = dark ? '☀️' : '🌙';
   try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
+  const sw = document.getElementById('themeSw'); if(sw) sw.checked = dark;
 }
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);
 document.getElementById('fontPlus').onclick  = ()=>bumpFont(1);
 document.getElementById('themeToggle').onclick = toggleTheme;
 
-/* ───────── 手机底部工具栏 ───────── */
-document.getElementById('mToc').onclick = toggleToc;
-document.getElementById('mFontMinus').onclick = ()=>bumpFont(-1);
-document.getElementById('mFontPlus').onclick  = ()=>bumpFont(1);
-document.getElementById('mTheme').onclick = toggleTheme;
-document.getElementById('mTutor').onclick = toggleTutor;
+/* ═══════════════════════════════════════════════════════
+   弹层:手机从底部升起(拇指可达),桌面居中卡片
+   ═══════════════════════════════════════════════════════ */
+const maskEl  = document.getElementById('mask');
+const sheetEl = document.getElementById('sheet');
+const shBody  = document.getElementById('shBody');
+let sheetTag = '';
 
-/* ───────── 进度与对话持久化 ───────── */
-async function saveState(){
+function openSheet(title, html, onMount, tag){
+  document.getElementById('shTitle').textContent = title;
+  shBody.innerHTML = html;
+  shBody.scrollTop = 0;
+  sheetTag = tag || '';
+  maskEl.classList.add('on');
+  sheetEl.classList.add('on');
+  if(onMount) onMount(shBody);
+}
+function closeSheet(){
+  maskEl.classList.remove('on');
+  sheetEl.classList.remove('on');
+  sheetTag = '';
+}
+const sheetIsOpen = ()=> sheetEl.classList.contains('on');
+maskEl.onclick = closeSheet;
+document.getElementById('shX').onclick = closeSheet;
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && sheetIsOpen()) closeSheet(); });
+
+/* 手机:按住顶部往下拖可关闭 */
+(function(){
+  let y0 = null;
+  const onStart = e=>{
+    if(!matchMedia('(max-width:900px)').matches) return;
+    y0 = e.touches[0].clientY; sheetEl.style.transition = 'none';
+  };
+  const onMove = e=>{
+    if(y0 === null) return;
+    const dy = e.touches[0].clientY - y0;
+    if(dy > 0) sheetEl.style.transform = 'translateY(' + dy + 'px)';
+  };
+  const onEnd = e=>{
+    if(y0 === null) return;
+    const dy = e.changedTouches[0].clientY - y0;
+    sheetEl.style.transition = ''; sheetEl.style.transform = '';
+    if(dy > 90) closeSheet();
+    y0 = null;
+  };
+  [sheetEl.querySelector('.grip'), sheetEl.querySelector('.sh-head')].forEach(el=>{
+    el.addEventListener('touchstart', onStart, {passive:true});
+    el.addEventListener('touchmove',  onMove,  {passive:true});
+    el.addEventListener('touchend',   onEnd);
+  });
+})();
+
+/* 轻提示 */
+let toastTimer = null;
+function toast(msg, actionLabel, onAction){
+  let t = document.getElementById('toast');
+  if(!t){ t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+  t.innerHTML = '<span>' + escapeHtml(msg) + '</span>' +
+    (actionLabel ? '<button class="tact">' + escapeHtml(actionLabel) + '</button>' : '');
+  t.classList.add('on');
+  if(actionLabel) t.querySelector('.tact').onclick = ()=>{ t.classList.remove('on'); if(onAction) onAction(); };
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('on'), actionLabel ? 9000 : 3200);
+}
+
+/* ═══════════════════════════════════════════════════════
+   云端连接与账号
+   ═══════════════════════════════════════════════════════ */
+const CLOUD_ON = !!CONFIG.DATA_URL && CONFIG.DATA_URL.indexOf('REPLACE-ME') < 0;
+const auth = { token:null, user:null };
+let syncState = 'off';   // ok / busy / bad / off
+
+function loadAuth(){
+  try{
+    const v = JSON.parse(localStorage.getItem('hatbook-auth') || 'null');
+    if(v && v.token){ auth.token = v.token; auth.user = v.user; }
+  }catch(e){}
+}
+function saveAuth(){ try{ localStorage.setItem('hatbook-auth', JSON.stringify({token:auth.token, user:auth.user})); }catch(e){} }
+function clearAuth(){ auth.token = null; auth.user = null; try{ localStorage.removeItem('hatbook-auth'); }catch(e){} }
+const loggedIn = ()=> !!(CLOUD_ON && auth.token);
+
+async function api(path, body, method){
+  if(!CLOUD_ON) throw new Error('云端未配置');
+  const headers = {'Content-Type':'application/json'};
+  if(auth.token) headers['Authorization'] = 'Bearer ' + auth.token;
+  const r = await fetch(CONFIG.DATA_URL + path, {
+    method: method || 'POST', headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = {};
+  try{ data = await r.json(); }catch(e){}
+  if(r.status === 401){
+    clearAuth(); setSync('off'); renderAcctBtn();
+    throw new Error(data.error || '登录已过期,请重新登录');
+  }
+  if(!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+  return data;
+}
+
+function setSync(s){
+  syncState = s;
+  const d = document.getElementById('syncDot');
+  if(d) d.className = 'syncdot' + (s === 'ok' ? '' : ' ' + s);
+}
+function renderAcctBtn(){
+  const b = document.getElementById('acctBtn');
+  if(b){
+    b.innerHTML = '<span class="syncdot ' + (loggedIn() ? (syncState==='ok'?'':syncState) : 'off') + '" id="syncDot"></span> ' +
+                  (auth.user ? escapeHtml(auth.user.name) : '登录');
+  }
+  const m = document.getElementById('mAcct');
+  if(m) m.querySelector('.ic').textContent = loggedIn() ? '◉' : '●';
+}
+
+/* ═══════════════════════════════════════════════════════
+   本地数据仓(游客与每个账号各一份)
+   ═══════════════════════════════════════════════════════ */
+const EMPTY_STORE = ()=>({ pos:null, peerPos:{}, annotations:{}, notes:{}, replies:{},
+                           homework:{}, progress:{}, users:{}, lastSync:0 });
+let store = EMPTY_STORE();
+
+const dataKey = ()=> 'hatbook-data-' + (auth.user ? auth.user.id : 'guest');
+function saveStore(){ try{ localStorage.setItem(dataKey(), JSON.stringify(store)); }catch(e){} }
+function loadStore(){
+  store = EMPTY_STORE();
+  try{
+    const v = JSON.parse(localStorage.getItem(dataKey()) || 'null');
+    if(v) store = Object.assign(EMPTY_STORE(), v);
+  }catch(e){}
+}
+const uid = ()=> (crypto.randomUUID ? crypto.randomUUID()
+                 : 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+
+/* ═══════════════════════════════════════════════════════
+   同步:本地为主(离线可用),云端为跨设备兜底
+   ═══════════════════════════════════════════════════════ */
+let syncTimer = null;
+function scheduleSync(){
+  if(!loggedIn()) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=>syncNow(), 1500);
+}
+
+/** 把本地带 _dirty 标记的改动推上去 */
+async function pushDirty(){
+  const pack = (map, fields)=>{
+    const up = [], del = [];
+    for(const k in map){
+      const it = map[k];
+      if(!it._dirty) continue;
+      if(it.deleted) del.push(it.id);
+      else{
+        const o = {};
+        for(const f of fields) o[f] = it[f];
+        up.push(o);
+      }
+    }
+    return {up, del};
+  };
+
+  const A = pack(store.annotations,
+    ['id','chapter','block_index','start_offset','end_offset','quote','prefix','suffix','color','note','private','created_at']);
+  if(A.up.length || A.del.length){
+    await api('/api/annotations', {upsert:A.up, delete:A.del});
+    for(const k in store.annotations) if(store.annotations[k]._dirty) delete store.annotations[k]._dirty;
+  }
+
+  const N = pack(store.notes, ['id','chapter','body','private','created_at']);
+  if(N.up.length || N.del.length){
+    await api('/api/notes', {upsert:N.up, delete:N.del});
+    for(const k in store.notes) if(store.notes[k]._dirty) delete store.notes[k]._dirty;
+  }
+
+  for(const k in store.replies){
+    const r = store.replies[k];
+    if(!r._dirty) continue;
+    await api('/api/replies', r.deleted ? {delete:r.id}
+              : {id:r.id, annotation_id:r.annotation_id, body:r.body, created_at:r.created_at});
+    delete r._dirty;
+  }
+
+  for(const k in store.homework){
+    const h = store.homework[k];
+    if(!h._dirty) continue;
+    await api('/api/homework', {chapter:h.chapter, done:h.done, log:h.log});
+    delete h._dirty;
+  }
+
+  if(store.pos && store.pos._dirty){ await pushPos(); }
+}
+
+function mergeRemote(d){
+  store.users = d.users || store.users;
+  const meId = d.me ? d.me.id : (auth.user ? auth.user.id : '');
+
+  const absorb = (list, map)=>{
+    for(const it of (list || [])){
+      const local = map[it.id];
+      if(local && local._dirty && (local.updated_at || 0) >= it.updated_at) continue; // 本地更新且未推,先留着
+      if(it.deleted) delete map[it.id];
+      else map[it.id] = it;
+    }
+  };
+  absorb(d.annotations, store.annotations);
+  absorb(d.notes, store.notes);
+  absorb(d.replies, store.replies);
+
+  for(const h of (d.homework || [])){
+    if(h.user_id !== meId) continue;
+    const k = h.chapter, local = store.homework[k];
+    if(local && local._dirty) continue;
+    store.homework[k] = h;
+  }
+  for(const p of (d.progress || [])){
+    if(p.user_id !== meId) continue;
+    const local = store.progress[p.chapter] || {};
+    store.progress[p.chapter] = {
+      max_ratio: Math.max(local.max_ratio || 0, p.max_ratio || 0),
+      seconds: Math.max(local.seconds || 0, p.seconds || 0),
+    };
+  }
+  for(const p of (d.pos || [])){
+    if(p.user_id === meId){
+      const cloud = {chapter:p.chapter, bi:p.block_index, ratio:p.ratio, snippet:p.snippet, updated_at:p.updated_at};
+      if(!store.pos || (store.pos.updated_at || 0) < p.updated_at) store.pos = cloud;
+    } else {
+      store.peerPos[p.user_id] = p;
+    }
+  }
+}
+
+async function syncNow(opt){
+  opt = opt || {};
+  if(!loggedIn()) return null;
+  setSync('busy');
+  try{
+    await pushDirty();
+    const d = await api('/api/sync?since=' + (store.lastSync || 0), null, 'GET');
+    mergeRemote(d);
+    store.lastSync = d.now;
+    saveStore();
+    setSync('ok');
+    if(typeof onSynced === 'function') onSynced(d);
+    return d;
+  }catch(e){
+    setSync('bad');
+    if(opt.loud) toast('同步失败:' + e.message);
+    return null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   块索引与阅读位置
+   —— 手机切后台被系统杀掉时,靠 sendBeacon 把位置发出去
+   ═══════════════════════════════════════════════════════ */
+let chapterEnterAt = Date.now();
+let readSecondsPending = 0;
+let scrollTimer = null, cloudPosTimer = null;
+
+function indexBlocks(){
+  const kids = document.getElementById('content').children;
+  for(let i = 0; i < kids.length; i++) kids[i].setAttribute('data-bi', String(i));
+}
+const blockEl = bi => document.getElementById('content').children[bi] || null;
+
+function capturePos(){
+  const rr = readerEl.getBoundingClientRect();
+  const kids = document.getElementById('content').children;
+  for(let i = 0; i < kids.length; i++){
+    const r = kids[i].getBoundingClientRect();
+    if(r.bottom > rr.top + 4){
+      const ratio = r.height > 0 ? Math.min(1, Math.max(0, (rr.top - r.top) / r.height)) : 0;
+      return { chapter:cur, bi:i, ratio:Math.round(ratio * 1000) / 1000,
+               snippet:(kids[i].textContent || '').slice(0, 60) };
+    }
+  }
+  return { chapter:cur, bi:0, ratio:0, snippet:'' };
+}
+function chapterRatio(){
+  const max = readerEl.scrollHeight - readerEl.clientHeight;
+  return max > 0 ? Math.min(1, readerEl.scrollTop / max) : 0;
+}
+function restorePos(p){
+  if(!p) return;
+  const el = blockEl(parseInt(p.bi, 10) || 0);
+  if(!el){ readerEl.scrollTop = 0; return; }
+  const prev = readerEl.style.scrollBehavior;
+  readerEl.style.scrollBehavior = 'auto';
+  const rr = readerEl.getBoundingClientRect(), er = el.getBoundingClientRect();
+  readerEl.scrollTop += (er.top - rr.top) + (Number(p.ratio) || 0) * er.height;
+  readerEl.style.scrollBehavior = prev || '';
+}
+
+function flushReadTime(){
+  if(chapterEnterAt){
+    readSecondsPending += Math.min(3600, (Date.now() - chapterEnterAt) / 1000);
+    chapterEnterAt = Date.now();
+  }
+}
+function takeReadSeconds(){ const s = readSecondsPending; readSecondsPending = 0; return Math.round(s); }
+
+function onPosChanged(immediate){
+  const p = capturePos();
+  p.updated_at = Date.now();
+  p._dirty = true;
+  store.pos = p;
+  const pr = store.progress[cur] || {max_ratio:0, seconds:0};
+  pr.max_ratio = Math.max(pr.max_ratio || 0, chapterRatio());
+  store.progress[cur] = pr;
+
+  if(immediate) saveStore();
+  else { clearTimeout(scrollTimer); scrollTimer = setTimeout(saveStore, 400); }
+
+  if(loggedIn()){
+    clearTimeout(cloudPosTimer);
+    cloudPosTimer = setTimeout(pushPos, 5000);
+  }
+}
+async function pushPos(){
+  if(!loggedIn() || !store.pos) return;
+  flushReadTime();
+  try{
+    await api('/api/pos', {
+      chapter: store.pos.chapter, bi: store.pos.bi, ratio: store.pos.ratio, snippet: store.pos.snippet,
+      chapterRatio: (store.progress[store.pos.chapter] || {}).max_ratio || 0,
+      seconds: takeReadSeconds(),
+    });
+    delete store.pos._dirty;
+    saveStore();
+    setSync('ok');
+  }catch(e){ setSync('bad'); }
+}
+
+/** 页面随时可能被系统回收,这是最后一次发送机会 */
+function beaconFlush(){
+  saveStore();
+  if(!loggedIn() || !navigator.sendBeacon || !store.pos) return;
+  flushReadTime();
+  try{
+    const payload = JSON.stringify({
+      _t: auth.token,
+      chapter: store.pos.chapter, bi: store.pos.bi, ratio: store.pos.ratio, snippet: store.pos.snippet,
+      chapterRatio: (store.progress[store.pos.chapter] || {}).max_ratio || 0,
+      seconds: takeReadSeconds(),
+    });
+    // text/plain 属简单请求,不触发预检;令牌走 body 的 _t(sendBeacon 带不了请求头)
+    navigator.sendBeacon(CONFIG.DATA_URL + '/api/pos', new Blob([payload], {type:'text/plain'}));
+    delete store.pos._dirty;
+    saveStore();
+  }catch(e){}
+}
+
+readerEl.addEventListener('scroll', ()=>{
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(()=>onPosChanged(), 300);
+}, {passive:true});
+
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'hidden'){ onPosChanged(true); beaconFlush(); }
+  else { chapterEnterAt = Date.now(); if(loggedIn()) syncNow(); }
+});
+window.addEventListener('pagehide', ()=>{ onPosChanged(true); beaconFlush(); });
+
+/* ═══════════════════════════════════════════════════════
+   账号与设置面板
+   ═══════════════════════════════════════════════════════ */
+function openAccount(){
+  const u = auth.user;
+  const acct = !CLOUD_ON
+    ? '<div class="hint">云端尚未配置,笔记与阅读位置只存在这台设备上。</div>'
+    : (u
+      ? `<div class="srow">
+           <div class="avatar">${escapeHtml((u.name || '?').slice(0,1))}</div>
+           <div class="lbl"><b>${escapeHtml(u.name)}</b><div class="sub">已登录 · 阅读位置与笔记正在云端同步</div></div>
+           <div class="ctl"><button class="btn" id="acLogout">退出</button></div>
+         </div>`
+      : `<div class="srow">
+           <div class="lbl"><b>未登录</b><div class="sub">登录后换设备也能接着读,还能看到对方的批注</div></div>
+           <div class="ctl"><button class="btn primary" id="acLogin">登录</button></div>
+         </div>`);
+
+  openSheet('账号与设置', acct + `
+    <div class="srow">
+      <div class="lbl">字号<div class="sub">正文文字大小</div></div>
+      <div class="ctl stepper">
+        <button id="stMinus">A−</button><span class="val" id="fontVal">${fontSize}</span><button id="stPlus">A＋</button>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="lbl">深色模式<div class="sub">夜里看书护眼</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="themeSw" ${document.body.classList.contains('dark')?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="srow">
+      <div class="lbl">术语释义<div class="sub">正文里的行话加虚线,点一下看解释</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="glossSw" ${prefs.gloss?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+    <div class="srow">
+      <div class="lbl">显示对方的批注<div class="sub">共读:看到对方划的线和写的话</div></div>
+      <div class="ctl"><label class="sw"><input type="checkbox" id="peerSw" ${prefs.peer?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
+    </div>
+  `, box=>{
+    const q = s => box.querySelector(s);
+    if(q('#acLogin'))  q('#acLogin').onclick  = openLogin;
+    if(q('#acLogout')) q('#acLogout').onclick = doLogout;
+    q('#stMinus').onclick = ()=>bumpFont(-1);
+    q('#stPlus').onclick  = ()=>bumpFont(1);
+    q('#themeSw').onchange = e => applyTheme(e.target.checked);
+    q('#glossSw').onchange = e => { prefs.gloss = e.target.checked; savePrefs(); applyDecorations(); };
+    q('#peerSw').onchange  = e => { prefs.peer  = e.target.checked; savePrefs(); applyDecorations(); };
+  }, 'acct');
+}
+
+function openLogin(){
+  openSheet('登录', `
+    <div class="hint">登录后,阅读位置、划线和笔记都会存到云端 —— 换手机、清缓存都不会丢,也能看到对方读到哪、划了什么。</div>
+    <div class="fld"><label>用户名</label>
+      <input id="lgUser" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+    <div class="fld"><label>密码</label>
+      <input id="lgPass" type="password" autocomplete="current-password"></div>
+    <div class="sh-err" id="lgErr"></div>
+    <div class="btnrow"><button class="btn primary block" id="lgGo">登 录</button></div>
+  `, box=>{
+    const q = s => box.querySelector(s);
+    const go = async ()=>{
+      const u = q('#lgUser').value.trim(), p = q('#lgPass').value;
+      if(!u || !p) return;
+      q('#lgGo').disabled = true; q('#lgGo').textContent = '登录中…';
+      try{
+        await doLogin(u, p);
+        closeSheet();
+        toast('已登录:' + auth.user.name);
+      }catch(e){
+        const el = q('#lgErr'); el.style.display = 'block'; el.textContent = e.message;
+        q('#lgGo').disabled = false; q('#lgGo').textContent = '登 录';
+      }
+    };
+    q('#lgGo').onclick = go;
+    q('#lgPass').addEventListener('keydown', e=>{
+      if(e.isComposing || e.keyCode === 229) return;
+      if(e.key === 'Enter') go();
+    });
+    setTimeout(()=>{ try{ q('#lgUser').focus(); }catch(e){} }, 120);
+  }, 'login');
+}
+
+async function doLogin(user, pass){
+  const d = await api('/api/login', {user, pass});
+  let guest = null;
+  try{ guest = JSON.parse(localStorage.getItem('hatbook-data-guest') || 'null'); }catch(e){}
+  auth.token = d.token; auth.user = d.user;
+  saveAuth();
+  loadStore();                       // 切到这个账号的本地库
+  if(guest) absorbGuest(guest);
+  renderAcctBtn();
+  const before = store.pos ? store.pos.updated_at || 0 : 0;
+  await syncNow({loud:true});
+  offerCloudPos(before);
+}
+
+/** 把游客期间攒下的划线、笔记、位置并进当前账号,并标记待上传 */
+function absorbGuest(g){
+  let n = 0;
+  for(const k in (g.annotations || {})){
+    if(!store.annotations[k]){ store.annotations[k] = Object.assign({}, g.annotations[k], {_dirty:true}); n++; }
+  }
+  for(const k in (g.notes || {})){
+    if(!store.notes[k]){ store.notes[k] = Object.assign({}, g.notes[k], {_dirty:true}); n++; }
+  }
+  for(const k in (g.homework || {})){
+    if(!store.homework[k]){ store.homework[k] = Object.assign({}, g.homework[k], {_dirty:true}); n++; }
+  }
+  if(g.pos && (!store.pos || (store.pos.updated_at || 0) < (g.pos.updated_at || 0))){
+    store.pos = Object.assign({}, g.pos, {_dirty:true});
+  }
+  saveStore();
+  try{ localStorage.removeItem('hatbook-data-guest'); }catch(e){}
+  if(n) toast('已把本机的 ' + n + ' 条笔记并入账号');
+}
+
+async function doLogout(){
+  try{ await api('/api/logout'); }catch(e){}
+  clearAuth();
+  loadStore();
+  setSync('off');
+  renderAcctBtn();
+  closeSheet();
+  applyDecorations();
+  toast('已退出登录。这台设备上的记录仍然保留。');
+}
+
+/** 云端位置比本机新时,不打断阅读,只给一个可点的提示 */
+function offerCloudPos(beforeTs){
+  const p = store.pos;
+  if(!p || !p.chapter) return;
+  if((p.updated_at || 0) <= beforeTs + 3000) return;
+  const here = capturePos();
+  if(p.chapter === cur && Math.abs((p.bi|0) - here.bi) <= 2) return;
+  const ch = CHAPTERS.find(c => c.id === p.chapter);
+  if(!ch) return;
+  toast('云端读到:' + ch.title, '接着读', ()=>{
+    if(p.chapter === cur) restorePos(p);
+    else openChapter(p.chapter, {pos:p});
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   偏好开关
+   ═══════════════════════════════════════════════════════ */
+const prefs = { gloss:true, peer:true };
+function savePrefs(){ try{ localStorage.setItem('hatbook-prefs', JSON.stringify(prefs)); }catch(e){} }
+function loadPrefs(){
+  try{ Object.assign(prefs, JSON.parse(localStorage.getItem('hatbook-prefs') || '{}')); }catch(e){}
+}
+
+/* 正文装饰:先划线,再术语,最后作业控件 */
+function applyDecorations(){ renderHighlights(); renderGlossary(); renderHomework(); }
+
+/** 云端同步回来后:对方新划的线要立刻显出来 */
+function onSynced(){
+  if(!sheetIsOpen()) applyDecorations();
+  renderAcctBtn();
+}
+
+/* ═══ 章节级自由笔记(不挂在某段话上) ═══ */
+function openNewNote(){
+  const ch = CHAPTERS.find(c => c.id === cur) || {title:''};
+  openSheet('写一条笔记', `
+    <div class="hint">记在「${escapeHtml(ch.title)}」名下,不挂具体段落 —— 适合写整章的心得、要落地的事、想问工厂的问题。</div>
+    <div class="fld"><textarea id="nnBody" placeholder="想到什么写什么。"></textarea></div>
+    <div class="btnrow"><button class="btn primary block" id="nnSave">保 存</button></div>
+  `, box=>{
+    box.querySelector('#nnSave').onclick = ()=>{
+      const v = box.querySelector('#nnBody').value.trim();
+      if(!v) return;
+      const id = uid(), t = Date.now();
+      store.notes[id] = {id, user_id:myId(), chapter:cur, body:v, private:0,
+                         created_at:t, updated_at:t, _dirty:true};
+      saveStore(); scheduleSync();
+      closeSheet(); toast('笔记已保存');
+    };
+    setTimeout(()=>{ try{ box.querySelector('#nnBody').focus(); }catch(e){} }, 150);
+  }, 'newnote');
+}
+
+/* ═══════════════════════════════════════════════════════
+   我的笔记本
+   ═══════════════════════════════════════════════════════ */
+let nbMode = 'mine';   // mine / all / hw
+
+function openNotebook(){
+  openSheet('我的笔记本', notebookHtml(), box=>bindNotebook(box), 'nb');
+}
+
+function notebookItems(){
+  const out = [];
+  for(const k in store.annotations){
+    const a = store.annotations[k];
+    if(!a || a.deleted) continue;
+    if(nbMode === 'mine' && !isMine(a)) continue;
+    if(groupOf(a.id) !== a.id && String(a.id).indexOf('#0') < 0) continue;  // 跨段划线只列首段
+    out.push({type:'anno', chapter:a.chapter, gid:groupOf(a.id), a,
+              time:a.created_at || 0, quote:groupQuote(groupOf(a.id)), note:a.note || ''});
+  }
+  for(const k in store.notes){
+    const n = store.notes[k];
+    if(!n || n.deleted) continue;
+    if(nbMode === 'mine' && !isMine(n)) continue;
+    out.push({type:'note', chapter:n.chapter, n, time:n.created_at || 0, quote:'', note:n.body || ''});
+  }
+  return out;
+}
+
+function notebookHtml(){
+  const items = notebookItems();
+  const hlCount = items.filter(i => i.type === 'anno').length;
+  const ntCount = items.filter(i => i.note).length;
+  const hwDone  = CHAPTERS.filter(c => (store.homework[c.id] || {}).done).length;
+  const hwTotal = 28;
+
+  const tabs = `
+    <div class="nbtabs">
+      <button data-m="mine" class="${nbMode==='mine'?'on':''}">我的</button>
+      <button data-m="all"  class="${nbMode==='all'?'on':''}">共读(含对方)</button>
+      <button data-m="hw"   class="${nbMode==='hw'?'on':''}">作业进度</button>
+      <button id="nbNew">＋ 本章笔记</button>
+      <button id="nbExport">导出</button>
+    </div>`;
+
+  if(nbMode === 'hw'){
+    let rows = '';
+    for(const c of CHAPTERS){
+      const h = store.homework[c.id];
+      if(!/^ch(0[1-9]|1\d|2[0-8])$/.test(c.id)) continue;
+      rows += `<div class="nbitem" data-ch="${c.id}">
+          <div class="qt"><b>${h && h.done ? '✔' : '○'}</b> ${escapeHtml(c.title)}</div>
+          ${h && h.log ? '<div class="nt">' + escapeHtml(h.log.slice(0,160)) + (h.log.length>160?'…':'') + '</div>' : ''}
+        </div>`;
+    }
+    return tabs + `
+      <div class="nbstat"><div><b>${hwDone}</b> / ${hwTotal} 章作业已完成</div></div>
+      <div class="bar"><i style="width:${Math.round(hwDone/hwTotal*100)}%"></i></div>
+      ${rows}`;
+  }
+
+  let body = '';
+  for(const c of CHAPTERS){
+    const list = items.filter(i => i.chapter === c.id).sort((a, b)=> a.time - b.time);
+    if(!list.length) continue;
+    body += `<div class="nbch"><h4>${escapeHtml(c.title)}<span class="n">${list.length} 条</span></h4>`;
+    for(const it of list){
+      const who = it.type === 'anno' ? it.a : it.n;
+      const mine = isMine(who);
+      body += `<div class="nbitem" data-jump="${it.type}" data-ch="${c.id}" data-gid="${it.gid || ''}">
+        ${it.quote ? '<div class="qt">' + escapeHtml(it.quote.length > 160 ? it.quote.slice(0,160) + '…' : it.quote) + '</div>' : ''}
+        ${it.note ? '<div class="nt">' + escapeHtml(it.note) + '</div>' : ''}
+        <div class="meta">${mine ? '我' : escapeHtml(userName(who.user_id))} · ${fmtTime(it.time)}${who.private ? ' · 私密' : ''}</div>
+      </div>`;
+    }
+    body += '</div>';
+  }
+  if(!body) body = `<div class="nbempty">还没有笔记。<br>在正文里长按选中一段文字,点「划线」或「笔记」就会出现在这里。</div>`;
+
+  return tabs + `
+    <div class="nbstat">
+      <div><b>${hlCount}</b> 处划线</div>
+      <div><b>${ntCount}</b> 条笔记</div>
+      <div><b>${hwDone}</b>/${hwTotal} 章作业</div>
+    </div>` + body;
+}
+
+function bindNotebook(box){
+  box.querySelectorAll('.nbtabs button[data-m]').forEach(b=>{
+    b.onclick = ()=>{ nbMode = b.dataset.m; openNotebook(); };
+  });
+  const ex = box.querySelector('#nbExport');
+  if(ex) ex.onclick = openExport;
+  const nw = box.querySelector('#nbNew');
+  if(nw) nw.onclick = openNewNote;
+  box.querySelectorAll('.nbitem').forEach(el=>{
+    el.onclick = ()=>{
+      const ch = el.dataset.ch, gid = el.dataset.gid;
+      closeSheet();
+      const go = ()=>{
+        if(!gid) return;
+        const a = groupMembers(gid)[0];
+        if(!a) return;
+        const at = resolveAnchor(a);
+        if(at) restorePos({bi:at.bi, ratio:0});
+        const bel = blockEl(at ? at.bi : 0);
+        if(bel){ bel.classList.add('flashhit'); setTimeout(()=>bel.classList.remove('flashhit'), 1700); }
+      };
+      if(ch !== cur) openChapter(ch, {silent:true, pos:{bi:0, ratio:0}});
+      setTimeout(go, ch !== cur ? 60 : 0);
+    };
+  });
+}
+
+/* ═══ 导出 Markdown ═══ */
+function buildExportMd(){
+  const lines = ['# 《一顶帽子的全球旅行》读书笔记', '',
+                 '导出时间:' + new Date().toLocaleString('zh-CN'),
+                 auth.user ? '读者:' + auth.user.name : '', ''];
+  const items = notebookItems();
+  for(const c of CHAPTERS){
+    const list = items.filter(i => i.chapter === c.id).sort((a, b)=> a.time - b.time);
+    const hw = store.homework[c.id];
+    if(!list.length && !(hw && (hw.done || hw.log))) continue;
+    lines.push('## ' + c.title, '');
+    for(const it of list){
+      const who = it.type === 'anno' ? it.a : it.n;
+      const tag = isMine(who) ? '' : '(' + userName(who.user_id) + ')';
+      if(it.quote) lines.push('> ' + it.quote.replace(/\n+/g, ' '));
+      if(it.note)  lines.push('', '**笔记' + tag + ':** ' + it.note);
+      lines.push('');
+    }
+    if(hw && (hw.done || hw.log)){
+      lines.push('**本章作业:** ' + (hw.done ? '已完成 ✔' : '未完成'));
+      if(hw.log) lines.push('', hw.log);
+      lines.push('');
+    }
+  }
+  const hwDone = CHAPTERS.filter(c => (store.homework[c.id] || {}).done).length;
+  lines.push('---', '', '共 ' + items.filter(i => i.type === 'anno').length + ' 处划线、' +
+             items.filter(i => i.note).length + ' 条笔记,' + hwDone + '/28 章作业已完成。');
+  return lines.join('\n');
+}
+
+function openExport(){
+  const md = buildExportMd();
+  openSheet('导出笔记', `
+    <div class="hint">导出为 Markdown。可以存进手机的「文件」,也可以复制后粘到备忘录或提交进 git 仓库长期保存。</div>
+    <div class="fld"><textarea id="exText" style="min-height:180px;font-size:12.5px">${escapeHtml(md)}</textarea></div>
+    <div class="btnrow">
+      <button class="btn primary" id="exCopy">复制全文</button>
+      <button class="btn" id="exDl">下载文件</button>
+    </div>
+  `, box=>{
+    box.querySelector('#exCopy').onclick = async ()=>{
+      const ta = box.querySelector('#exText');
+      try{
+        await navigator.clipboard.writeText(md);
+        toast('已复制到剪贴板');
+      }catch(e){
+        ta.select(); ta.setSelectionRange(0, md.length);
+        try{ document.execCommand('copy'); toast('已复制'); }catch(_){ toast('请长按文本框手动复制'); }
+      }
+    };
+    box.querySelector('#exDl').onclick = ()=>{
+      const blob = new Blob([md], {type:'text/markdown;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '帽子书读书笔记-' + new Date().toISOString().slice(0, 10) + '.md';
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    };
+  }, 'export');
+}
+
+/* ═══════════════════════════════════════════════════════
+   全书搜索:内容已在页面里,纯前端即可
+   ═══════════════════════════════════════════════════════ */
+let searchIndex = null;
+const stripMd = s => s
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+  .replace(/[*_`>#|]/g, '')
+  .replace(/[ \t]+/g, ' ')
+  .trim();
+
+function buildSearchIndex(){
+  if(searchIndex) return searchIndex;
+  searchIndex = [];
+  for(const c of CHAPTERS){
+    if(!c.done || c.id === 'toc') continue;
+    const parts = md(c.id).split(/\n{2,}/);
+    for(const p of parts){
+      const plain = stripMd(p);
+      if(plain.length < 2) continue;
+      searchIndex.push({ch:c.id, title:c.title, plain, low:plain.toLowerCase()});
+    }
+  }
+  return searchIndex;
+}
+
+function openSearch(){
+  openSheet('全书搜索', `
+    <div class="sbox">
+      <input id="sq" placeholder="搜术语、章节、任何一句话…" autocapitalize="none" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="hint" id="sTip">全书 28 章 + 附录都能搜。试试「保险」「AQL」「退税」。</div>
+    <div id="sRes"></div>
+  `, box=>{
+    const inp = box.querySelector('#sq'), res = box.querySelector('#sRes'), tip = box.querySelector('#sTip');
+    let t = null;
+    const run = ()=>{
+      const q = inp.value.trim();
+      if(q.length < 1){ res.innerHTML = ''; tip.style.display = 'block'; return; }
+      const t0 = performance.now();
+      const idx = buildSearchIndex();
+      const low = q.toLowerCase();
+      const hits = [];
+      for(const it of idx){
+        const p = it.low.indexOf(low);
+        if(p < 0) continue;
+        hits.push({it, p});
+        if(hits.length >= 120) break;
+      }
+      tip.style.display = 'none';
+      if(!hits.length){ res.innerHTML = '<div class="nbempty">没找到「' + escapeHtml(q) + '」</div>'; return; }
+      const ms = Math.round(performance.now() - t0);
+      res.innerHTML = '<div class="hint">找到 ' + hits.length + (hits.length >= 120 ? '+' : '') + ' 处 · ' + ms + 'ms</div>' +
+        hits.map((h, i)=>{
+          const s = Math.max(0, h.p - 28), e = Math.min(h.it.plain.length, h.p + q.length + 52);
+          const ctx = (s > 0 ? '…' : '') + escapeHtml(h.it.plain.slice(s, h.p)) +
+                      '<b>' + escapeHtml(h.it.plain.substr(h.p, q.length)) + '</b>' +
+                      escapeHtml(h.it.plain.slice(h.p + q.length, e)) + (e < h.it.plain.length ? '…' : '');
+          return `<div class="shit" data-i="${i}"><div class="ttl">${escapeHtml(h.it.title)}</div><div class="ctx">${ctx}</div></div>`;
+        }).join('');
+      res.querySelectorAll('.shit').forEach(el=>{
+        el.onclick = ()=>{
+          const h = hits[parseInt(el.dataset.i, 10)];
+          closeSheet();
+          jumpToText(h.it.ch, h.it.plain.substr(h.p, Math.min(20, q.length + 12)));
+        };
+      });
+    };
+    inp.addEventListener('input', ()=>{ clearTimeout(t); t = setTimeout(run, 180); });
+    inp.addEventListener('keydown', e=>{
+      if(e.isComposing || e.keyCode === 229) return;
+      if(e.key === 'Enter'){ clearTimeout(t); run(); }
+    });
+    setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 150);
+  }, 'search');
+}
+
+function jumpToText(ch, key){
+  const go = ()=>{
+    const kids = document.getElementById('content').children;
+    const k = key.trim();
+    for(let i = 0; i < kids.length; i++){
+      if(blockText(kids[i]).indexOf(k) >= 0){
+        restorePos({bi:i, ratio:0});
+        kids[i].classList.add('flashhit');
+        setTimeout(()=>kids[i].classList.remove('flashhit'), 1700);
+        return;
+      }
+    }
+  };
+  if(ch !== cur){ openChapter(ch, {silent:true, pos:{bi:0, ratio:0}}); setTimeout(go, 60); }
+  else go();
+}
+
+/* ═══════════════════════════════════════════════════════
+   术语释义:附录 A1 的 447 条,构建时注入
+   ═══════════════════════════════════════════════════════ */
+let GLOSS = null, GLOSS_RE = null, GLOSS_MAP = null;
+function loadGloss(){
+  if(GLOSS) return GLOSS;
+  try{ GLOSS = JSON.parse(document.getElementById('glossary').textContent) || []; }
+  catch(e){ GLOSS = []; }
+  GLOSS_MAP = {};
+  GLOSS.forEach(t => { if(t.cn && !GLOSS_MAP[t.cn]) GLOSS_MAP[t.cn] = t; });
+  const words = Object.keys(GLOSS_MAP)
+    .filter(w => w.length >= 2 && w.length <= 12)
+    .sort((a, b)=> b.length - a.length)                       // 长词优先,避免"纱支"吃掉"纱支数"
+    .map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  GLOSS_RE = words.length ? new RegExp(words.join('|'), 'g') : null;
+  return GLOSS;
+}
+
+const SKIP_TAGS = {H1:1, H2:1, H3:1, H4:1, CODE:1, PRE:1, TH:1, A:1, TEXTAREA:1, BUTTON:1};
+function renderGlossary(){
+  if(!prefs.gloss) return;
+  loadGloss();
+  if(!GLOSS_RE) return;
+
+  const content = document.getElementById('content');
+  const nodes = [];
+  const w = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      if(!n.nodeValue || n.nodeValue.length < 2) return NodeFilter.FILTER_REJECT;
+      for(let p = n.parentNode; p && p !== content; p = p.parentNode){
+        if(SKIP_TAGS[p.tagName] || (p.classList && (p.classList.contains('term') || p.classList.contains('hwbox'))))
+          return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let n;
+  while((n = w.nextNode())) nodes.push(n);
+
+  const seen = new Set();
+  let i = 0;
+  // 分片:手机上一次做完会卡住滚动
+  const step = ()=>{
+    const t0 = performance.now();
+    while(i < nodes.length && performance.now() - t0 < 10) markTerms(nodes[i++], seen);
+    if(i < nodes.length){
+      (window.requestIdleCallback || (f => setTimeout(f, 16)))(step);
+    }
+  };
+  step();
+}
+
+function markTerms(node, seen){
+  const txt = node.nodeValue;
+  if(!txt || !node.parentNode) return;
+  GLOSS_RE.lastIndex = 0;
+  let m, last = 0, frag = null;
+  while((m = GLOSS_RE.exec(txt))){
+    const word = m[0];
+    if(seen.has(word)) continue;      // 每章每词只标首次,免得满屏虚线
+    seen.add(word);
+    frag = frag || document.createDocumentFragment();
+    if(m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+    const s = document.createElement('span');
+    s.className = 'term'; s.dataset.t = word; s.textContent = word;
+    frag.appendChild(s);
+    last = m.index + word.length;
+  }
+  if(frag){
+    if(last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+}
+
+function openTermCard(word){
+  const t = (GLOSS_MAP || {})[word];
+  if(!t) return;
+  openSheet(word, `
+    <div class="termcard">
+      <div class="en">${escapeHtml(t.en || '')}</div>
+      <div class="def">${escapeHtml(t.def || '')}</div>
+      ${t.src ? '<div class="src">首见 ' + escapeHtml(t.src) + ' · <a href="#" id="tmGo" style="color:var(--thread)">去看原文</a></div>' : ''}
+    </div>
+  `, box=>{
+    const go = box.querySelector('#tmGo');
+    if(go) go.onclick = e=>{
+      e.preventDefault();
+      const chNum = String(t.src).split('.')[0].replace(/[^\d]/g, '');
+      const id = 'ch' + String(chNum).padStart(2, '0');
+      if(CHAPTERS.find(c => c.id === id && c.done)){ closeSheet(); jumpToText(id, word); }
+      else toast('这条术语来自附录');
+    };
+  }, 'term');
+}
+
+/* ═══════════════════════════════════════════════════════
+   本章作业:打勾 + 写下完成记录
+   ═══════════════════════════════════════════════════════ */
+function renderHomework(){
+  const content = document.getElementById('content');
+  content.querySelectorAll('.hwbox').forEach(x => x.remove());
+  if(!/^ch(0[1-9]|1\d|2[0-8])$/.test(cur)) return;
+
+  let target = null;
+  content.querySelectorAll('blockquote').forEach(bq=>{
+    if(!target && (bq.textContent || '').indexOf('本章作业') >= 0) target = bq;
+  });
+  if(!target) return;
+
+  const h = store.homework[cur] || {chapter:cur, done:0, log:''};
+  const box = document.createElement('div');
+  box.className = 'hwbox' + (h.done ? ' done' : '');
+  box.innerHTML = `
+    <div class="top">
+      <div class="tick">${h.done ? '✓' : ''}</div>
+      <div>
+        <div class="lb">${h.done ? '这章作业已完成' : '做完了就打个勾'}</div>
+        <div class="sub">写下你的做法和结果,导出时会一并带走</div>
+      </div>
+    </div>
+    <textarea placeholder="我是怎么做的?遇到什么?结果如何?">${escapeHtml(h.log || '')}</textarea>`;
+  // 挂在作业框内部,不打乱 #content 的块索引
+  target.appendChild(box);
+
+  const ta = box.querySelector('textarea');
+  box.querySelector('.top').onclick = ()=>{
+    const curH = store.homework[cur] || {chapter:cur, done:0, log:''};
+    const done = curH.done ? 0 : 1;
+    saveHomework({done, log:ta.value});
+    box.classList.toggle('done', !!done);
+    box.querySelector('.tick').textContent = done ? '✓' : '';
+    box.querySelector('.lb').textContent = done ? '这章作业已完成' : '做完了就打个勾';
+    if(done) toast('第 ' + cur.replace('ch', '') + ' 章作业完成 ✔');
+  };
+  let tt = null;
+  ta.addEventListener('input', ()=>{
+    clearTimeout(tt);
+    tt = setTimeout(()=>saveHomework({log:ta.value}), 600);
+  });
+}
+
+function saveHomework(patch){
+  const h = store.homework[cur] || {chapter:cur, done:0, log:''};
+  Object.assign(h, patch, {chapter:cur, updated_at:Date.now(), _dirty:true});
+  store.homework[cur] = h;
+  saveStore(); scheduleSync();
+}
+
+/* ───────── 手机底部工具栏 ───────── */
+document.getElementById('mToc').onclick   = toggleToc;
+document.getElementById('mTutor').onclick = toggleTutor;
+document.getElementById('mSearch').onclick   = ()=>openSearch();
+document.getElementById('mNotebook').onclick = ()=>openNotebook();
+document.getElementById('mAcct').onclick     = ()=>openAccount();
+document.getElementById('searchBtn').onclick      = ()=>openSearch();
+document.getElementById('notebookToggle').onclick = ()=>openNotebook();
+document.getElementById('acctBtn').onclick        = ()=>openAccount();
+
+/* ───────── 助教对话持久化 ───────── */
+function saveChat(){
   try{ localStorage.setItem('hatbook-state', JSON.stringify({cur, history: history.slice(-12)})); }catch(e){}
 }
-async function loadState(){
+function loadChat(){
   try{
     const v = localStorage.getItem('hatbook-state');
-    if(v){
-      const s = JSON.parse(v);
-      if(s.cur && CHAPTERS.find(c=>c.id===s.cur && c.done)) cur = s.cur;
-      if(Array.isArray(s.history)){
-        history = s.history;
-        for(const m of history){
-          if(m.role==='user') addMsg('user', m.content.startsWith('我选中了')? m.content.split('我的问题:').pop() : m.content);
-          else addMsg('assistant', m.content);
-        }
+    if(!v) return;
+    const s = JSON.parse(v);
+    if(Array.isArray(s.history)){
+      history = s.history;
+      for(const m of history){
+        if(m.role === 'user') addMsg('user', m.content.startsWith('我选中了') ? m.content.split('我的问题:').pop() : m.content);
+        else addMsg('assistant', m.content);
       }
     }
   }catch(e){}
 }
 
 /* ───────── 启动 ───────── */
-(async function(){
+(function(){
+  loadAuth();
+  loadPrefs();
+  loadStore();
   try{
     const f = parseInt(localStorage.getItem('hatbook-font'), 10);
-    if(f >= 13 && f <= 20) fontSize = f;
+    if(f >= 13 && f <= 22) fontSize = f;
     const savedTheme = localStorage.getItem('hatbook-theme');
     applyTheme(savedTheme ? savedTheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
   }catch(e){ applyTheme(false); }
   applyFont();
   if(matchMedia('(max-width:900px)').matches) setTutor(false);
-  await loadState();
+  setSync(loggedIn() ? 'busy' : 'off');
+  renderAcctBtn();
+  loadChat();
+
+  // 先用本机记录瞬时恢复:即使被系统杀过进程、即使没网,也能立刻回到原处
+  const p = store.pos;
+  if(p && p.chapter && CHAPTERS.find(c => c.id === p.chapter && c.done)) cur = p.chapter;
   renderNav();
   document.getElementById('content').innerHTML = marked.parse(md(cur));
-  if(history.length===0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
+  indexBlocks();
+  applyDecorations();
+  if(p && p.chapter === cur) restorePos(p);
+  chapterEnterAt = Date.now();
+
+  if(history.length === 0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
+
+  // 再拉云端:换了设备/清过缓存时才用得上,不打断当前阅读
+  if(loggedIn()){
+    const before = p ? (p.updated_at || 0) : 0;
+    syncNow().then(()=>offerCloudPos(before));
+  }
 })();
 </script>
 </body>

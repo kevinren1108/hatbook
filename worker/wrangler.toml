@@ -1,0 +1,14 @@
+name = "hatbook-data"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+# 这是独立于助教代理的第二个 Worker,只管用户数据。
+# 助教 Worker(shy-brook-76ea)不受影响,无需改动。
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hatbook"
+database_id = "c8e5c4af-ae04-479c-bb0d-958f1df0c89a"
+
+[observability]
+enabled = true
