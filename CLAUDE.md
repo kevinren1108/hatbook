@@ -31,6 +31,8 @@
 - 阅读位置采用「本机瞬时 + 云端兜底」双层:滚动落定写 localStorage,`visibilitychange:hidden` / `pagehide` 用 `navigator.sendBeacon` 上报(令牌走 body 的 `_t`,因为 beacon 带不了请求头)。这是手机切后台被系统杀掉后仍能回到原处的关键,改动此处务必回归验证。
 - 划线锚点 = 块序号 + 块内纯文本偏移 + 前后文,三级容错(原坐标 → 前后文重定位 → 全章找原文)。**若日后修订已发布章节的正文,划线会自动重定位,但仍应抽查一次。**
 - 术语字典由 `build.py` 从附录 A1 的十四张表解析生成(447 条),不要手工维护第二份;改动 A1 表格式会影响解析。
+- **PWA**:`manifest.webmanifest` + `icons/` + `sw_template.js`。`build.py` 把页面内容的 sha1 前12位注入模板产出根目录 `sw.js`,所以**书稿一改、重新构建,读者就会收到「有更新」提示**,点了才换新版,不打断阅读。改 `sw.js` 要改 `sw_template.js`(sw.js 是产物)。Service Worker 显式放行 `*.workers.dev`(接口永不进缓存),其余走缓存优先,因此离线可读全书。
+- 账号:`kevin`(Kevin)、`iris`(Iris)。主屏 PWA 与 Safari 是两套独立存储,首次从主屏打开需重新登录一次,登录后笔记自动同步回来。
 
 ## 边界
 

@@ -6,6 +6,17 @@
 <title>一顶帽子的全球旅行 · 小白入行帽子厂贸实战</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- ══ 装到手机主屏:像 App 一样打开,离线可读 ══ -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#faf9f5" id="tcMeta">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="帽子书">
+<meta name="description" content="小白入行帽子厂贸实战 —— 从布料到出口的全流程实战教材">
 <style>
 :root{
   --ink:#232c3d;            /* 墨 */
@@ -72,7 +83,9 @@ button{font-family:inherit}
 
 /* ═══ 顶栏:织唛式品牌牌 ═══ */
 header{
-  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  display:flex;align-items:center;gap:14px;
+  /* 装到主屏后没有浏览器界面,顶部要让开刘海/状态栏 */
+  padding:calc(10px + env(safe-area-inset-top)) 18px 10px;
   background:var(--panel);border-bottom:1px solid var(--stitch);flex-shrink:0;
   box-shadow:0 1px 0 rgba(35,44,61,.03);
 }
@@ -252,6 +265,18 @@ body.dark .annocard blockquote.qt{color:#cfd4de}
   border-radius:8px;padding:9px 12px;
 }
 .replies .rp b{color:var(--thread);margin-right:7px;font-weight:700}
+
+/* ═══ 安装引导步骤 ═══ */
+.steps{margin:14px 0}
+.stp{
+  display:flex;gap:11px;align-items:flex-start;
+  font-size:14px;line-height:1.8;margin:11px 0;
+}
+.stp > b:first-child{
+  flex-shrink:0;width:23px;height:23px;border-radius:50%;margin-top:3px;
+  background:var(--thread);color:#fff;font-size:12.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
 
 /* ═══ 笔记本 ═══ */
 .nbtabs{display:flex;gap:7px;margin-bottom:4px;flex-wrap:wrap}
@@ -545,7 +570,7 @@ body.dark .sh-err{background:#33231a;color:#e0904f}
 @media(max-width:900px){
   header .hbtn{display:none}
   header #acctBtn{display:none}
-  nav{position:fixed;left:0;top:53px;bottom:calc(58px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
+  nav{position:fixed;left:0;top:calc(53px + env(safe-area-inset-top));bottom:calc(58px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(35,44,61,.14)}
   nav.open{transform:none}
   #tutor{
     position:fixed;left:0;right:0;width:auto;top:auto;
@@ -15882,6 +15907,8 @@ function applyTheme(dark){
   document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
   try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
   const sw = document.getElementById('themeSw'); if(sw) sw.checked = dark;
+  // 装到主屏后,手机状态栏跟着书页一起变色
+  const tc = document.getElementById('tcMeta'); if(tc) tc.content = dark ? '#14171e' : '#faf9f5';
 }
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);
@@ -16290,6 +16317,10 @@ function openAccount(){
       <div class="lbl">显示对方的批注<div class="sub">共读:看到对方划的线和写的话</div></div>
       <div class="ctl"><label class="sw"><input type="checkbox" id="peerSw" ${prefs.peer?'checked':''}><span class="track"></span><span class="knob"></span></label></div>
     </div>
+    <div class="srow">
+      <div class="lbl">装到手机主屏<div class="sub">${isStandalone() ? '已经装好了' : '像 App 一样打开,没网也能读'}</div></div>
+      <div class="ctl"><button class="btn" id="acInstall">${isStandalone() ? '已安装' : '怎么装'}</button></div>
+    </div>
   `, box=>{
     const q = s => box.querySelector(s);
     if(q('#acLogin'))  q('#acLogin').onclick  = openLogin;
@@ -16299,6 +16330,7 @@ function openAccount(){
     q('#themeSw').onchange = e => applyTheme(e.target.checked);
     q('#glossSw').onchange = e => { prefs.gloss = e.target.checked; savePrefs(); applyDecorations(); };
     q('#peerSw').onchange  = e => { prefs.peer  = e.target.checked; savePrefs(); applyDecorations(); };
+    q('#acInstall').onclick = openInstallGuide;
   }, 'acct');
 }
 
@@ -16392,6 +16424,63 @@ function offerCloudPos(beforeTs){
   toast('云端读到:' + ch.title, '接着读', ()=>{
     if(p.chapter === cur) restorePos(p);
     else openChapter(p.chapter, {pos:p});
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   装到手机主屏(PWA)
+   ═══════════════════════════════════════════════════════ */
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); installPrompt = e; });
+
+const isStandalone = ()=>
+  matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+function openInstallGuide(){
+  if(isStandalone()){ toast('已经装好了 —— 你现在就是从主屏打开的'); return; }
+  if(installPrompt){
+    installPrompt.prompt();
+    installPrompt.userChoice.finally(()=>{ installPrompt = null; });
+    return;
+  }
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  openSheet('装到手机主屏', ios ? `
+    <div class="hint">装好之后,书会像一个 App 一样出现在桌面上:打开是全屏的、没有地址栏,没网也能读,被系统清掉重开也回得到原来那页。</div>
+    <div class="steps">
+      <div class="stp"><b>1</b>点屏幕底部中间的「分享」按钮 —— 就是那个<b style="font-weight:400">方框里一支向上箭头</b>的图标</div>
+      <div class="stp"><b>2</b>在弹出的列表里往下翻,点「添加到主屏幕」</div>
+      <div class="stp"><b>3</b>右上角点「添加」</div>
+    </div>
+    <div class="hint">桌面上会多一个靛蓝色的「帽」字图标。以后从那里打开就行。<br><b>注意</b>:主屏打开是独立的,第一次要重新登录一次账号,登完笔记就都回来了。</div>
+  ` : `
+    <div class="hint">装好之后,书会像一个 App 一样出现在桌面上:全屏、没网也能读。</div>
+    <div class="steps">
+      <div class="stp"><b>1</b>点浏览器右上角的菜单(三个点)</div>
+      <div class="stp"><b>2</b>选「安装应用」或「添加到主屏幕」</div>
+      <div class="stp"><b>3</b>确认</div>
+    </div>
+  `, null, 'install');
+}
+
+if('serviceWorker' in navigator &&
+   (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      reg.addEventListener('updatefound', ()=>{
+        const nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange', ()=>{
+          // 已经有旧版本在跑,才提示;首次安装静默完成
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){
+            toast('这本书有更新', '刷新看新版', ()=>{
+              nw.postMessage('skipWaiting');
+              setTimeout(()=>location.reload(), 250);
+            });
+          }
+        });
+      });
+    }).catch(()=>{});
   });
 }
 

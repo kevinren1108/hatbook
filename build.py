@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""hatbook 构建脚本:模板 + 各章markdown + 术语字典 → index.html"""
-import json, re, sys
+"""hatbook 构建脚本:模板 + 各章markdown + 术语字典 → index.html,并产出 sw.js"""
+import hashlib, json, os, re, sys
 
 WORKER_URL = 'https://shy-brook-76ea.kevinren1108.workers.dev'
 # 数据 Worker(账号/阅读位置/划线/笔记)。部署后把地址填在这里;
@@ -67,8 +67,26 @@ if DATA_WORKER_URL:
     assert DATA_WORKER_URL in out, '数据Worker地址替换失败'
     assert 'REPLACE-ME-DATA' not in out, '数据Worker占位符残留'
 
+# PWA 相关
+assert 'rel="manifest"' in out, 'manifest 未挂上'
+assert 'apple-touch-icon' in out, 'iOS 主屏图标未挂上'
+assert "serviceWorker.register('sw.js')" in out, 'Service Worker 未注册'
+assert 'env(safe-area-inset-top)' in out, '主屏全屏模式下的刘海避让缺失'
+for f in ('manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png',
+          'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'):
+    assert os.path.exists(f), f'PWA 资源缺失: {f}'
+
 open('index.html', 'w', encoding='utf-8').write(out)
+
+# Service Worker:版本号跟页面内容走,书稿一改就会在页面上提示「有更新」
+digest = hashlib.sha1(out.encode('utf-8')).hexdigest()[:12]
+sw = open('sw_template.js', encoding='utf-8').read().replace('__BUILD_VERSION__', digest)
+assert '__BUILD_VERSION__' not in sw, 'SW 版本号未替换'
+assert 'workers.dev' in sw, 'SW 必须显式放行接口请求(不缓存)'
+open('sw.js', 'w', encoding='utf-8').write(sw)
+
 cloud = DATA_WORKER_URL or '未配置(仅本机存储)'
 print(f'✅ build OK: {len(FILES)} chapters, {len(terms)} terms, '
       f'{len(out.encode("utf-8"))} bytes → index.html')
 print(f'   数据Worker: {cloud}')
+print(f'   PWA: sw.js 版本 {digest}')
