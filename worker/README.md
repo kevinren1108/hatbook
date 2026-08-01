@@ -7,6 +7,32 @@
 
 ---
 
+## 当前部署状态（2026-07-31 已完成）
+
+| 项目 | 值 |
+|---|---|
+| Worker 地址 | `https://hatbook-data.kevinren1108.workers.dev` |
+| D1 数据库 | `hatbook`（region WNAM），id 见 `wrangler.toml` |
+| 账号 | `kevin`（老任）、`taitai`（太太） |
+| 管理密钥 | 存在 `wrangler secret` 里，不在仓库中 |
+
+**下面的部署步骤只在需要重建或迁移时才用。**日常改动只需在 `worker/` 里
+`npx wrangler deploy` 重新发布；改前端则在仓库根目录 `python3 build.py` 后提交推送。
+
+### 改密码
+
+```bash
+cd worker
+npx wrangler secret list                 # 确认 ADMIN_KEY 还在
+curl -X POST https://hatbook-data.kevinren1108.workers.dev/api/admin/user \
+  -H "X-Admin-Key: <你的ADMIN_KEY>" -H "Content-Type: application/json" \
+  -d '{"id":"kevin","name":"老任","pass":"新密码"}'
+```
+
+忘了 ADMIN_KEY 就重设一个：`printf '新密钥' | npx wrangler secret put ADMIN_KEY`。
+
+---
+
 ## 一次性部署（约 5 分钟）
 
 以下命令都在 `worker/` 目录里执行。本机已有 node，直接用 `npx`，不必全局装 wrangler。
