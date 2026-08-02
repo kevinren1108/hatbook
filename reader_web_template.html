@@ -9,12 +9,15 @@
 
 <!-- ══ 装到手机主屏:像 App 一样打开,离线可读 ══ -->
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#faf9f5" id="tcMeta">
+<meta name="theme-color" content="#243656" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14171e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#243656" id="tcMeta">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!-- 状态栏做成透明,由页面自己那条 #statusbar 上色,深浅色才跟得住 -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="帽子书">
 <meta name="description" content="小白入行帽子厂贸实战 —— 从布料到出口的全流程实战教材">
 <style>
@@ -80,6 +83,15 @@ body{
 ::selection{background:var(--thread-soft);color:var(--denim-deep)}
 button{font-family:inherit}
 :focus-visible{outline:2px solid var(--thread);outline-offset:2px;border-radius:4px}
+
+/* ═══ 状态栏区域(装到主屏后才有高度)═══
+   iOS 全屏模式下系统状态栏文字恒为白色,所以这条底色必须始终是深的 */
+#statusbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;pointer-events:none;
+  height:env(safe-area-inset-top);
+  background:#243656;
+}
+body.dark #statusbar{background:#14171e}
 
 /* ═══ 顶栏:织唛式品牌牌 ═══ */
 header{
@@ -619,6 +631,8 @@ body.dark .sh-err{background:#33231a;color:#e0904f}
 </style>
 </head>
 <body>
+
+<div id="statusbar"></div>
 
 <header>
   <button class="hbtn" id="tocToggle">☰ 目录</button>
@@ -1386,8 +1400,8 @@ function applyTheme(dark){
   document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
   try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
   const sw = document.getElementById('themeSw'); if(sw) sw.checked = dark;
-  // 装到主屏后,手机状态栏跟着书页一起变色
-  const tc = document.getElementById('tcMeta'); if(tc) tc.content = dark ? '#14171e' : '#faf9f5';
+  // 装到主屏后,手机状态栏跟着书页一起变色(浅色下用品牌靛蓝,系统白字才看得清)
+  const tc = document.getElementById('tcMeta'); if(tc) tc.content = dark ? '#14171e' : '#243656';
 }
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);

@@ -10,8 +10,8 @@
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
-  "background_color": "#faf9f5",
-  "theme_color": "#faf9f5",
+  "background_color": "#243656",
+  "theme_color": "#243656",
   "categories": ["books", "education", "business"],
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
