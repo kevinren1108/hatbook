@@ -9,15 +9,27 @@
 
 <!-- ══ 装到手机主屏:像 App 一样打开,离线可读 ══ -->
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#243656" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14171e" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#243656" id="tcMeta">
+<meta name="theme-color" content="#ffffff" id="tcMeta">
+<script>
+/* iOS 装到主屏后,状态栏颜色只认页面加载那一刻的 theme-color,之后改它不认。
+   所以在这里(解析到 body 之前)就按上次的主题把值定死,取顶栏底色 → 状态栏与顶栏无缝,
+   文字明暗由 iOS 自己按底色挑。 */
+(function(){
+  try{
+    var t = localStorage.getItem('hatbook-theme');
+    var dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    var m = document.getElementById('tcMeta');
+    if(m) m.content = dark ? '#1d212b' : '#ffffff';
+    // 顺带把底色提前铺上,深色模式启动时不再闪一下白
+    if(dark) document.documentElement.style.background = '#14171e';
+  }catch(e){}
+})();
+</script>
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<!-- 状态栏做成透明,由页面自己那条 #statusbar 上色,深浅色才跟得住 -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="帽子书">
 <meta name="description" content="小白入行帽子厂贸实战 —— 从布料到出口的全流程实战教材">
 <style>
@@ -83,15 +95,6 @@ body{
 ::selection{background:var(--thread-soft);color:var(--denim-deep)}
 button{font-family:inherit}
 :focus-visible{outline:2px solid var(--thread);outline-offset:2px;border-radius:4px}
-
-/* ═══ 状态栏区域(装到主屏后才有高度)═══
-   iOS 全屏模式下系统状态栏文字恒为白色,所以这条底色必须始终是深的 */
-#statusbar{
-  position:fixed;top:0;left:0;right:0;z-index:200;pointer-events:none;
-  height:env(safe-area-inset-top);
-  background:#243656;
-}
-body.dark #statusbar{background:#14171e}
 
 /* ═══ 顶栏:织唛式品牌牌 ═══ */
 header{
@@ -631,8 +634,6 @@ body.dark .sh-err{background:#33231a;color:#e0904f}
 </style>
 </head>
 <body>
-
-<div id="statusbar"></div>
 
 <header>
   <button class="hbtn" id="tocToggle">☰ 目录</button>
@@ -1400,8 +1401,20 @@ function applyTheme(dark){
   document.getElementById('themeToggle').textContent = dark ? '☀️ 浅色' : '🌙 深色';
   try{ localStorage.setItem('hatbook-theme', dark ? 'dark' : 'light'); }catch(e){}
   const sw = document.getElementById('themeSw'); if(sw) sw.checked = dark;
-  // 装到主屏后,手机状态栏跟着书页一起变色(浅色下用品牌靛蓝,系统白字才看得清)
-  const tc = document.getElementById('tcMeta'); if(tc) tc.content = dark ? '#14171e' : '#243656';
+  setThemeColor(dark);
+}
+/**
+ * 状态栏底色 = 顶栏底色,两者才连成一片。
+ * 整个 meta 抽掉重建,而不是改 content —— 部分 iOS 版本只有这样才肯重新读。
+ */
+function setThemeColor(dark){
+  const old = document.getElementById('tcMeta');
+  if(old) old.remove();
+  const m = document.createElement('meta');
+  m.name = 'theme-color';
+  m.id = 'tcMeta';
+  m.content = dark ? '#1d212b' : '#ffffff';
+  document.head.appendChild(m);
 }
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 document.getElementById('fontMinus').onclick = ()=>bumpFont(-1);
