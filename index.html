@@ -473,6 +473,61 @@ body.dark #content .term{border-bottom-color:#7f93b8}
 }
 #send:hover{background:#b25617}
 #send:disabled{opacity:.45;cursor:default}
+#photoBtn{
+  flex-shrink:0;width:44px;height:44px;border:1px solid var(--stitch);border-radius:10px;
+  background:var(--panel);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#8f8879;transition:color .15s,border-color .15s;
+}
+#photoBtn:hover,#photoBtn.has{color:var(--thread);border-color:var(--thread)}
+#attachBar{display:none;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+#attachBar.on{display:flex}
+#attachBar .att{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--stitch)}
+#attachBar .att img{width:100%;height:100%;object-fit:cover;display:block}
+#attachBar .att .rm{
+  position:absolute;right:1px;top:1px;width:17px;height:17px;border-radius:50%;
+  background:rgba(30,30,30,.65);color:#fff;font-size:11px;line-height:17px;text-align:center;cursor:pointer;
+}
+.msg .mimgs{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.msg .mimgs img{width:56px;height:56px;object-fit:cover;border-radius:7px;border:1px solid rgba(255,255,255,.35)}
+/* ── 每日练习 ── */
+nav a.daily{color:var(--thread);font-weight:500}
+nav a.daily .dot{background:var(--thread)}
+nav a.daily .ddot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;background:#c04f2a;
+  margin-left:6px;vertical-align:2px;
+}
+.dq-imgs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch}
+.dq-imgs img{
+  height:120px;border-radius:9px;border:1px solid var(--stitch);cursor:zoom-in;flex-shrink:0;
+  transition:height .18s;
+}
+.dq-imgs img.big{height:300px;cursor:zoom-out}
+.dq-meta{font-size:12.5px;color:#8f8879;line-height:1.8;margin:6px 0 10px}
+.dq-meta b{color:var(--ink)}
+.dq-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px dashed var(--stitch)}
+.dq-row .lb{flex:1;min-width:0;font-size:13.5px}
+.dq-row .lb .hint2{font-size:11px;color:#a39c8e;margin-top:2px;line-height:1.5}
+.dq-row input{
+  width:76px;border:1px solid var(--stitch);border-radius:8px;padding:7px 9px;font-size:14px;
+  text-align:right;background:var(--panel);color:var(--ink);font-family:inherit;
+}
+.dq-row input:focus{outline:none;border-color:var(--thread)}
+.dq-row .unit{font-size:12px;color:#a39c8e;width:20px}
+.dq-row.total{border-bottom:none;border-top:2px solid var(--stitch);margin-top:2px;font-weight:600}
+.dq-verdict{width:70px;font-size:12px;text-align:right;flex-shrink:0;line-height:1.5}
+.dq-verdict.ok{color:#3e7d4f}.dq-verdict.off{color:#b2402a}
+.dq-ref{font-size:11px;color:#a39c8e}
+.dq-exp{
+  font-size:12.5px;line-height:1.9;color:#6b6353;background:var(--panel);
+  border-left:3px solid var(--thread);border-radius:0 8px 8px 0;padding:9px 12px;margin:8px 0;
+}
+.dq-hist{font-size:13px}
+.dq-hist a{display:block;padding:8px 2px;border-bottom:1px dashed var(--stitch);color:var(--ink);text-decoration:none}
+.dq-hist a b{color:var(--thread);font-weight:500;margin-right:8px}
+.dq-hist a .sc{float:right;color:#a39c8e;font-size:12px}
+body.dark .dq-exp{color:#b6bcc9}
+body.dark .dq-meta b{color:#d5d9e2}
+body.dark .msg .mimgs img{border-color:rgba(255,255,255,.15)}
 
 /* ═══════════════════════════════════════════════
    通用弹层:手机=底部抽屉(拇指可达),桌面=居中卡片
@@ -715,6 +770,17 @@ body.dark .avatar.peer{background:#a85c22}
     <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v18H5.5A1.5 1.5 0 0 1 4 19.5z"/>
     <path d="M8 3v18"/>
   </symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24">
+    <path d="M3.5 7.5h3l1.8-2.5h7.4l1.8 2.5h3v12h-17z"/>
+    <circle cx="12" cy="13" r="3.6"/>
+  </symbol>
+  <symbol id="i-abacus" viewBox="0 0 24 24">
+    <rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/>
+    <path d="M3.5 9h17M3.5 15h17"/>
+    <circle cx="8.5" cy="6.2" r="1.1"/><circle cx="15.5" cy="6.2" r="1.1"/>
+    <circle cx="11" cy="12" r="1.1"/><circle cx="17" cy="12" r="1.1"/>
+    <circle cx="7" cy="17.8" r="1.1"/><circle cx="13.5" cy="17.8" r="1.1"/>
+  </symbol>
 </defs></svg>
 
 <header>
@@ -751,10 +817,13 @@ body.dark .avatar.peer{background:#a85c22}
     <div id="msgs"></div>
     <div id="inputRow">
       <div id="quoteBox"><span class="x" onclick="clearQuote()">✕</span><span id="quoteText"></span></div>
+      <div id="attachBar"></div>
       <div id="inWrap">
+        <button id="photoBtn" title="拍帽子照片,让助教拆解报价"><svg class="ic"><use href="#i-camera"/></svg></button>
         <textarea id="q" placeholder="就当前章节提问,或选中正文文字追问…"></textarea>
         <button id="send">问</button>
       </div>
+      <input type="file" id="photoFile" accept="image/*" multiple hidden>
     </div>
   </aside>
 </main>
@@ -15354,11 +15423,17 @@ const md = id => (document.getElementById('md-'+id)?.textContent || '').trim();
 let cur = 'toc';
 let history = [];
 let pendingQuote = '';
+let pendingImages = [];   // [{data:base64无前缀, mt:mime, thumb:dataURL}] 只随当次请求发送
+let PRICES = null;        // data/prices.json 价格库(启动时拉取,失败降级)
+let DAILY_INDEX = null;   // daily/index.json 每日练习索引
 
 /* ───────── 目录渲染 ───────── */
 function renderNav(){
   const nav = document.getElementById('nav');
   let html = '', lastPart = '';
+  if(DAILY_INDEX && dailyLatest()){
+    html += `<a href="#" id="navDaily" class="daily"><span class="dot"></span>每日练习 · 看帽拆价${dailyUndone() ? '<span class="ddot"></span>' : ''}</a>`;
+  }
   for(const c of CHAPTERS){
     if(c.part !== lastPart){ html += `<div class="part">${c.part}</div>`; lastPart = c.part; }
     html += c.done
@@ -15367,6 +15442,8 @@ function renderNav(){
   }
   nav.innerHTML = html;
   nav.querySelectorAll('a[data-id]').forEach(a=>a.onclick=e=>{e.preventDefault();openChapter(a.dataset.id);});
+  const nd = document.getElementById('navDaily');
+  if(nd) nd.onclick = e=>{ e.preventDefault(); document.getElementById('nav').classList.remove('open'); openDaily(); };
   const done = CHAPTERS.filter(c=>c.done && c.id!=='toc').length;
   const total = CHAPTERS.filter(c=>c.id!=='toc').length;
   document.getElementById('prog').textContent = done + '/' + total + '章';
@@ -15887,13 +15964,85 @@ function fmtTime(ts){
               : (d.getMonth() + 1) + '月' + d.getDate() + '日';
 }
 
+/* ───────── 拍照估价:图片选取与压缩 ───────── */
+const photoBtn  = document.getElementById('photoBtn');
+const photoFile = document.getElementById('photoFile');
+photoBtn.onclick = ()=> photoFile.click();
+photoFile.onchange = async ()=>{
+  const files = Array.from(photoFile.files || []).slice(0, 4 - pendingImages.length);
+  photoFile.value = '';
+  for(const f of files){
+    try{ pendingImages.push(await compressImage(f)); }
+    catch(e){ toast('这张图片读不出来,换一张试试'); }
+  }
+  renderAttachBar();
+  if(pendingImages.length && !document.getElementById('q').value.trim()){
+    document.getElementById('q').placeholder = '可补充说明(数量/材质…),直接点「问」按部件拆解报价';
+  }
+};
+function compressImage(file){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = ()=>{
+      URL.revokeObjectURL(url);
+      const MAX = 1568;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const k = Math.min(1, MAX / Math.max(w, h));
+      w = Math.round(w * k); h = Math.round(h * k);
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      const full = cv.toDataURL('image/jpeg', 0.85);
+      // 缩略图另做一份,消息气泡里用
+      const tk = Math.min(1, 160 / Math.max(w, h));
+      const tv = document.createElement('canvas');
+      tv.width = Math.round(w * tk); tv.height = Math.round(h * tk);
+      tv.getContext('2d').drawImage(img, 0, 0, tv.width, tv.height);
+      resolve({ data: full.split(',')[1], mt: 'image/jpeg', thumb: tv.toDataURL('image/jpeg', 0.7) });
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('bad image')); };
+    img.src = url;
+  });
+}
+function renderAttachBar(){
+  const bar = document.getElementById('attachBar');
+  bar.classList.toggle('on', pendingImages.length > 0);
+  photoBtn.classList.toggle('has', pendingImages.length > 0);
+  bar.innerHTML = pendingImages.map((im, i)=>
+    `<div class="att"><img src="${im.thumb}" alt=""><span class="rm" data-i="${i}">✕</span></div>`).join('');
+  bar.querySelectorAll('.rm').forEach(el=> el.onclick = ()=>{
+    pendingImages.splice(Number(el.dataset.i), 1); renderAttachBar();
+  });
+}
+/** 价格库压缩成给模型看的文字摘要 */
+function pricesDigest(){
+  if(!PRICES) return '';
+  const line = it=>{
+    const rng = (it.low != null && it.high != null) ? `${it.low}-${it.high}` : (it.typical != null ? String(it.typical) : '?');
+    let s = `${it.name}:${rng}${it.unit ? it.unit.replace(/^元/, '元') : ''}`;
+    if(it.usage_per_cap_sqm) s += `(单顶约${it.usage_per_cap_sqm}㎡)`;
+    return s;
+  };
+  const sec = (title, arr)=> (arr && arr.length) ? `【${title}】` + arr.map(line).join(';') : '';
+  return [
+    sec('面料', PRICES.fabrics), sec('辅料', PRICES.trims), sec('工艺', PRICES.crafts),
+    sec('工缴', PRICES.labor), sec('比例项', PRICES.overhead), sec('整帽参考', PRICES.reference_caps),
+    PRICES.meta ? `(价格库更新于${PRICES.meta.updated},美元汇率${PRICES.meta.usd_cny})` : '',
+  ].filter(Boolean).join('\n');
+}
+
 /* ───────── 助教对话 ───────── */
-function addMsg(role, content, quote){
+function addMsg(role, content, quote, imgs){
   const box = document.getElementById('msgs');
   const d = document.createElement('div');
   d.className = 'msg ' + (role==='user'?'u':'a');
   if(role==='user'){
-    d.innerHTML = (quote?`<div class="quote">「${escapeHtml(quote.length>100?quote.slice(0,100)+'…':quote)}」</div>`:'') + escapeHtml(content);
+    const pics = (imgs && imgs.length)
+      ? `<div class="mimgs">${imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>` : '';
+    d.innerHTML = pics
+      + (quote?`<div class="quote">「${escapeHtml(quote.length>100?quote.slice(0,100)+'…':quote)}」</div>`:'')
+      + escapeHtml(content);
   } else {
     d.innerHTML = marked.parse(content);
   }
@@ -15903,26 +16052,41 @@ function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 async function send(){
   const q = document.getElementById('q');
-  const text = q.value.trim();
-  if(!text) return;
+  let text = q.value.trim();
+  const imgs = pendingImages;          // 图片只随本次请求发送,不进后续轮次
+  if(!text && !imgs.length) return;
+  if(!text) text = '请识别这顶帽子,按部件拆解成本并给出FOB报价区间。';
   const quote = pendingQuote;
   clearQuote();
-  q.value = '';
-  addMsg('user', text, quote);
+  pendingImages = []; renderAttachBar();
+  q.value = ''; q.placeholder = '就当前章节提问,或选中正文文字追问…';
+  addMsg('user', text, quote, imgs.map(im=>im.thumb));
 
   const userContent = quote
     ? `我选中了书中这段文字:「${quote}」\n\n我的问题:${text}`
-    : text;
+    : (imgs.length ? `[发来${imgs.length}张帽子照片] ${text}` : text);
   history.push({role:'user', content:userContent});
 
   const box = document.getElementById('msgs');
   const th = document.createElement('div');
-  th.className = 'msg thinking'; th.textContent = '助教翻书中…';
+  th.className = 'msg thinking'; th.textContent = imgs.length ? '助教看图核价中…' : '助教翻书中…';
   box.appendChild(th); box.scrollTop = box.scrollHeight;
   document.getElementById('send').disabled = true;
 
   const curCh = CHAPTERS.find(c=>c.id===cur);
-  const system = `你是《一顶帽子的全球旅行:小白入行帽子厂贸实战》的随书助教。这本书教零基础读者进入帽子的生产制造与出口外贸行业。
+  const system = imgs.length ? `你是《一顶帽子的全球旅行:小白入行帽子厂贸实战》的随书助教,现在进入「报价员模式」:读者发来了帽子照片,要你像老业务一样拆解报价。
+
+按下面的固定结构回答(用简体中文,markdown表格):
+1. **识别**:帽型(六片棒球帽/五片/trucker/渔夫帽/针织帽等)、面料判断(材质+大致规格,说明判断依据与不确定处)、可见工艺(平绣/3D绣/贴布绣/印花/水洗等,估计绣花针数量级)。
+2. **逐部件拆价表**:面料(用量×米价)、每项辅料(扣/汗带/沿条/织唛/洗水标/顶扣/塑袋/箱摊)、每项工艺(千针单价×针数,制版费单列)、裁剪车缝工缴、损耗%、管理摊销、毛利——每行给出区间和你取的值,格式对齐书中第9章的报价单八层拆法。
+3. **FOB报价区间**:按500顶量级给,注明量级变化的影响。
+4. **提醒**:照片里看不出、但对报价影响大的1-3个问题(如克重、扣子材质、针数),教读者去问工厂什么。
+
+计价必须优先采用下面价格库里的市场区间,不要凭空编价:
+${pricesDigest() || '(价格库未加载,采用书中第9章口径:面料约1.4-1.5/顶,辅料合计2.2-2.5,绣花千针0.35-0.55,工缴2.5-4,损耗2-3%,管理摊销约1.8,毛利8-15个点)'}
+
+【全书目录】
+${md('toc')}` : `你是《一顶帽子的全球旅行:小白入行帽子厂贸实战》的随书助教。这本书教零基础读者进入帽子的生产制造与出口外贸行业。
 
 你的行为准则:
 1. 你对读者一无所知,不假设读者的任何背景、地区或资源,像面对一位陌生读者一样回答。
@@ -15937,14 +16101,27 @@ ${md('toc')}
 【读者当前正在阅读的章节全文】
 ${md(curCh.id)}`;
 
+  // 图片不进 history(太大),发请求时把最后一条 user 消息临时替换成图文混合块
+  const buildMsgs = ()=>{
+    const msgs = history.slice(-12).map(m=>({role:m.role, content:m.content}));
+    if(imgs.length){
+      msgs[msgs.length-1] = { role:'user', content: [
+        ...imgs.map(im=>({type:'image', source:{type:'base64', media_type:im.mt, data:im.data}})),
+        {type:'text', text:userContent},
+      ]};
+    }
+    return msgs;
+  };
+  const maxTok = imgs.length ? 2000 : 1000;
+
   try{
     let resp = await fetch(CONFIG.WORKER_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })
+      body: JSON.stringify({ system, max_tokens: maxTok, messages: buildMsgs() })
     });
     if(!resp.ok && resp.status >= 500){ await new Promise(r=>setTimeout(r,1200));
-      resp = await fetch(CONFIG.WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({ system, max_tokens: 1000, messages: history.slice(-12) })});
+      resp = await fetch(CONFIG.WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({ system, max_tokens: maxTok, messages: buildMsgs() })});
     }
     let data = null, raw = '';
     try{ raw = await resp.text(); data = JSON.parse(raw); }catch(_){}
@@ -16412,6 +16589,10 @@ function openAccount(){
 
   openSheet('账号与设置', acct + `
     <div class="srow">
+      <div class="lbl">每日练习<div class="sub">每天一道「看帽拆价」题,练报价手感</div></div>
+      <div class="ctl"><button class="btn" id="acDaily">${dailyUndone() ? '今天还没做' : '去练习'}</button></div>
+    </div>
+    <div class="srow">
       <div class="lbl">字号<div class="sub">正文文字大小</div></div>
       <div class="ctl stepper">
         <button id="stMinus">A−</button><span class="val" id="fontVal">${fontSize}</span><button id="stPlus">A＋</button>
@@ -16435,6 +16616,7 @@ function openAccount(){
     </div>
   `, box=>{
     const q = s => box.querySelector(s);
+    q('#acDaily').onclick = ()=> openDaily();
     if(q('#acLogin'))  q('#acLogin').onclick  = openLogin;
     if(q('#acLogout')) q('#acLogout').onclick = doLogout;
     q('#stMinus').onclick = ()=>bumpFont(-1);
@@ -17051,6 +17233,157 @@ function saveHomework(patch){
   saveStore(); scheduleSync();
 }
 
+/* ═══════════════════════════════════════════════════════
+   每日练习:GitHub Action 每天出一道「看帽拆价」题
+   题目在 daily/YYYY-MM-DD.json,索引在 daily/index.json
+   ═══════════════════════════════════════════════════════ */
+let dailyStore = {results:{}};
+try{ const v = JSON.parse(localStorage.getItem('hatbook-daily') || 'null'); if(v && v.results) dailyStore = v; }catch(e){}
+function saveDailyStore(){ try{ localStorage.setItem('hatbook-daily', JSON.stringify(dailyStore)); }catch(e){} }
+const dailyLatest = ()=> (DAILY_INDEX && Array.isArray(DAILY_INDEX.days) && DAILY_INDEX.days[0]) || null;
+const dailyUndone = ()=>{ const d = dailyLatest(); return !!(d && !dailyStore.results[d.date]); };
+
+async function loadDailyIndex(){
+  try{
+    const r = await fetch('daily/index.json?t=' + Date.now());
+    if(r.ok){ DAILY_INDEX = await r.json(); renderNav(); }
+  }catch(e){}
+}
+
+async function openDaily(date){
+  const idx = dailyLatest();
+  if(!date && !idx){
+    openSheet('每日练习', '<div class="hint">今天的题目还没生成。练习题由云端每天早上自动出一道,如果这是刚上线,等明早第一题,或让作者手动触发一次。</div>', null, 'daily');
+    return;
+  }
+  date = date || idx.date;
+  openSheet('每日练习 · 看帽拆价', '<div class="hint">题目加载中…</div>', null, 'daily');
+  let quiz = null;
+  try{
+    const r = await fetch('daily/' + date + '.json?t=' + Date.now());
+    if(r.ok) quiz = await r.json();
+  }catch(e){}
+  if(!quiz || !Array.isArray(quiz.components) || !quiz.fob){ shBody.innerHTML = '<div class="hint">这道题加载失败了,检查网络后再试。</div>'; return; }
+  const saved = dailyStore.results[date] || null;
+  shBody.innerHTML = dailyHtml(quiz, saved);
+  bindDaily(shBody, quiz, saved);
+}
+
+function dailyHtml(quiz, saved){
+  const imgs = (quiz.images && quiz.images.length)
+    ? `<div class="dq-imgs">${quiz.images.map(u=>`<img src="${escapeHtml(u)}" loading="lazy" alt="帽子图">`).join('')}</div>` : '';
+  const rows = quiz.components.map((c, i)=>`
+    <div class="dq-row" data-i="${i}">
+      <div class="lb">${escapeHtml(c.label)}${c.hint ? `<div class="hint2">${escapeHtml(c.hint)}</div>` : ''}</div>
+      <div class="dq-verdict" id="dqv${i}"></div>
+      <input type="number" step="0.01" min="0" inputmode="decimal" id="dqi${i}" placeholder="?">
+      <span class="unit">元</span>
+    </div>`).join('');
+  return `
+    ${imgs}
+    <div class="dq-meta">
+      <b>${escapeHtml(quiz.title || '看帽拆价')}</b> · ${escapeHtml(quiz.date)}<br>
+      ${escapeHtml(quiz.desc || '')}<br>
+      订单假设:<b>${(quiz.order && quiz.order.qty) || 500}顶</b>${quiz.order && quiz.order.note ? ' · ' + escapeHtml(quiz.order.note) : ''}
+    </div>
+    <div class="hint">逐项填你的估价(元/顶),交卷后逐项对答案。拿不准就按第9章的公式反算。</div>
+    ${rows}
+    <div class="dq-row total">
+      <div class="lb">FOB 报价(元/顶)</div>
+      <div class="dq-verdict" id="dqvT"></div>
+      <input type="number" step="0.1" min="0" inputmode="decimal" id="dqiT" placeholder="?">
+      <span class="unit">元</span>
+    </div>
+    <div class="btnrow" style="margin-top:14px">
+      <button class="btn primary block" id="dqGo">${saved ? '重新对答案' : '交 卷'}</button>
+    </div>
+    <div id="dqResult"></div>
+    ${dailyHistHtml(quiz.date)}`;
+}
+
+function dailyHistHtml(curDate){
+  if(!DAILY_INDEX || !Array.isArray(DAILY_INDEX.days) || DAILY_INDEX.days.length < 2) return '';
+  const items = DAILY_INDEX.days.filter(d=>d.date !== curDate).slice(0, 14).map(d=>{
+    const r = dailyStore.results[d.date];
+    return `<a href="#" data-date="${escapeHtml(d.date)}"><b>${escapeHtml(d.date)}</b>${escapeHtml(d.title || '')}<span class="sc">${r ? '已做 ' + r.score : '未做'}</span></a>`;
+  }).join('');
+  return `<div class="dq-hist" style="margin-top:18px"><div class="hint">往期题目</div>${items}</div>`;
+}
+
+function bindDaily(box, quiz, saved){
+  // 图片点一下放大
+  box.querySelectorAll('.dq-imgs img').forEach(im=> im.onclick = ()=> im.classList.toggle('big'));
+  // 回填已做过的答案
+  if(saved && saved.vals){
+    quiz.components.forEach((c, i)=>{ if(saved.vals[i] != null) box.querySelector('#dqi' + i).value = saved.vals[i]; });
+    if(saved.vals.T != null) box.querySelector('#dqiT').value = saved.vals.T;
+    gradeDaily(box, quiz, false);
+  }
+  box.querySelector('#dqGo').onclick = ()=> gradeDaily(box, quiz, true);
+  box.querySelectorAll('.dq-hist a').forEach(a=> a.onclick = e=>{ e.preventDefault(); openDaily(a.dataset.date); });
+}
+
+/** 单项判定:行情区间内✓;区间外15%以内算接近;再远给出偏差方向与幅度 */
+function dailyVerdict(v, c){
+  if(v == null || isNaN(v)) return {cls:'off', txt:'没填'};
+  const lo = Number(c.low), hi = Number(c.high);
+  if(v >= lo && v <= hi) return {cls:'ok', txt:'✓ 在行情内'};
+  if(v >= lo * 0.85 && v <= hi * 1.15) return {cls:'ok', txt:'≈ 接近'};
+  const mid = (c.typical != null) ? Number(c.typical) : (lo + hi) / 2;
+  const pct = Math.round(Math.abs(v - mid) / mid * 100);
+  return {cls:'off', txt: (v > mid ? '高了约' : '低了约') + pct + '%'};
+}
+
+function gradeDaily(box, quiz, save){
+  const vals = {};
+  let hit = 0;
+  quiz.components.forEach((c, i)=>{
+    const raw = box.querySelector('#dqi' + i).value;
+    const v = raw === '' ? null : Number(raw);
+    vals[i] = v;
+    const vd = dailyVerdict(v, c);
+    if(vd.cls === 'ok') hit++;
+    const el = box.querySelector('#dqv' + i);
+    el.className = 'dq-verdict ' + vd.cls;
+    el.innerHTML = vd.txt + `<div class="dq-ref">答案 ${c.typical}(${c.low}-${c.high})</div>`;
+  });
+  const rawT = box.querySelector('#dqiT').value;
+  vals.T = rawT === '' ? null : Number(rawT);
+  const vdT = dailyVerdict(vals.T, quiz.fob);
+  const elT = box.querySelector('#dqvT');
+  elT.className = 'dq-verdict ' + vdT.cls;
+  elT.innerHTML = vdT.txt + `<div class="dq-ref">答案 ${quiz.fob.typical}(${quiz.fob.low}-${quiz.fob.high})</div>`;
+
+  const score = hit + '/' + quiz.components.length;
+  const mp = quiz.market_price;
+  const srcs = (quiz.sources || []).map(s=>`<a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.title || s.url)}</a>`).join(' · ');
+  box.querySelector('#dqResult').innerHTML = `
+    <div class="dq-meta" style="margin-top:12px">部件命中 <b>${score}</b>${vdT.cls === 'ok' ? ' · FOB ✓' : ''}</div>
+    ${quiz.components.map(c=> c.explain ? `<div class="dq-exp"><b>${escapeHtml(c.label)}</b>:${escapeHtml(c.explain)}</div>` : '').join('')}
+    ${quiz.fob && quiz.fob.explain ? `<div class="dq-exp"><b>FOB</b>:${escapeHtml(quiz.fob.explain)}</div>` : ''}
+    ${mp ? `<div class="dq-exp"><b>市场实价对照</b>:${escapeHtml(mp.note || '')}${mp.url ? ` <a href="${escapeHtml(mp.url)}" target="_blank" rel="noopener">看原链接</a>` : ''}</div>` : ''}
+    ${quiz.analysis ? `<div class="dq-exp">${marked.parse(quiz.analysis)}</div>` : ''}
+    ${srcs ? `<div class="hint">价格出处:${srcs}</div>` : ''}
+    <div class="btnrow" style="margin-top:10px"><button class="btn block" id="dqAsk">不服?带着这题去问助教</button></div>`;
+  box.querySelector('#dqAsk').onclick = ()=> askTutorAboutDaily(quiz, vals);
+
+  if(save){
+    dailyStore.results[quiz.date] = {vals, score, ts: Date.now()};
+    saveDailyStore();
+    renderNav();
+    toast('已交卷:' + score);
+  }
+}
+
+function askTutorAboutDaily(quiz, vals){
+  closeSheet();
+  setTutor(true);
+  const mine = quiz.components.map((c, i)=> `${c.label}我填${vals[i] != null ? vals[i] : '空'}(答案${c.typical})`).join(',');
+  const q = document.getElementById('q');
+  q.value = `今天的每日练习「${quiz.title}」(${quiz.desc || ''}),${mine},FOB我填${vals.T != null ? vals.T : '空'}(答案${quiz.fob.typical})。帮我看看差得最多的那项,我的思路错在哪?`;
+  q.focus();
+}
+
 /* ───────── 手机底部工具栏 ───────── */
 document.getElementById('mToc').onclick   = toggleToc;
 document.getElementById('mTutor').onclick = toggleTutor;
@@ -17107,7 +17440,11 @@ function loadChat(){
   if(p && p.chapter === cur) restorePos(p);
   chapterEnterAt = Date.now();
 
-  if(history.length === 0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。');
+  if(history.length === 0) addHint('你好,我是随书助教。就当前章节直接提问,或选中正文任意文字(手机长按选择)点「问这段」。也可以点📷发帽子照片,我帮你按部件拆解报价。');
+
+  // 价格库与每日练习索引:都是锦上添花,拉不到就静默降级
+  fetch('data/prices.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null).then(j=>{ if(j) PRICES = j; }).catch(()=>{});
+  loadDailyIndex();
 
   // 再拉云端:换了设备/清过缓存时才用得上,不打断当前阅读
   if(loggedIn()){

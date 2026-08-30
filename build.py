@@ -67,6 +67,12 @@ if DATA_WORKER_URL:
     assert DATA_WORKER_URL in out, '数据Worker地址替换失败'
     assert 'REPLACE-ME-DATA' not in out, '数据Worker占位符残留'
 
+# 拍照估价 + 每日练习(2026-08-30 加)
+assert 'id="photoBtn"' in out, '拍照估价按钮缺失'
+assert 'openDaily' in out, '每日练习入口缺失'
+assert os.path.exists('data/prices.json'), '价格库缺失: data/prices.json'
+assert os.path.exists('daily/index.json'), '每日练习索引缺失: daily/index.json'
+
 # PWA 相关
 assert 'rel="manifest"' in out, 'manifest 未挂上'
 assert 'apple-touch-icon' in out, 'iOS 主屏图标未挂上'
@@ -83,6 +89,7 @@ digest = hashlib.sha1(out.encode('utf-8')).hexdigest()[:12]
 sw = open('sw_template.js', encoding='utf-8').read().replace('__BUILD_VERSION__', digest)
 assert '__BUILD_VERSION__' not in sw, 'SW 版本号未替换'
 assert 'workers.dev' in sw, 'SW 必须显式放行接口请求(不缓存)'
+assert 'isDaily' in sw, 'SW 必须对 daily/ 与 data/ 走网络优先'
 open('sw.js', 'w', encoding='utf-8').write(sw)
 
 cloud = DATA_WORKER_URL or '未配置(仅本机存储)'

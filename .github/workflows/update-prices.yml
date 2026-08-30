@@ -1,0 +1,42 @@
+name: 价格库周度校准
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'   # 每周一 UTC 01:00 = 北京时间 09:00
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-prices
+  cancel-in-progress: false
+
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install anthropic
+      - name: 校准价格库
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo '仓库 secret ANTHROPIC_API_KEY 未配置,跳过本周校准。'
+            exit 0
+          fi
+          python3 scripts/update_prices.py
+      - name: 提交
+        run: |
+          git config user.name 'hatbook-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/prices.json
+          git diff --cached --quiet && echo '无变化' && exit 0
+          git commit -m "价格库校准: $(date -u -d '+8 hours' +%F)"
+          git pull --rebase origin main
+          git push

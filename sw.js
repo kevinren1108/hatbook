@@ -4,7 +4,7 @@
  * 目标:加到手机主屏后能像 App 一样秒开、离线可读;书稿更新时不打断阅读,
  * 只在页面上提示一次「有更新」,点了才换新版。
  */
-const VERSION = '870ab5effddf';
+const VERSION = '3a39ad068e6d';
 const CACHE   = 'hatbook-' + VERSION;
 const BASE    = self.registration.scope;          // https://…/hatbook/
 const PAGE    = BASE + 'index.html';
@@ -20,6 +20,10 @@ const CORE = [
 
 /** 用户数据 / 助教接口:一律不碰缓存 */
 const isApi = url => url.hostname.endsWith('.workers.dev');
+/** 每日练习与价格库:内容每天在变,网络优先、失败才回缓存 */
+const isDaily = url =>
+  url.origin === self.location.origin &&
+  (url.pathname.includes('/daily/') || url.pathname.includes('/data/'));
 /** 允许运行时缓存的第三方(字体与 markdown 解析器) */
 const cacheableThirdParty = url =>
   url.hostname === 'cdnjs.cloudflare.com' ||
@@ -71,6 +75,22 @@ self.addEventListener('fetch', event => {
         '<meta charset="utf-8"><p style="font-family:sans-serif;padding:40px">离线了,而且这本书还没缓存过。连上网再打开一次就好。</p>',
         {status: 200, headers: {'Content-Type': 'text/html; charset=utf-8'}}
       );
+    })());
+    return;
+  }
+
+  // 每日练习题目与价格库:网络优先,断网才用上次缓存的
+  if (isDaily(url)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      try {
+        const res = await fetch(req);
+        if (res && res.ok) cache.put(req, res.clone());
+        return res;
+      } catch (e) {
+        const hit = await cache.match(req, {ignoreSearch: true});
+        return hit || new Response('', {status: 504, statusText: 'offline'});
+      }
     })());
     return;
   }

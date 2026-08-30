@@ -34,6 +34,14 @@
 - **PWA**:`manifest.webmanifest` + `icons/` + `sw_template.js`。`build.py` 把页面内容的 sha1 前12位注入模板产出根目录 `sw.js`,所以**书稿一改、重新构建,读者就会收到「有更新」提示**,点了才换新版,不打断阅读。改 `sw.js` 要改 `sw_template.js`(sw.js 是产物)。Service Worker 显式放行 `*.workers.dev`(接口永不进缓存),其余走缓存优先,因此离线可读全书。
 - 账号:`kevin`(Kevin)、`iris`(Iris)。主屏 PWA 与 Safari 是两套独立存储,首次从主屏打开需重新登录一次,登录后笔记自动同步回来。
 
+## 拍照估价与每日练习(2026-08-30 加)
+
+- **价格库** `data/prices.json`:帽子部件市场价(带出处/置信度),拍照估价与每日练习共用;结构(各节条目的 id 集合)不能随意变动——`scripts/update_prices.py` 有结构守卫,前端按条目字段渲染。周一由 `.github/workflows/update-prices.yml` 让 Claude 联网校准。
+- **拍照估价**:助教输入行的 📷(`photoBtn`),canvas 压到长边 1568px 后以 image block 随请求发助教 Worker(已验证该 Worker 对 messages 是透传的,图片能过);图片不进 history。报价员模式的 system 内嵌价格库摘要(`pricesDigest()`)。
+- **每日练习**:`.github/workflows/daily-quiz.yml` 每天北京时间 8 点跑 `scripts/daily_quiz.py`,三通道降级:OneBound 1688 API(secret:`ONEBOUND_KEY`/`ONEBOUND_SECRET`,可选)→ Claude 联网搜索 → 纸面题兜底。产出 `daily/YYYY-MM-DD.json` + `daily/img/`(留90天) + `daily/index.json`,Action 直接 commit,不需要跑 build.py。前端入口:目录抽屉顶部 + 「我」面板;答题记录只存 localStorage。
+- SW 对 `daily/`、`data/` 走网络优先(见 `sw_template.js` 的 `isDaily`),否则读者拿不到当天新题。
+- **密钥位置**:助教 Worker(shy-brook-76ea)的 `ANTHROPIC_API_KEY` 在 wrangler secret(换法:`printf 'sk-...' | npx wrangler secret put ANTHROPIC_API_KEY --name shy-brook-76ea`);GitHub Actions 用仓库 secret `ANTHROPIC_API_KEY`(没配时 workflow 自动跳过不报错)。
+
 ## 边界
 
 - 不改动助教代理 Worker 的部署架构;不在前端引入任何密钥(数据 Worker 的 ADMIN_KEY 只存在 wrangler secret 里)。
