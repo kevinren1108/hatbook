@@ -17303,7 +17303,7 @@ function dailyHtml(quiz, saved){
 
 function dailyHistHtml(curDate){
   if(!DAILY_INDEX || !Array.isArray(DAILY_INDEX.days) || DAILY_INDEX.days.length < 2) return '';
-  const items = DAILY_INDEX.days.filter(d=>d.date !== curDate).slice(0, 14).map(d=>{
+  const items = DAILY_INDEX.days.filter(d=>d.date !== curDate).map(d=>{
     const r = dailyStore.results[d.date];
     return `<a href="#" data-date="${escapeHtml(d.date)}"><b>${escapeHtml(d.date)}</b>${escapeHtml(d.title || '')}<span class="sc">${r ? '已做 ' + r.score : '未做'}</span></a>`;
   }).join('');

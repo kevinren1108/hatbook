@@ -4,7 +4,7 @@
  * 目标:加到手机主屏后能像 App 一样秒开、离线可读;书稿更新时不打断阅读,
  * 只在页面上提示一次「有更新」,点了才换新版。
  */
-const VERSION = '3a39ad068e6d';
+const VERSION = '6aff2cc8bfc5';
 const CACHE   = 'hatbook-' + VERSION;
 const BASE    = self.registration.scope;          // https://…/hatbook/
 const PAGE    = BASE + 'index.html';

@@ -140,11 +140,27 @@ def download_images(urls, date):
             if len(r.content) < 3000:  # 占位图/防盗链小图
                 continue
             p = IMG_DIR / f'{date}-{len(saved) + 1}.jpg'
-            p.write_bytes(r.content)
+            p.write_bytes(_compress(r.content))
             saved.append(f'daily/img/{p.name}')
         except Exception as e:
             print(f'图片下载失败 {u}: {e}', file=sys.stderr)
     return saved
+
+
+def _compress(data):
+    """往期题永久保留,图片压到长边≤1200px/质量80,控制仓库体积;没装Pillow就原样存"""
+    try:
+        import io
+        from PIL import Image
+        im = Image.open(io.BytesIO(data))
+        im = im.convert('RGB')
+        im.thumbnail((1200, 1200))
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=80)
+        out = buf.getvalue()
+        return out if len(out) < len(data) else data
+    except Exception:
+        return data
 
 
 def image_blocks(paths):
@@ -387,17 +403,6 @@ def synthetic(client, digest):
     return quiz
 
 
-def prune_old():
-    """图片留 90 天,索引留 120 条"""
-    cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
-    for p in IMG_DIR.glob('*.jpg'):
-        if p.name[:10] < cutoff:
-            p.unlink()
-    for p in DAILY.glob('*.json'):
-        if p.name != 'index.json' and p.name[:10] < cutoff:
-            p.unlink()
-
-
 def main():
     DAILY.mkdir(exist_ok=True)
     prices = load_json(ROOT / 'data/prices.json', None)
@@ -422,10 +427,9 @@ def main():
         json.dumps(quiz, ensure_ascii=False, indent=1), encoding='utf-8')
     index['days'] = ([{'date': TODAY, 'title': quiz['title'],
                        'source': quiz['source'], 'source_id': quiz.get('source_id', '')}]
-                     + [d for d in index['days'] if d.get('date') != TODAY])[:120]
+                     + [d for d in index['days'] if d.get('date') != TODAY])  # 往期全留
     (DAILY / 'index.json').write_text(
         json.dumps(index, ensure_ascii=False, indent=1), encoding='utf-8')
-    prune_old()
     print(f"出题完成: {TODAY} 「{quiz['title']}」 通道={quiz['source']} 图={len(quiz['images'])}张")
 
 
