@@ -165,14 +165,26 @@ def gen_quiz(client, digest, listing_text, img_paths, extra_rule=''):
 {extra_rule}
 {QUIZ_SCHEMA_HINT}"""
     content = image_blocks(img_paths) + [{'type': 'text', 'text': listing_text}]
-    with client.messages.stream(
-        model=MODEL, max_tokens=16000,
-        system=system,
-        messages=[{'role': 'user', 'content': content}],
-    ) as stream:
-        msg = stream.get_final_message()
-    text = ''.join(b.text for b in msg.content if b.type == 'text')
-    return validate_quiz(extract_json(text))
+    messages = [{'role': 'user', 'content': content}]
+    last_err = None
+    for attempt in range(3):  # 模型偶发输出不合法 JSON,带着报错重试
+        with client.messages.stream(
+            model=MODEL, max_tokens=16000,
+            system=system,
+            messages=messages,
+        ) as stream:
+            msg = stream.get_final_message()
+        text = ''.join(b.text for b in msg.content if b.type == 'text')
+        try:
+            return validate_quiz(extract_json(text))
+        except Exception as e:
+            last_err = e
+            print(f'出题第{attempt + 1}次输出无效({e}),重试', file=sys.stderr)
+            messages = messages[:1] + [
+                {'role': 'assistant', 'content': text[:3000]},
+                {'role': 'user', 'content': f'你上面的输出解析失败:{e}。重新输出完整、合法的 JSON,注意字符串里的引号要转义,只输出 JSON 本身。'},
+            ]
+    raise last_err
 
 
 # ───────── 通道一:RapidAPI Otapi 1688(免费档20次/天) ─────────
@@ -334,7 +346,17 @@ def try_websearch(client, digest, recent_urls):
 图片直链要是 .jpg/.png/.webp 的完整 URL。"""}],
         ) as stream:
             msg = stream.get_final_message()
-        found = extract_json(''.join(b.text for b in msg.content if b.type == 'text'))
+        raw_text = ''.join(b.text for b in msg.content if b.type == 'text')
+        try:
+            found = extract_json(raw_text)
+        except Exception:
+            # 偶发 JSON 格式错:让模型自己修一遍,不重新联网搜
+            with client.messages.stream(
+                model=MODEL, max_tokens=4000,
+                messages=[{'role': 'user', 'content':
+                           f'把下面内容修成一个合法 JSON 对象原样输出(修引号转义/缺逗号,不改内容,只输出JSON):\n{raw_text[:4000]}'}],
+            ) as s2:
+                found = extract_json(''.join(b.text for b in s2.get_final_message().content if b.type == 'text'))
     except Exception as e:
         print(f'联网搜索失败: {e}', file=sys.stderr)
         return None
