@@ -1,8 +1,7 @@
 name: 每日练习出题
 
 on:
-  schedule:
-    - cron: '0 0 * * *'   # UTC 00:00 = 北京时间 08:00
+  # 定时出题已停用(2026-08-31 作者要求,省API费用);想出一道时手动触发即可
   workflow_dispatch:
     inputs:
       force:
