@@ -30,7 +30,7 @@ import anthropic
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / 'daily'
 IMG_DIR = DAILY / 'img'
-MODEL = os.environ.get('QUIZ_MODEL', 'claude-sonnet-5')  # 出题模型,想更省可设为 claude-haiku-4-5
+MODEL = (os.environ.get('QUIZ_MODEL') or 'claude-sonnet-5')  # 出题模型,想更省可设为 claude-haiku-4-5
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
       'Referer': 'https://www.1688.com/'}
 

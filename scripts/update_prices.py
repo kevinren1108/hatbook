@@ -16,7 +16,7 @@ import anthropic
 
 ROOT = Path(__file__).resolve().parent.parent
 PRICES_PATH = ROOT / 'data/prices.json'
-MODEL = os.environ.get('QUIZ_MODEL', 'claude-sonnet-5')  # 出题模型,想更省可设为 claude-haiku-4-5
+MODEL = (os.environ.get('QUIZ_MODEL') or 'claude-sonnet-5')  # 出题模型,想更省可设为 claude-haiku-4-5
 TODAY = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)).strftime('%Y-%m-%d')
 
 
