@@ -30,8 +30,10 @@ jobs:
       - name: 出题
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           ONEBOUND_KEY: ${{ secrets.ONEBOUND_KEY }}
           ONEBOUND_SECRET: ${{ secrets.ONEBOUND_SECRET }}
+          QUIZ_MODEL: ${{ vars.QUIZ_MODEL }}
           FORCE: ${{ inputs.force }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then

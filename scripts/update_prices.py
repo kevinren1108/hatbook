@@ -16,7 +16,7 @@ import anthropic
 
 ROOT = Path(__file__).resolve().parent.parent
 PRICES_PATH = ROOT / 'data/prices.json'
-MODEL = 'claude-opus-5'
+MODEL = os.environ.get('QUIZ_MODEL', 'claude-sonnet-5')  # 出题模型,想更省可设为 claude-haiku-4-5
 TODAY = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)).strftime('%Y-%m-%d')
 
 
@@ -41,8 +41,11 @@ def main():
 
     with client.messages.stream(
         model=MODEL, max_tokens=64000,
-        tools=[{'type': 'web_search_20260209', 'name': 'web_search', 'max_uses': 20},
-               {'type': 'web_fetch_20260209', 'name': 'web_fetch', 'max_uses': 10}],
+        tools=([{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 20},
+                {'type': 'web_fetch_20250910', 'name': 'web_fetch', 'max_uses': 10}]
+               if 'haiku' in MODEL else
+               [{'type': 'web_search_20260209', 'name': 'web_search', 'max_uses': 20},
+                {'type': 'web_fetch_20260209', 'name': 'web_fetch', 'max_uses': 10}]),
         messages=[{'role': 'user', 'content': f"""下面是一份帽子外贸成本价格库(中国产业带、500-1000顶量级、人民币)。
 请联网抽查核对:优先核对 confidence 为 low 的条目和大宗原料类条目(面料、纱线、纸箱),
 每类至少搜 1-2 次;有新证据就更新 low/high/typical/sources/confidence/note,没有新证据的条目**原样保留**。

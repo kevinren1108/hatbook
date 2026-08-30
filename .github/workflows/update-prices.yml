@@ -25,6 +25,7 @@ jobs:
       - name: 校准价格库
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          QUIZ_MODEL: ${{ vars.QUIZ_MODEL }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then
             echo '仓库 secret ANTHROPIC_API_KEY 未配置,跳过本周校准。'
