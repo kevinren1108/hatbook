@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "2026-08-30",
+    "updated": "2026-08-31",
     "usd_cny": 6.75,
-    "note": "价格为中国产业带（胶州/东莞/义乌等）500-1000顶量级参考价，非权威报价。汇率取2026年8月中旬在岸价约6.75（中间价6.79）。来源为公开搜索结果与行业页面，1688类目页价格为区间性参考。"
+    "note": "价格为中国产业带(胶州/东莞/义乌等)500-1000顶量级参考价,非权威报价。标注\"义乌购实查\"的条目为2026-08-31用浏览器逐条查看义乌购(义乌国际商贸城线上平台)档口标价所得。汇率取2026年8月在岸价约6.75。"
   },
   "fabrics": [
     {
@@ -16,8 +16,16 @@
       "usage_per_cap_sqm": 0.17,
       "book": "ch09: 21支108×58磨毛斜纹¥12/米，普通斜纹¥10-12/米",
       "sources": [
-        {"url": "https://cn.made-in-china.com/jiage/dixiewml-1.html", "title": "斜纹面料价格表-中国制造网（21×21 108×58坯布约¥7.5-8/米）", "date": "2026-08"},
-        {"url": "http://lx.168tex.com/ProductsView-58652.html", "title": "布工厂：21支纯棉斜纹白坯布 108*58", "date": "2026-08"}
+        {
+          "url": "https://cn.made-in-china.com/jiage/dixiewml-1.html",
+          "title": "斜纹面料价格表-中国制造网（21×21 108×58坯布约¥7.5-8/米）",
+          "date": "2026-08"
+        },
+        {
+          "url": "http://lx.168tex.com/ProductsView-58652.html",
+          "title": "布工厂：21支纯棉斜纹白坯布 108*58",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "查到的是坯布价¥7.5-8/米；染色+磨毛后加约¥3-5/米，推得成品布¥10-13/米，与书内¥10-12口径吻合。"
@@ -33,7 +41,11 @@
       "usage_per_cap_sqm": 0.17,
       "book": "书内未单列，绣花帽章节提及涤纶帽体更便宜",
       "sources": [
-        {"url": "https://m.tnc.com.cn/cp/604786", "title": "涤纶面料价格行情-全球纺织网（批发十几到三四十元/米，低端春亚纺¥3.8/米）", "date": "2026-08"}
+        {
+          "url": "https://m.tnc.com.cn/cp/604786",
+          "title": "涤纶面料价格行情-全球纺织网（批发十几到三四十元/米，低端春亚纺¥3.8/米）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "涤纶面料价差极大；帽用速干布（吸湿排汗网眼/平纹，130-160g）常见¥5-12/米，取中值8。"
@@ -49,8 +61,16 @@
       "usage_per_cap_sqm": 0.18,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.yubotextile.com/new_detail/nid/68624.html", "title": "灯芯绒布料批发市场价格（全棉约¥40/米，混纺¥20-30/米）", "date": "2026-08"},
-        {"url": "https://zhidao.baidu.com/question/275814457.html", "title": "灯芯绒布料批发多少钱一米-百度知道", "date": "2026-08"}
+        {
+          "url": "https://www.yubotextile.com/new_detail/nid/68624.html",
+          "title": "灯芯绒布料批发市场价格（全棉约¥40/米，混纺¥20-30/米）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://zhidao.baidu.com/question/275814457.html",
+          "title": "灯芯绒布料批发多少钱一米-百度知道",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "全棉细坑约¥40/米，涤/腈混纺¥20-30/米；帽厂大货多用混纺或中支全棉，取¥28。绒类面料裁耗更高，单顶用布略多。"
@@ -66,8 +86,16 @@
       "usage_per_cap_sqm": 0.18,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.zhihu.com/question/358436042", "title": "知乎：羊毛混纺面料价格讨论（50%毛约¥70/米，化纤仿呢约¥25/米，全毛¥150+）", "date": "2026-08"},
-        {"url": "https://zhuanlan.zhihu.com/p/455965511", "title": "知乎：不同面料类型价格大致参考（混纺毛呢¥25.8-81.85/米）", "date": "2026-08"}
+        {
+          "url": "https://www.zhihu.com/question/358436042",
+          "title": "知乎：羊毛混纺面料价格讨论（50%毛约¥70/米，化纤仿呢约¥25/米，全毛¥150+）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://zhuanlan.zhihu.com/p/455965511",
+          "title": "知乎：不同面料类型价格大致参考（混纺毛呢¥25.8-81.85/米）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "含毛量决定价格：化纤仿呢¥25/米、30-50%羊毛¥40-70/米、全毛¥150+/米。帽用常见30-50%混纺，取¥50。"
@@ -83,8 +111,16 @@
       "usage_per_cap_sqm": 0.08,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.tnc.com.cn/cp/609088", "title": "六角网眼布 涤纶价格行情-全球纺织网（约¥2.3/米起）", "date": "2026-08"},
-        {"url": "https://www.sinotex.cn/MianLiao/MianliaoDetail.asp?id=72", "title": "锦桥纺织网：涤纶/尼龙六角网面料报价页", "date": "2026-08"}
+        {
+          "url": "https://www.tnc.com.cn/cp/609088",
+          "title": "六角网眼布 涤纶价格行情-全球纺织网（约¥2.3/米起）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.sinotex.cn/MianLiao/MianliaoDetail.asp?id=72",
+          "title": "锦桥纺织网：涤纶/尼龙六角网面料报价页",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "帽用105g左右涤纶六角网¥2.3-6/米；trucker帽只有后四片用网布，单顶用量约0.08㎡，摊到每顶仅两三毛。"
@@ -99,8 +135,16 @@
       "usage_per_cap_kg": 0.1,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.sinotex.cn/news/Html/huaxian-info/jinglunxianwei/", "title": "锦桥纺织网腈纶行情（腈纶毛条约¥16800/吨）", "date": "2026-08"},
-        {"url": "https://www.tnc.com.cn/market/average-price-d49-p4.html", "title": "腈纶短纤价格走势-全球纺织网", "date": "2026-08"}
+        {
+          "url": "https://www.sinotex.cn/news/Html/huaxian-info/jinglunxianwei/",
+          "title": "锦桥纺织网腈纶行情（腈纶毛条约¥16800/吨）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.tnc.com.cn/market/average-price-d49-p4.html",
+          "title": "腈纶短纤价格走势-全球纺织网",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "腈纶毛条原料约¥16.8/kg，纺成针织帽用膨体腈纶纱约¥18-24/kg。普通针织帽单顶用纱80-120g，纱线成本约¥1.5-2.5/顶。"
@@ -116,25 +160,47 @@
       "typical": 1.2,
       "book": "ch09: ¥1.2/套",
       "sources": [
-        {"url": "https://s.1688.com/kq/-CEE5BDF0C5A6BFDBBFDBD7D3.html", "title": "1688五金扣类目（锌合金8字扣/猪鼻扣零售档约¥0.9-0.97/个）", "date": "2026-08"},
-        {"url": "https://www.1688.com/market/-BBACBFDB.html", "title": "1688滑扣类目页（4200+厂家）", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E9%87%91%E5%B1%9E%E5%B8%BD%E6%89%A3%20%E8%B0%83%E8%8A%82%E6%89%A3",
+          "title": "义乌购档口:合金三档扣¥0.12-0.13/个(轻薄款参照)",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://s.1688.com/kq/-CEE5BDF0C5A6BFDBBFDBD7D3.html",
+          "title": "1688五金扣类目（锌合金8字扣/猪鼻扣零售档约¥0.9-0.97/个）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/market/-BBACBFDB.html",
+          "title": "1688滑扣类目页（4200+厂家）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
-      "note": "1688零散档单个锌合金扣约¥0.9；帽用滑扣+收尾环成套大货价¥0.8-1.5，与书内¥1.2吻合。"
+      "note": "义乌购可见轻薄合金三档扣低至¥0.12-0.13(1000个起),但R&B同款为压铸锌合金+古铜电镀+收尾环成套,坠手感与镀层成本高一个档,成套¥0.8-1.5、书内¥1.2口径成立。"
     },
     {
       "id": "buckle_iron",
       "name": "铁滑扣(电镀)",
       "unit": "元/套",
-      "low": 0.4,
+      "low": 0.25,
       "high": 0.6,
-      "typical": 0.5,
+      "typical": 0.4,
       "book": "ch09: ¥0.4-0.6",
       "sources": [
-        {"url": "https://www.1688.com/market/-BBACBFDB.html", "title": "1688滑扣类目页", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E9%87%91%E5%B1%9E%E5%B8%BD%E6%89%A3%20%E8%B0%83%E8%8A%82%E6%89%A3",
+          "title": "义乌购档口:金属帽扣调节扣¥0.10-0.16/个,1000个起",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/market/-BBACBFDB.html",
+          "title": "1688滑扣类目页",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "low",
-      "note": "未找到铁扣单独标价的独立来源，沿用书内口径；类目页可见低价档金属扣存在。"
+      "confidence": "high",
+      "note": "义乌购实查:单只金属滑动调节扣档口价¥0.10-0.16(1000个起,东华压铸/华兴辅料等,2026-08浏览器实查);加收尾环并含电镀损耗,折成套约¥0.25-0.6,书内¥0.4-0.6口径成立。"
     },
     {
       "id": "buckle_brass",
@@ -169,8 +235,16 @@
       "typical": 0.35,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.sinobnet.com/topwords/id/900135254/77", "title": "慧聪网：魔术贴尼龙粘扣带报价（¥0.25-0.5/米）", "date": "2026-08"},
-        {"url": "https://m.makepolo.com/mpp_2f/672488g2724_2.html", "title": "马可波罗网：魔术贴尼龙搭扣厂家批发", "date": "2026-08"}
+        {
+          "url": "https://www.sinobnet.com/topwords/id/900135254/77",
+          "title": "慧聪网：魔术贴尼龙粘扣带报价（¥0.25-0.5/米）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://m.makepolo.com/mpp_2f/672488g2724_2.html",
+          "title": "马可波罗网：魔术贴尼龙搭扣厂家批发",
+          "date": "2026-08"
+        }
       ],
       "confidence": "high",
       "note": "按米计价¥0.25-0.5；单顶用约0.2米，摊到每顶不到¥0.1。"
@@ -179,16 +253,24 @@
       "id": "sweatband",
       "name": "全棉汗带",
       "unit": "元/顶",
-      "low": 0.3,
-      "high": 0.6,
-      "typical": 0.4,
+      "low": 0.2,
+      "high": 0.5,
+      "typical": 0.35,
       "book": "ch09: ¥0.4",
       "sources": [
-        {"url": "https://www.1688.com/market/-CEFCBAB9B4F8.html", "title": "1688吸汗带类目页（9万+产品）", "date": "2026-08"},
-        {"url": "https://www.1688.com/market/-B5D3C2DAD6AFB4F8.html", "title": "1688涤纶织带类目（织带¥0.25-0.6/米）", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E5%B8%BD%E5%AD%90%E5%90%B8%E6%B1%97%E5%B8%A6",
+          "title": "义乌购档口:帽子吸汗带¥0.28-0.65/米,3000米起",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/market/-CEFCBAB9B4F8.html",
+          "title": "1688吸汗带类目页（9万+产品）",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "medium",
-      "note": "织带类米价¥0.25-0.6，单顶汗带用料约0.6米加缝制，全棉汗带¥0.3-0.6/顶，与书内¥0.4吻合；涤纶汗带更便宜。"
+      "confidence": "high",
+      "note": "义乌购实查:130g拉毛布/420D牛津布汗带¥0.28-0.65/米(3000米起,锦灿服装辅料,2026-08);单顶用约0.6米折¥0.17-0.4,全棉斜纹汗带取上半段,书内¥0.4吻合。"
     },
     {
       "id": "piping",
@@ -199,7 +281,11 @@
       "typical": 0.3,
       "book": "ch09: ¥0.3",
       "sources": [
-        {"url": "https://www.1688.com/market/-B5D3C2DAD6AFB4F8.html", "title": "1688涤纶织带类目（¥0.25-0.6/米）", "date": "2026-08"}
+        {
+          "url": "https://www.1688.com/market/-B5D3C2DAD6AFB4F8.html",
+          "title": "1688涤纶织带类目（¥0.25-0.6/米）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "以织带米价折算单顶用量，与书内¥0.3一致。"
@@ -208,58 +294,93 @@
       "id": "woven_label",
       "name": "织唛主标(千枚起订)",
       "unit": "元/个",
-      "low": 0.08,
-      "high": 0.2,
-      "typical": 0.12,
+      "low": 0.05,
+      "high": 0.12,
+      "typical": 0.08,
       "book": "ch09: ¥0.12，千枚起订",
       "sources": [
-        {"url": "https://www.1688.com/chanpin/-CFB4B1EA.html", "title": "1688洗标/织唛类目页（起订量1000个已证实）", "date": "2026-08"},
-        {"url": "https://www.ipackbynewstep.com/article/qxzblbbbsx.html", "title": "欣派包装：织标/领标/水洗标科普", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E7%BB%87%E5%94%9B%E5%B8%83%E6%A0%87%E5%AE%9A%E5%81%9A",
+          "title": "义乌购档口:定制织唛¥0.05-0.10/个",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/chanpin/-CFB4B1EA.html",
+          "title": "1688洗标/织唛类目页（起订量1000个已证实）",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "medium",
-      "note": "千枚起订得到独立确认；单价未见明码，按行业常见¥0.08-0.2覆盖书内¥0.12。"
+      "confidence": "high",
+      "note": "义乌购实查:定制织唛布标¥0.05/个(5000个起,圣利服装辅料工厂直销)、卡通织唛logo定做¥0.08-0.10(1000个起,昌锋辅料),2026-08;书内¥0.12为小批量口径,量大更低。"
     },
     {
       "id": "wash_label",
       "name": "洗水标(印唛)",
       "unit": "元/个",
-      "low": 0.02,
-      "high": 0.08,
-      "typical": 0.04,
+      "low": 0.01,
+      "high": 0.04,
+      "typical": 0.02,
       "book": "ch09: ¥0.04",
       "sources": [
-        {"url": "https://www.1688.com/chanpin/-CFB4B1EA.html", "title": "1688洗标类目页", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E7%BB%87%E5%94%9B%E5%B8%83%E6%A0%87%E5%AE%9A%E5%81%9A",
+          "title": "义乌购档口:洗水标/尺码标¥0.01-0.03/个",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/chanpin/-CFB4B1EA.html",
+          "title": "1688洗标类目页",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "low",
-      "note": "未找到明码独立来源，沿用书内口径；印唛比织唛便宜一个量级是行业通例。"
+      "confidence": "high",
+      "note": "义乌购实查:现货尺码标/洗水唛¥0.01-0.03/个(1000-10000个起,2026-08);定制内容印唛取上限,书内¥0.04为含定制的保守口径。"
     },
     {
       "id": "hangtag",
       "name": "吊牌(含吊粒)",
       "unit": "元/个",
-      "low": 0.1,
+      "low": 0.05,
       "high": 0.3,
       "typical": 0.15,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.jinxiu58.com/news/188.html", "title": "锦绣塑胶：包装印刷计价方法", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E5%90%8A%E7%89%8C%E5%AE%9A%E5%81%9A",
+          "title": "义乌购档口:定制吊牌¥0.08-0.30/套,1000套起",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.jinxiu58.com/news/188.html",
+          "title": "锦绣塑胶：包装印刷计价方法",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "low",
-      "note": "搜索仅见按批计价的模糊报价，未获可靠单价；按常见铜版纸吊牌+吊粒估¥0.1-0.3。"
+      "confidence": "high",
+      "note": "义乌购实查:空白铜版纸吊牌¥0.01-0.02/张(1000张起,缠转角包装),定制印刷含吊粒¥0.08-0.30/套(1000套起,泽坤印业/金波辅料),2026-08。"
     },
     {
       "id": "eyelet",
       "name": "气眼/鸡眼(金属，单顶4-6粒)",
       "unit": "元/顶",
       "low": 0.1,
-      "high": 0.3,
+      "high": 0.35,
       "typical": 0.15,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.jd.com/jiage/98557d2acaa8647ea655.html", "title": "京东：气眼鸡眼扣价格行情页", "date": "2026-08"}
+        {
+          "url": "https://www.yiwugo.com/search?q=%E9%87%91%E5%B1%9E%E9%B8%A1%E7%9C%BC%E6%89%A3%E6%B0%94%E7%9C%BC",
+          "title": "义乌购档口:金属鸡眼¥0.02-0.08/粒",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.jd.com/jiage/98557d2acaa8647ea655.html",
+          "title": "京东：气眼鸡眼扣价格行情页",
+          "date": "2026-08"
+        }
       ],
-      "confidence": "low",
-      "note": "零售页有多档价但无大货明码；金属鸡眼大货约¥0.02-0.05/粒，按每顶4-6粒折算。绣花气眼则计入绣花针数。"
+      "confidence": "high",
+      "note": "义乌购实查:金属/全铜鸡眼¥0.02-0.08/粒(鑫鹏纽扣/亿美纶纽扣,量大低至¥0.01-0.03),2026-08;按单顶4-6粒折¥0.1-0.35。绣花气眼则计入绣花针数。"
     },
     {
       "id": "top_button",
@@ -282,7 +403,11 @@
       "typical": 0.2,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://m.1688.com/xunjia/-7wd5m8vr.html", "title": "1688询价：PE塑料帽舌18*7cm 2.2mm再生料弯板", "date": "2026-08"}
+        {
+          "url": "https://m.1688.com/xunjia/-7wd5m8vr.html",
+          "title": "1688询价：PE塑料帽舌18*7cm 2.2mm再生料弯板",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "找到再生料PE帽舌板的1688询价页但未见明码；按再生料重量与同类塑料件估¥0.15-0.35/片，新料更贵。"
@@ -296,7 +421,11 @@
       "typical": 0.08,
       "book": "ch09: ¥0.08",
       "sources": [
-        {"url": "https://www.jinxiu58.com/news/188.html", "title": "锦绣塑胶：OPP袋价格计算公式（长×宽×厚×比例×原料价+封口胶条）", "date": "2026-08"}
+        {
+          "url": "https://www.jinxiu58.com/news/188.html",
+          "title": "锦绣塑胶：OPP袋价格计算公式（长×宽×厚×比例×原料价+封口胶条）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "按公式折算帽用30×40cm、5丝OPP自粘袋约¥0.05-0.1/个，覆盖书内¥0.08。"
@@ -310,8 +439,16 @@
       "typical": 0.045,
       "book": "ch09: ¥0.04/顶（¥3.5/个装100顶）",
       "sources": [
-        {"url": "https://www.hgj.com/knowledge/show-2875.html", "title": "海管家：外箱计价公式，市场价约¥6/㎡，60×30×40cm箱约¥4.47/个", "date": "2026-08"},
-        {"url": "https://www.1688.com/market/-CEE5B2E3CDDFC0E3D6BDCFE4.html", "title": "1688五层瓦楞纸箱类目页", "date": "2026-08"}
+        {
+          "url": "https://www.hgj.com/knowledge/show-2875.html",
+          "title": "海管家：外箱计价公式，市场价约¥6/㎡，60×30×40cm箱约¥4.47/个",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/market/-CEE5B2E3CDDFC0E3D6BDCFE4.html",
+          "title": "1688五层瓦楞纸箱类目页",
+          "date": "2026-08"
+        }
       ],
       "confidence": "high",
       "note": "按¥6/㎡公式，帽用大箱¥3.5-5/个，装100顶摊¥0.035-0.05/顶，与书内一致；纸价波动会小幅影响。"
@@ -327,8 +464,16 @@
       "typical": 0.45,
       "book": "ch09: ¥0.35-0.55/千针，>0.6要问，<0.30警惕；普通logo 6000-12000针",
       "sources": [
-        {"url": "https://www.jdzj.com/xiuhuajiagong/1-1489095.html", "title": "电脑绣花标加工定制价格页", "date": "2026-08"},
-        {"url": "https://www.tshe.com/ask/Eo60XAcf37", "title": "T社定制问答：印绣花工艺费说明", "date": "2026-08"}
+        {
+          "url": "https://www.jdzj.com/xiuhuajiagong/1-1489095.html",
+          "title": "电脑绣花标加工定制价格页",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.tshe.com/ask/Eo60XAcf37",
+          "title": "T社定制问答：印绣花工艺费说明",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "公开页多为零售小批量价（¥5-10/千针），与大货价差10倍以上是正常现象；大货口径未见独立明码，沿用书内¥0.35-0.55并经绣花厂计价逻辑旁证。一个8000针logo约¥2.8-4.4/顶。"
@@ -342,8 +487,16 @@
       "typical": 250,
       "book": "ch09: ¥150-300/logo",
       "sources": [
-        {"url": "https://www.sakurahz.com/pd6223094.html", "title": "杭州樱花线业：电脑刺绣打版制版费页", "date": "2026-08"},
-        {"url": "https://www.tshe.com/ask/Eo60XAcf37", "title": "T社定制问答（制版费约¥200-500一次性）", "date": "2026-08"}
+        {
+          "url": "https://www.sakurahz.com/pd6223094.html",
+          "title": "杭州樱花线业：电脑刺绣打版制版费页",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.tshe.com/ask/Eo60XAcf37",
+          "title": "T社定制问答（制版费约¥200-500一次性）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "high",
       "note": "市场报¥200-500，书内¥150-300偏产业带熟客价；复杂图案上探500。返单不再收。"
@@ -357,7 +510,11 @@
       "typical": 1.5,
       "book": "书内提及3D绣更贵，未给具体数",
       "sources": [
-        {"url": "https://s.1688.com/kq/-3364C1A2CCE5D0E5.html", "title": "1688 3D立体绣类目页", "date": "2026-08"}
+        {
+          "url": "https://s.1688.com/kq/-3364C1A2CCE5D0E5.html",
+          "title": "1688 3D立体绣类目页",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "未见大货明码；行业惯例为平绣价的1.5-2倍（EVA垫料+慢车速），按普通logo折合每顶加¥1-3。"
@@ -371,7 +528,11 @@
       "typical": 1.8,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "http://www.1688.com/chanpin/-CCF9B2BCD0E5.html", "title": "1688贴布绣类目（成品绣片¥1.5起）", "date": "2026-08"}
+        {
+          "url": "http://www.1688.com/chanpin/-CCF9B2BCD0E5.html",
+          "title": "1688贴布绣类目（成品绣片¥1.5起）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "1688成品贴布绣片¥1.5起；帽厂做法为外购绣片+车缝或整体贴布绣，折合每顶加¥1-3。"
@@ -385,8 +546,16 @@
       "typical": 0.2,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.fdf42.com/%E7%83%AD%E8%BD%AC%E7%A7%BB%E5%8D%B0%E8%8A%B1%E5%92%8C%E8%83%B6%E5%8D%B0%E5%93%AA%E4%B8%AA%E5%A5%BD.html", "title": "飞文屋：丝印单价¥0.3/色，5000-20000件¥0.2/色，2万件以上¥0.1/色；版费¥100/色", "date": "2026-08"},
-        {"url": "https://www.sohu.com/a/141458486_788928", "title": "搜狐：丝印与热转印哪个更省钱", "date": "2026-08"}
+        {
+          "url": "https://www.fdf42.com/%E7%83%AD%E8%BD%AC%E7%A7%BB%E5%8D%B0%E8%8A%B1%E5%92%8C%E8%83%B6%E5%8D%B0%E5%93%AA%E4%B8%AA%E5%A5%BD.html",
+          "title": "飞文屋：丝印单价¥0.3/色，5000-20000件¥0.2/色，2万件以上¥0.1/色；版费¥100/色",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.sohu.com/a/141458486_788928",
+          "title": "搜狐：丝印与热转印哪个更省钱",
+          "date": "2026-08"
+        }
       ],
       "confidence": "high",
       "note": "另有版费(含菲林)约¥100/色一次性。500顶量级取¥0.2-0.3/色。"
@@ -400,8 +569,16 @@
       "typical": 1,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.fdf42.com/%E7%83%AD%E8%BD%AC%E7%A7%BB%E5%8D%B0%E8%8A%B1%E5%92%8C%E8%83%B6%E5%8D%B0%E5%93%AA%E4%B8%AA%E5%A5%BD.html", "title": "飞文屋：热转印按印刷幅面计价，不计色数", "date": "2026-08"},
-        {"url": "http://www.inknet.cn/news/201605/26/23125.html", "title": "中国喷墨网：数码转印加工费约¥3/米", "date": "2026-08"}
+        {
+          "url": "https://www.fdf42.com/%E7%83%AD%E8%BD%AC%E7%A7%BB%E5%8D%B0%E8%8A%B1%E5%92%8C%E8%83%B6%E5%8D%B0%E5%93%AA%E4%B8%AA%E5%A5%BD.html",
+          "title": "飞文屋：热转印按印刷幅面计价，不计色数",
+          "date": "2026-08"
+        },
+        {
+          "url": "http://www.inknet.cn/news/201605/26/23125.html",
+          "title": "中国喷墨网：数码转印加工费约¥3/米",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "不计色数、按面积计；帽前幅小logo烫画大货约¥0.5-2/顶，渐变多色图案比丝印划算。"
@@ -415,9 +592,21 @@
       "typical": 9,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "http://www.inknet.cn/news/201605/26/23125.html", "title": "中国喷墨网：数码印花加工费杀入低价时代", "date": "2026-08"},
-        {"url": "https://www.fxbaogao.com/detail/4386305", "title": "头豹研究院：数码直喷加工费由¥30/米降至约¥9/米", "date": "2026-08"},
-        {"url": "http://www.168tex.com/2023-06-05/1166752.html", "title": "纺织快报：数码印花加工费低至¥0.9的低价竞争报道", "date": "2026-08"}
+        {
+          "url": "http://www.inknet.cn/news/201605/26/23125.html",
+          "title": "中国喷墨网：数码印花加工费杀入低价时代",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.fxbaogao.com/detail/4386305",
+          "title": "头豹研究院：数码直喷加工费由¥30/米降至约¥9/米",
+          "date": "2026-08"
+        },
+        {
+          "url": "http://www.168tex.com/2023-06-05/1166752.html",
+          "title": "纺织快报：数码印花加工费低至¥0.9的低价竞争报道",
+          "date": "2026-08"
+        }
       ],
       "confidence": "high",
       "note": "直喷约¥9/米、转印约¥3/米（丝绸类¥10-25/米）；帽子多为裁片印或成品小幅面印，折合每顶约¥1-3。"
@@ -431,7 +620,11 @@
       "typical": 1.5,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://zhuanlan.zhihu.com/p/149741721", "title": "知乎：服装洗水工艺（工艺说明，无大货单价）", "date": "2026-08"}
+        {
+          "url": "https://zhuanlan.zhihu.com/p/149741721",
+          "title": "知乎：服装洗水工艺（工艺说明，无大货单价）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "未找到大货明码来源，按牛仔/成衣洗水厂常见按件计价估¥1-3/顶；重工做旧（破坏洗、猫须）上探¥3-5。"
@@ -445,7 +638,11 @@
       "typical": 0.5,
       "book": "书内未单列价格",
       "sources": [
-        {"url": "https://www.laserfair.com/peitao/201507/15/62570.html", "title": "激光切割加工费计算方法（按小时¥400-1000/时）", "date": "2026-08"}
+        {
+          "url": "https://www.laserfair.com/peitao/201507/15/62570.html",
+          "title": "激光切割加工费计算方法（按小时¥400-1000/时）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "公开资料多为金属切割；布料激光打孔按机时折算，简单透气孔阵每顶约¥0.2-1。"
@@ -461,8 +658,16 @@
       "typical": 3.4,
       "book": "ch09: 车缝约¥3+裁剪¥0.3-0.4，行情¥2.5-4（胶州车工月薪5500、日产70顶）",
       "sources": [
-        {"url": "https://www.zhihu.com/question/41401967", "title": "知乎：服装厂加工费怎么算（人工日薪÷日产量的计价逻辑）", "date": "2026-08"},
-        {"url": "https://m.tnc.com.cn/info/c-042002-d-3627056.html", "title": "全球纺织网：成衣生产成本计算方法（裁剪+车缝+整理构成）", "date": "2026-08"}
+        {
+          "url": "https://www.zhihu.com/question/41401967",
+          "title": "知乎：服装厂加工费怎么算（人工日薪÷日产量的计价逻辑）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://m.tnc.com.cn/info/c-042002-d-3627056.html",
+          "title": "全球纺织网：成衣生产成本计算方法（裁剪+车缝+整理构成）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "未见帽子单件工缴明码；按书内口径反算（月薪5500÷26天÷日产70≈¥3/顶车缝）与服装业计价逻辑一致，区间¥2.8-4.4含裁剪整烫。"
@@ -500,7 +705,11 @@
       "typical": 1.5,
       "book": "书内未单列",
       "sources": [
-        {"url": "https://www.linknit.com/blog/knitwear-processing-cost-guide.html", "title": "Linknit：毛织加工费构成与定价逻辑", "date": "2026-08"}
+        {
+          "url": "https://www.linknit.com/blog/knitwear-processing-cost-guide.html",
+          "title": "Linknit：毛织加工费构成与定价逻辑",
+          "date": "2026-08"
+        }
       ],
       "confidence": "low",
       "note": "电脑横机织造+套口缝合，机器效率高、人工少；由成品腈纶针织帽出厂价¥3.5-5.5反推工缴约¥1-2.5。"
@@ -554,9 +763,21 @@
       "typical": 17,
       "book": "主线订单锚定：FOB ¥17.5（胶州、全棉磨毛斜纹、平绣）",
       "sources": [
-        {"url": "https://www.giftres.com/product/fuzhuang_17255.html", "title": "金文定制：广告棒球帽定制印logo报价页", "date": "2026-08"},
-        {"url": "https://www.fuszj.com/sell/show.php?itemid=1896", "title": "服饰之家：五片棉布广告帽刺绣厂家供应", "date": "2026-08"},
-        {"url": "https://www.1688.com/factory/b2b-22007803587622623c.html", "title": "1688东莞顶之品制帽（50顶起定制贴牌）", "date": "2026-08"}
+        {
+          "url": "https://www.giftres.com/product/fuzhuang_17255.html",
+          "title": "金文定制：广告棒球帽定制印logo报价页",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.fuszj.com/sell/show.php?itemid=1896",
+          "title": "服饰之家：五片棉布广告帽刺绣厂家供应",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.1688.com/factory/b2b-22007803587622623c.html",
+          "title": "1688东莞顶之品制帽（50顶起定制贴牌）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "搜索所见：促销级广告帽低至¥5.5-11.5，中等品质绣花定制¥18-38（百顶量级）。500顶全棉六片+平绣落在¥12-22，书内¥17.5在区间中枢，口径成立。"
@@ -570,8 +791,16 @@
       "typical": 12,
       "book": "书内未锚定",
       "sources": [
-        {"url": "https://www.1688.com/market/-9D4FB7F2C3B1.html", "title": "1688渔夫帽类目（现货¥5.3-17.96/顶）", "date": "2026-08"},
-        {"url": "https://www.taojincn.com/%E6%B8%94%E5%A4%AB%E5%B8%BD/", "title": "简创：渔夫帽定制厂家（300顶起订，定制约¥15/顶）", "date": "2026-08"}
+        {
+          "url": "https://www.1688.com/market/-9D4FB7F2C3B1.html",
+          "title": "1688渔夫帽类目（现货¥5.3-17.96/顶）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.taojincn.com/%E6%B8%94%E5%A4%AB%E5%B8%BD/",
+          "title": "简创：渔夫帽定制厂家（300顶起订，定制约¥15/顶）",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "现货批发¥5.3-18，定制带logo约¥12-15；全棉双面戴或做旧款上探¥18+。"
@@ -597,11 +826,42 @@
       "typical": 6,
       "book": "书内未锚定",
       "sources": [
-        {"url": "https://www.iyicaibao.com/productlist/403717", "title": "义采宝：针织帽批发（¥5.2-14/顶，儿童款出厂¥3.5）", "date": "2026-08"},
-        {"url": "https://m.gys.cn/maozi/3703062941.html", "title": "供应商网：帽子厂定制秋冬毛线帽 刺绣针织帽", "date": "2026-08"}
+        {
+          "url": "https://www.iyicaibao.com/productlist/403717",
+          "title": "义采宝：针织帽批发（¥5.2-14/顶，儿童款出厂¥3.5）",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://m.gys.cn/maozi/3703062941.html",
+          "title": "供应商网：帽子厂定制秋冬毛线帽 刺绣针织帽",
+          "date": "2026-08"
+        }
       ],
       "confidence": "medium",
       "note": "普通腈纶针织帽批发¥5.2起；加织标/绣花定制约¥5-9，翻边提花或羊毛混纺更高。"
+    },
+    {
+      "id": "blank_stock_caps_yiwu",
+      "name": "光板/现货帽 义乌档口批发",
+      "unit": "元/顶",
+      "low": 4.8,
+      "high": 6.5,
+      "typical": 5.5,
+      "book": "书内未锚定;对应7.2.1的促销/现货档",
+      "sources": [
+        {
+          "url": "https://www.yiwugo.com/search?q=%E5%B8%BD%E8%88%8C%E6%9D%BF",
+          "title": "义乌购档口:光板平沿帽¥4.80-5.28/顶,1000顶起(海盛小商品/尚宝钰头饰)",
+          "date": "2026-08"
+        },
+        {
+          "url": "https://www.yiwugo.com/search?q=%E5%B8%BD%E5%AD%90%E5%A1%91%E6%96%99%E6%8E%92%E6%89%A3",
+          "title": "义乌购档口:外贸水洗做旧棒球帽¥6.20/顶,300顶起(新塔丹服饰)",
+          "date": "2026-08"
+        }
+      ],
+      "confidence": "high",
+      "note": "2026-08浏览器实查:光板平沿帽¥4.8-5.3(1000顶起)、水洗做旧成品帽¥6.2(300顶起)。这是无logo现货散货价,与定制FOB口径差:绣花+制版摊销+验货单证+利润。"
     }
   ]
 }
