@@ -38,7 +38,7 @@
 
 - **价格库** `data/prices.json`:帽子部件市场价(带出处/置信度),拍照估价与每日练习共用;结构(各节条目的 id 集合)不能随意变动——`scripts/update_prices.py` 有结构守卫,前端按条目字段渲染。`.github/workflows/update-prices.yml` 可让 Claude 联网校准(**定时已停用**,2026-08-31 作者要求,仅手动触发)。
 - **拍照估价**:助教输入行的 📷(`photoBtn`),canvas 压到长边 1568px 后以 image block 随请求发助教 Worker(已验证该 Worker 对 messages 是透传的,图片能过);图片不进 history。报价员模式的 system 内嵌价格库摘要(`pricesDigest()`)。
-- **每日练习**:`.github/workflows/daily-quiz.yml` 跑 `scripts/daily_quiz.py`(**定时已停用**,2026-08-31 作者要求省费用,仅手动 `gh workflow run daily-quiz.yml` 触发;往期题永久保留),四通道降级:RapidAPI Otapi 1688(secret:`RAPIDAPI_KEY`,免费档20次/天)→ OneBound(secret:`ONEBOUND_KEY`/`ONEBOUND_SECRET`,可选)→ Claude 联网搜索 → 纸面题兜底。出题模型默认 `claude-sonnet-5`,可用仓库 variable `QUIZ_MODEL` 覆盖(设 haiku 时脚本自动换基础版联网工具)。产出 `daily/YYYY-MM-DD.json` + `daily/img/`(留90天) + `daily/index.json`,Action 直接 commit,不需要跑 build.py。前端入口:目录抽屉顶部 + 「我」面板;答题记录只存 localStorage。
+- **每日练习**:`.github/workflows/daily-quiz.yml` 跑 `scripts/daily_quiz.py`(**定时已停用**,2026-08-31 作者要求省费用,仅手动 `gh workflow run daily-quiz.yml` 触发;往期题永久保留),四通道降级:RapidAPI Otapi 1688(secret:`RAPIDAPI_KEY`,免费档20次/天)→ OneBound(secret:`ONEBOUND_KEY`/`ONEBOUND_SECRET`,可选)→ DuckDuckGo 图片搜索(免费无密钥)→ 纸面题兜底。**找图一律不走 Claude 的 web_search/web_fetch**(2026-08-31 作者要求,此前一天烧了19次搜索的费用),模型只在出题时调用一次。出题模型默认 `claude-sonnet-5`,可用仓库 variable `QUIZ_MODEL` 覆盖。产出 `daily/YYYY-MM-DD.json` + `daily/img/`(留90天) + `daily/index.json`,Action 直接 commit,不需要跑 build.py。前端入口:目录抽屉顶部 + 「我」面板;答题记录只存 localStorage。
 - SW 对 `daily/`、`data/` 走网络优先(见 `sw_template.js` 的 `isDaily`),否则读者拿不到当天新题。
 - **密钥位置**:助教 Worker(shy-brook-76ea)的 `ANTHROPIC_API_KEY` 在 wrangler secret(换法:`printf 'sk-...' | npx wrangler secret put ANTHROPIC_API_KEY --name shy-brook-76ea`);GitHub Actions 用仓库 secret `ANTHROPIC_API_KEY`(没配时 workflow 自动跳过不报错)。
 

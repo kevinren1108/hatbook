@@ -4,8 +4,11 @@
 四条通道,依次降级:
   1. RapidAPI Otapi 1688(配了 RAPIDAPI_KEY 时,免费档20次/天够用):真图 + 真实批发价
   2. OneBound 1688 API(配了 ONEBOUND_KEY/ONEBOUND_SECRET 时):同上,备选
-  3. Claude 联网搜索(web_search/web_fetch 服务端工具):找真实商品页
+  3. DuckDuckGo 图片搜索(免费、无密钥、不走模型联网工具):真实商品图,无实价
   4. 纸面题:从价格库随机组合规格,无图纯文字——保证每天必有一题
+
+注意:找图一律不用 Claude 的 web_search/web_fetch(2026-08-31 起,曾一天烧掉19次搜索的费用);
+模型只在最后出题时调用一次。
 
 产出:
   daily/YYYY-MM-DD.json   题目(部件参考答案 + 解析 + 出处)
@@ -289,7 +292,7 @@ def try_otapi(client, digest, recent_ids):
 def try_onebound(client, digest, recent_ids):
     key, secret = os.environ.get('ONEBOUND_KEY'), os.environ.get('ONEBOUND_SECRET')
     if not (key and secret):
-        print('未配置 OneBound,跳过通道一')
+        print('未配置 OneBound,跳过通道二')
         return None
     name, kw = random.choice(KEYWORD_POOL)
     try:
@@ -334,63 +337,69 @@ def try_onebound(client, digest, recent_ids):
             quiz['source_id'] = iid
             return quiz
         except Exception as e:
-            print(f'通道一出题失败: {e}', file=sys.stderr)
+            print(f'通道二出题失败: {e}', file=sys.stderr)
             return None
     return None
 
 
-# ───────── 通道二:Claude 联网搜索 ─────────
+# ───────── 通道三:DuckDuckGo 图片搜索(免费无密钥,找图绝不动用模型联网工具) ─────────
 
-def try_websearch(client, digest, recent_urls):
+DDG_EN = {  # 中文关键词配上英文,DDG 图搜命中率高得多
+    '六片棒球帽': '6 panel cotton baseball cap',
+    '五片平沿帽': '5 panel snapback flat brim cap',
+    '网帽trucker': '5 panel trucker mesh cap',
+    '渔夫帽': 'cotton bucket hat',
+    '3D绣花棒球帽': '3d embroidery baseball cap',
+    '灯芯绒帽': 'corduroy baseball cap',
+    '麂皮帽': 'suede baseball cap',
+    '儿童棒球帽': 'kids embroidered baseball cap',
+    '运动速干帽': 'quick dry sports cap',
+}
+
+
+def try_ddg(client, digest, recent_ids):
+    """DDG 图搜拿一张真实商品图,看图出题;页面标价拿不到,market_price 为 null"""
     name, kw = random.choice(KEYWORD_POOL)
-    avoid = '\n'.join(recent_urls[:30])
+    q = f"{kw} {DDG_EN.get(name, 'hat')}"
+    h = {'User-Agent': UA['User-Agent']}
     try:
-        with client.messages.stream(
-            model=MODEL, max_tokens=16000,
-            # haiku 只支持基础版联网工具,新版 20260209 需要 sonnet 4.6+/sonnet 5/opus
-            tools=([{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8},
-                    {'type': 'web_fetch_20250910', 'name': 'web_fetch', 'max_uses': 6}]
-                   if 'haiku' in MODEL else
-                   [{'type': 'web_search_20260209', 'name': 'web_search', 'max_uses': 8},
-                    {'type': 'web_fetch_20260209', 'name': 'web_fetch', 'max_uses': 6}]),
-            messages=[{'role': 'user', 'content': f"""帮我找一个真实在售的帽子商品页,用于外贸估价教学。
-要求:类型是「{name}」(搜索方向:{kw}),商品页要有多角度大图(最好含内里/细节图),页面上有标价。
-优先 1688 / 阿里巴巴国际站 / made-in-china / 亚马逊。避开这些用过的链接:\n{avoid or '(无)'}
-找到后,只输出一个 JSON(不要代码块):
-{{"title":"商品名","url":"商品页链接","price_note":"页面标价与阶梯价原文","image_urls":["图片直链",...最多6个],"desc":"一句话描述帽子的款式面料工艺"}}
-图片直链要是 .jpg/.png/.webp 的完整 URL。"""}],
-        ) as stream:
-            msg = stream.get_final_message()
-        raw_text = ''.join(b.text for b in msg.content if b.type == 'text')
+        r = requests.get('https://duckduckgo.com/', params={'q': q}, headers=h, timeout=30)
+        vqd = re.search(r'vqd=([\d-]+)', r.text)
+        if not vqd:
+            print('DDG 未取得 vqd,跳过通道三', file=sys.stderr)
+            return None
+        r2 = requests.get('https://duckduckgo.com/i.js',
+                          params={'q': q, 'vqd': vqd.group(1), 'o': 'json', 'p': '1'},
+                          headers=h, timeout=30)
+        results = r2.json().get('results') or []
+    except Exception as e:
+        print(f'DDG 搜索失败: {e}', file=sys.stderr)
+        return None
+    results = [x for x in results
+               if (x.get('width') or 0) >= 500 and x.get('image') and x['image'] not in recent_ids]
+    random.shuffle(results)
+    for x in results[:6]:  # 最多试6张,防单张下载失败
+        img_paths = download_images([x['image']], TODAY)
+        if not img_paths:
+            continue
+        listing = (f"配图是图片搜索找到的一张真实商品图(结果标题:{(x.get('title') or '')[:120]};"
+                   f"来源页:{(x.get('url') or '')[:200]})。看图判断这顶「{name}」的面料与工艺细节并出题:"
+                   f"desc 里把图上能看到的款式/片数/面料质感/绣印花等特征写具体,让学员有足够信息估价。"
+                   f"页面标价拿不到,market_price 填 null,sources 里放来源页链接。")
         try:
-            found = extract_json(raw_text)
-        except Exception:
-            # 偶发 JSON 格式错:让模型自己修一遍,不重新联网搜
-            with client.messages.stream(
-                model=MODEL, max_tokens=4000,
-                messages=[{'role': 'user', 'content':
-                           f'把下面内容修成一个合法 JSON 对象原样输出(修引号转义/缺逗号,不改内容,只输出JSON):\n{raw_text[:4000]}'}],
-            ) as s2:
-                found = extract_json(''.join(b.text for b in s2.get_final_message().content if b.type == 'text'))
-    except Exception as e:
-        print(f'联网搜索失败: {e}', file=sys.stderr)
-        return None
-    img_paths = download_images(found.get('image_urls') or [], TODAY)
-    listing = (f"商品信息:{json.dumps(found, ensure_ascii=False)[:3000]}\n"
-               + (f"配图是它的商品图。" if img_paths else "图片下载失败,按文字描述出题,desc 里把帽子外观写详细些。")
-               + "market_price 依据 price_note,url 用商品页链接。")
-    try:
-        quiz = gen_quiz(client, digest, listing, img_paths)
-        quiz['images'] = img_paths
-        quiz['source'] = 'websearch'
-        quiz['source_id'] = found.get('url', '')
-        return quiz
-    except Exception as e:
-        print(f'通道二出题失败: {e}', file=sys.stderr)
-        return None
+            quiz = gen_quiz(client, digest, listing, img_paths)
+            quiz['images'] = img_paths
+            quiz['source'] = 'ddg'
+            quiz['source_id'] = x['image']
+            return quiz
+        except Exception as e:
+            print(f'通道三出题失败: {e}', file=sys.stderr)
+            return None
+    print('DDG 结果里没有可下载的图,降级', file=sys.stderr)
+    return None
 
 
-# ───────── 通道三:纸面题兜底 ─────────
+# ───────── 通道四:纸面题兜底 ─────────
 
 def synthetic(client, digest):
     name, kw = random.choice(KEYWORD_POOL)
@@ -419,7 +428,7 @@ def main():
 
     quiz = (try_otapi(client, digest, recent_ids)
             or try_onebound(client, digest, recent_ids)
-            or try_websearch(client, digest, list(recent_ids))
+            or try_ddg(client, digest, recent_ids)
             or synthetic(client, digest))
     quiz['date'] = TODAY
 
