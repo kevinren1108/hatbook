@@ -1,8 +1,7 @@
 name: 价格库周度校准
 
 on:
-  schedule:
-    - cron: '0 1 * * 1'   # 每周一 UTC 01:00 = 北京时间 09:00
+  # 定时校准已停用(2026-08-31 作者要求,省API费用);需要时手动触发
   workflow_dispatch:
 
 permissions:
